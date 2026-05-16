@@ -1,11 +1,37 @@
 import { Component } from '@angular/core';
-
+import { MatDialog } from '@angular/material/dialog';
+import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordinator/checker-guide-or-coordinator.component';
 @Component({
   selector: 'app-welcome-page',
   imports: [],
   templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.scss'
+  styleUrls: ['./welcome-page.component.scss'],
+  standalone : true
 })
 export class WelcomePageComponent {
+  constructor(public dialog: MatDialog) {}
 
+  openDialog() {
+
+    const dialogRef = this.dialog.open(
+      CheckerGuideOrCoordinatorComponent,
+      {
+        width: '400px',
+        data: {}
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      console.log('בחירה:', result);
+
+      if (result === 'guide') {
+        console.log('נבחרה מדריכה');
+      }
+
+      if (result === 'coordinator') {
+        console.log('נבחרה רכזת');
+      }
+    });
+  }
 }
