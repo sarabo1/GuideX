@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { min } from 'rxjs';
+import { IdentificationServiceService } from '../../Services/identification-service.service';
+import { AuthService } from '../../Services/auth-service.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,13 +23,34 @@ export class CoordinatorIdentificationComponent {
     Validators.minLength(8)
     ]),
   })
-
-
-
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Form Submitted!', this.loginForm.value);
+  showPassword: boolean = false;
+  toggleShowPassword() {
+      this.showPassword = !this.showPassword; 
     }
-    this.loginForm.reset()
+
+  ////מכאן והלאה זה רק בשביל בדיקה, לא קשור לשום דבר
+  constructor(public mansInSite: IdentificationServiceService, private router: Router, private authService: AuthService) { }
+  onSubmit() {
+    const username = this.loginForm.get('username')?.value;
+    const password = this.loginForm.get('password')?.value;
+    const trueDetails = this.mansInSite.docOfman.some(f => f.username === username && f.password === password);
+    if (!trueDetails) {
+      alert('השם משתמש או הסיסמה שגויים, אנא נסי שוב');
+    }
+    else {
+      const userValue = this.loginForm.get('username')?.value;
+      if (userValue) {
+        this.authService.login({ username: userValue });
+       this.router.navigate(['/Hi_coordinator']);
+      }
+      
+      this.loginForm.reset();
+    }
   }
+
+
+
+
+
+
 }

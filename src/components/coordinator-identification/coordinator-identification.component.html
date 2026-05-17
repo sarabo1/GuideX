@@ -11,8 +11,17 @@
             }
 
    <label>סיסמה</label>
-   <input type="text" formControlName="password" class="form-control me-2">
-            
+   <input [type]="showPassword ? 'text' : 'password'" 
+        formControlName="password"                                                                  
+        class="form-control me-2">
+            <button type="button" class="toggle-btn" (click)="toggleShowPassword()">
+                @if(showPassword){
+                    <span >👁️</span>
+                }
+                @else{
+                    <span>👁️‍🗨️</span>
+                }
+            </button>
             @if (loginForm.get('password')?.touched) 
             {  @if(loginForm.get('password')?.hasError('required'))
                 {<div class=red>השדה חובה⚠️</div>}
