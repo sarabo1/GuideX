@@ -1,11 +1,22 @@
 .textOnWlcomePage{
     text-align: center;
+   
 
 }
 .btn {
-     margin: 10px;
+    margin: 10px;
+    background-color: #FF5C67;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* הוספת אנימציה חלקה */
+}
+
+.btn:hover {
+    color: #004aad;
+    transform: translateY(-1px); /* יוצר אפקט של התרוממות */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* הוספת צל */
 }
 .container{
+    
     display: flex;
     justify-content: flex-end;
 }
@@ -21,3 +32,5 @@ img{
     font-weight: bold;
     margin-top: 20px;
 }
+
+

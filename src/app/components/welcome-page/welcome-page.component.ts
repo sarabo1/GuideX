@@ -16,7 +16,7 @@ export class WelcomePageComponent {
     const dialogRef = this.dialog.open(
       CheckerGuideOrCoordinatorComponent,
       {
-        width: '400px',
+        width: '650px',
         data: {}
       }
     );

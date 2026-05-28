@@ -1,127 +1,111 @@
-<BR />
 <form
   [formGroup]="formCoordinator"
   (ngSubmit)="newCoordinator()"
   class="coordinator-form"
 >
-  <mat-form-field appearance="fill">
-    <mat-label>שם פרטי:</mat-label>
-    <input matInput formControlName="FirstName" />
-  </mat-form-field>
+  <div>
+    <label>שם פרטי:</label>
+    <input type="text" formControlName="FirstName" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>שם משפחה:</mat-label>
-    <input matInput formControlName="LastName" />
-  </mat-form-field>
+  <div>
+    <label>שם משפחה:</label>
+    <input type="text" formControlName="LastName" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>מספר זהות:</mat-label>
-    <input matInput formControlName="IdNumber" />
-  </mat-form-field>
+  <div>
+    <label>מספר זהות:</label>
+    <input type="text" formControlName="IdNumber" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>אימייל:</mat-label>
-    <input matInput formControlName="Email" type="email" />
-  </mat-form-field>
+  <div>
+    <label>אימייל:</label>
+    <input type="email" formControlName="Email" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>מספר טלפון:</mat-label>
-    <input matInput formControlName="PhoneNumber" type="text" />
-  </mat-form-field>
+  <div>
+    <label>מספר טלפון:</label>
+    <input type="text" formControlName="PhoneNumber" />
+  </div>
 
-  <mat-form-field>
-    <mat-label>סיסמה:</mat-label>
-    <input matInput [type]="hide() ? 'password' : 'text'" />
-    <button
-      mat-icon-button
-      matSuffix
-      (click)="clickEvent($event)"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hide()"
+  <div class="inputEye">
+    <label>סיסמה</label>
+    <input
+      [type]="showPassword ? 'text' : 'password'"
       formControlName="UserPassword"
-    >
-      <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-  </mat-form-field>
+      />
+      <button type="button" class="eyes" (click)="PasswordVisibility()">
+        @if (!showPassword) {
+          <!-- <span class="material-symbols-sharp"> visibility </span> -->
+          <mat-icon>visibility</mat-icon>
+        } @else {
+          <!-- <span class="material-symbols-sharp"> visibility_off </span> -->
+          <mat-icon>visibility_off</mat-icon>
+        }
+      </button>
+  </div>
 
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>סיסמה:</mat-label>
-    <input matInput type="password" formControlName="UserPassword" />
-  </mat-form-field> -->
-
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>אימות סיסמה:</mat-label>
-    <input matInput type="password" formControlName="confirmPassword" />
-  </mat-form-field> -->
-
-  <mat-form-field appearance="fill">
-    <mat-label>תפקיד:</mat-label>
-    <mat-select formControlName="RoleId">
+  <div>
+    <label>תפקיד:</label>
+    <select formControlName="RoleId">
       @for (item of RoleIdData; track item.id) {
-        <mat-option [value]="item.id">
-          {{ item.name }}
-        </mat-option>
+        <option [value]="item.id">{{ item.name }}</option>
       }
-    </mat-select>
-  </mat-form-field>
+    </select>
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>עיר:</mat-label>
-    <input matInput formControlName="CityId" />
-  </mat-form-field>
+  <div>
+    <label>עיר:</label>
+    <input type="text" formControlName="CityId" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>שם מוסד:</mat-label>
-    <input matInput formControlName="SchoolName" />
-  </mat-form-field>
+  <div>
+    <label>שם מוסד:</label>
+    <input type="text" formControlName="SchoolName" />
+  </div>
 
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>מגדר:</mat-label>
-    <input matInput formControlName="IsBoys" />
-  </mat-form-field> -->
+  <div>
+    <label>מגדר:</label>
+    <div>
+      <label>
+        <input type="radio" formControlName="IsBoys" value="1" /> מוסד לבנים
+      </label>
+      <label>
+        <input type="radio" formControlName="IsBoys" value="0" /> מוסד לבנות
+      </label>
+    </div>
+  </div>
 
-  <mat-radio-group formControlName="IsBoys">
-    <mat-radio-button value="1">מוסד לבנים</mat-radio-button>
-    <mat-radio-button value="0">מוסד לבנות</mat-radio-button>
-  </mat-radio-group>
+  <div>
+    <label>שם מנהל:</label>
+    <input type="text" formControlName="PrincipalName" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>שם מנהל:</mat-label>
-    <input matInput formControlName="PrincipalName" type="text" />
-  </mat-form-field>
+  <div>
+    <label>מספר טלפון מוסד:</label>
+    <input type="text" formControlName="PhoneSecretary" />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>מספר טלפון מוסד:</mat-label>
-    <input matInput formControlName="PhoneSecretary" />
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>סוג מוסד:</mat-label>
-    <!-- <input matInput formControlName="TypeSchoolId" /> -->
-
-    <mat-select formControlName="religiousId">
+  <div>
+    <label>סוג מוסד:</label>
+    <select formControlName="religiousId">
       @for (item of religiousData; track item.id) {
-        <mat-option [value]="item.id">
-          {{ item.name }}
-        </mat-option>
+        <option [value]="item.id">{{ item.name }}</option>
       }
-    </mat-select>
-  </mat-form-field>
+    </select>
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>גיל מוסד:</mat-label>
-    <!-- <input matInput formControlName="AgeSchoolId" /> -->
-     <mat-select formControlName="AgeSchoolId">
+  <div>
+    <label>גיל מוסד:</label>
+    <select formControlName="AgeSchoolId">
       @for (item of AgeSchoolIdData; track item.id) {
-        <mat-option [value]="item.id">
-          {{ item.name }}
-        </mat-option>
+        <option [value]="item.id">{{ item.name }}</option>
       }
-    </mat-select>
-  </mat-form-field>
+    </select>
+  </div>
+
   <br />
 
-  <button mat-raised-button type="submit" [disabled]="!formCoordinator.valid">
-    הרשמה
-  </button>
+  <button type="submit" [disabled]="!formCoordinator.valid">הרשמה</button>
 </form>
+
