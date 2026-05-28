@@ -20,9 +20,11 @@ export class WelcomePageComponent {
         data: {}
       }
     );
-
+   
     dialogRef.afterClosed().subscribe(result => {
 
+      // כאן תוכל לקבל את התוצאה של הבחירה (מדריכה או רכזת) ולבצע את הפעולות המתאימות 
+      // למחוק אחרי זה!!!!
       console.log('בחירה:', result);
 
       if (result === 'guide') {

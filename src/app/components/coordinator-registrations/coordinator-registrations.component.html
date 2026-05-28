@@ -1,0 +1,127 @@
+<BR />
+<form
+  [formGroup]="formCoordinator"
+  (ngSubmit)="newCoordinator()"
+  class="coordinator-form"
+>
+  <mat-form-field appearance="fill">
+    <mat-label>שם פרטי:</mat-label>
+    <input matInput formControlName="FirstName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>שם משפחה:</mat-label>
+    <input matInput formControlName="LastName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>מספר זהות:</mat-label>
+    <input matInput formControlName="IdNumber" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>אימייל:</mat-label>
+    <input matInput formControlName="Email" type="email" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>מספר טלפון:</mat-label>
+    <input matInput formControlName="PhoneNumber" type="text" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>סיסמה:</mat-label>
+    <input matInput [type]="hide() ? 'password' : 'text'" />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="clickEvent($event)"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide()"
+      formControlName="UserPassword"
+    >
+      <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>סיסמה:</mat-label>
+    <input matInput type="password" formControlName="UserPassword" />
+  </mat-form-field> -->
+
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>אימות סיסמה:</mat-label>
+    <input matInput type="password" formControlName="confirmPassword" />
+  </mat-form-field> -->
+
+  <mat-form-field appearance="fill">
+    <mat-label>תפקיד:</mat-label>
+    <mat-select formControlName="RoleId">
+      @for (item of RoleIdData; track item.id) {
+        <mat-option [value]="item.id">
+          {{ item.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>עיר:</mat-label>
+    <input matInput formControlName="CityId" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>שם מוסד:</mat-label>
+    <input matInput formControlName="SchoolName" />
+  </mat-form-field>
+
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>מגדר:</mat-label>
+    <input matInput formControlName="IsBoys" />
+  </mat-form-field> -->
+
+  <mat-radio-group formControlName="IsBoys">
+    <mat-radio-button value="1">מוסד לבנים</mat-radio-button>
+    <mat-radio-button value="0">מוסד לבנות</mat-radio-button>
+  </mat-radio-group>
+
+  <mat-form-field appearance="fill">
+    <mat-label>שם מנהל:</mat-label>
+    <input matInput formControlName="PrincipalName" type="text" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>מספר טלפון מוסד:</mat-label>
+    <input matInput formControlName="PhoneSecretary" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>סוג מוסד:</mat-label>
+    <!-- <input matInput formControlName="TypeSchoolId" /> -->
+
+    <mat-select formControlName="religiousId">
+      @for (item of religiousData; track item.id) {
+        <mat-option [value]="item.id">
+          {{ item.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>גיל מוסד:</mat-label>
+    <!-- <input matInput formControlName="AgeSchoolId" /> -->
+     <mat-select formControlName="AgeSchoolId">
+      @for (item of AgeSchoolIdData; track item.id) {
+        <mat-option [value]="item.id">
+          {{ item.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <br />
+
+  <button mat-raised-button type="submit" [disabled]="!formCoordinator.valid">
+    הרשמה
+  </button>
+</form>
