@@ -107,4 +107,12 @@ export class ServiceCoordinatorService {
     GetCoordinators(){
         return this.mock_Coordinators;
     }
- }
+    GetLastUserId() {
+        const userIds = this.mock_Coordinators.map(coordinator => coordinator.user.UserId);
+        return Math.max(...userIds);
+    }
+    GetLastTourCoordinatorId(){
+        const coordinatorIds = this.mock_Coordinators.map(coordinator => coordinator.TourCoordinatorId);
+        return Math.max(...coordinatorIds);
+    }
+}

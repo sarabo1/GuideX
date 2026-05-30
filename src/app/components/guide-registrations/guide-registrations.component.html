@@ -1,17 +1,123 @@
 <p>guide-registrations works!</p>
+<br/>
+<form
+  [formGroup]="formGuide"
+  (ngSubmit)="newGuide()"
+  class="guide-form"
+>
+  <div>
+    <label>שם פרטי:</label>
+    <input type="text" formControlName="FirstName" />
+  </div>
+  @if (formGuide.get('FirstName')?.touched) 
+            {  @if(formGuide.get('FirstName')?.hasError('required'))
+                {<div class=red>השדה חובה⚠️</div>}
+               @if (formGuide.get('FirstName')?.hasError('minlength')) { 
+               <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
+            }
 
-<!-- <mat-form-field appearance="fill">
-    <mat-label>עדה:</mat-label>
-    <!-- <input matInput formControlName="religiousId" /> -->
-    <!-- <mat-select formControlName="religiousId">
-      <mat-select formControlName="religiousId">
 
-    @for (item of religiousData; track item.id) {
-      <mat-option [value]="item.id">
-        {{ item.name }}
-      </mat-option>
-    }
+  <div>
+    <label>שם משפחה:</label>
+    <input type="text" formControlName="LastName" />
+  </div>
+  @if (formGuide.get('LastName')?.touched) 
+            {  @if(formGuide.get('LastName')?.hasError('required'))
+                {<div class=red>השדה חובה⚠️</div>}
+               @if (formGuide.get('LastName')?.hasError('minlength')) { 
+               <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
+            }
 
-  </mat-select>
-    </mat-select>
-  </mat-form-field> --> 
+
+  <div>
+    <label>מספר זהות:</label>
+    <input type="text" formControlName="IdNumber" />
+  </div>
+  @if (formGuide.get('IdNumber')?.touched) 
+            {  @if(formGuide.get('IdNumber')?.hasError('required'))
+                {<div class=red>השדה חובה⚠️</div>}
+               @if (formGuide.get('IdNumber')?.hasError('IsraelIdValidator')) { 
+               <div class="red">יש להכניס מספר תעודת זהות תקינה </div>}
+            }
+
+
+  <div>
+    <label>אימייל:</label>
+    <input type="email" formControlName="Email" />
+  </div>
+    @if (formGuide.get('Email')?.touched) 
+              {  @if(formGuide.get('Email')?.hasError('required'))
+                  {<div class=red>השדה חובה⚠️</div>}
+                @if (formGuide.get('Email')?.hasError('email')) { 
+                <div class="red">יש להכניס כתובת אימייל תקינה⚠️</div>}
+              }
+
+  <div>
+    <label>מספר טלפון:</label>
+    <input type="text" formControlName="PhoneNumber" />
+  </div>
+  @if (formGuide.get('PhoneNumber')?.touched) 
+            {  @if(formGuide.get('PhoneNumber')?.hasError('required'))
+                {<div class=red>השדה חובה⚠️</div>}
+            }
+
+  <div class="inputEye">
+    <label>סיסמה</label>
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      formControlName="UserPassword"
+      />
+      <button type="button" class="eyes" (click)="PasswordVisibility()">
+        @if (!showPassword) {
+          <mat-icon>visibility</mat-icon>
+        } @else {
+          <mat-icon>visibility_off</mat-icon>
+        }
+      </button>
+  </div>
+    @if (formGuide.get('UserPassword')?.touched) 
+              {  @if(formGuide.get('UserPassword')?.hasError('required'))
+                  {<div class=red>השדה חובה⚠️</div>}
+                 @if (formGuide.get('UserPassword')?.hasError('minlength')) 
+                  {<div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>}
+                 @if (formGuide.get('UserPassword')?.hasError('pattern')) 
+                 {<div class="red">יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️</div>}
+              }
+
+  
+
+
+  <div>
+    <label>עיר:</label>
+    <input type="number" formControlName="CityId" />
+  </div>
+  @if (formGuide.get('CityId')?.touched) 
+      {  @if(formGuide.get('CityId')?.hasError('required'))
+        {<div class=red>השדה חובה⚠️</div>}
+      }
+       <div>
+    <label>origin:</label>
+    <input type="number" formControlName="Origin" />
+  </div>
+  @if (formGuide.get('Origin')?.touched) 
+      {  @if(formGuide.get('Origin')?.hasError('required'))
+        {<div class=red>השדה חובה⚠️</div>}
+      }
+
+       <div>
+    <label>religous:</label>
+    <input type="number" formControlName="ReligiousId" />
+  </div>
+  @if (formGuide.get('ReligiousId')?.touched) 
+      {  @if(formGuide.get('ReligiousId')?.hasError('required'))
+        {<div class=red>השדה חובה⚠️</div>}
+      }
+
+
+
+
+
+            
+  <button class="btn btn-outline-secondary" type="submit" [disabled]="formGuide.invalid">הוספת מדריכה</button>
+</form>
+
