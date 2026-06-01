@@ -57,11 +57,12 @@
     <input type="text" formControlName="PhoneNumber" />
   </div>
   @if (formGuide.get('PhoneNumber')?.touched) 
-            {  @if(formGuide.get('PhoneNumber')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-            }
+    {  @if(formGuide.get('PhoneNumber')?.hasError('required'))
+        {<div class=red>השדה חובה⚠️</div>}
+    }
 
   <div class="inputEye">
+
     <label>סיסמה</label>
     <input
       [type]="showPassword ? 'text' : 'password'"
@@ -95,26 +96,34 @@
       {  @if(formGuide.get('CityId')?.hasError('required'))
         {<div class=red>השדה חובה⚠️</div>}
       }
-       <div>
-    <label>origin:</label>
-    <input type="number" formControlName="Origin" />
-  </div>
-  @if (formGuide.get('Origin')?.touched) 
-      {  @if(formGuide.get('Origin')?.hasError('required'))
-        {<div class=red>השדה חובה⚠️</div>}
+       
+  <div>
+    <label>גיל מוסד:</label>
+    <select formControlName="ReligiousId">
+      @for (item of religiousData; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
       }
-
-       <div>
-    <label>religous:</label>
-    <input type="number" formControlName="ReligiousId" />
+    </select>
   </div>
-  @if (formGuide.get('ReligiousId')?.touched) 
-      {  @if(formGuide.get('ReligiousId')?.hasError('required'))
-        {<div class=red>השדה חובה⚠️</div>}
-      }
-
-
-
+    @if (formGuide.get('ReligiousId')?.touched) 
+        {  @if(formGuide.get('ReligiousId')?.hasError('required'))
+          {<div class=red>השדה חובה⚠️</div>}
+        }
+      
+      
+      <div class="form-group">
+        <label for="items">בחרי אזורי התמחות:</label>
+        <mat-form-field>
+          <mat-select multiple formControlName="selectedOrigins" name="items">
+            
+            @for (item of Origins; track item) {
+              <mat-option [value]="item.code">{{ item.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <label>קבצי תעודות, יש להעלות תעודה על כל אזור שנבחר.:</label>
+      <input type="file" (change)="onFileSelected($event)" multiple  />
 
 
             

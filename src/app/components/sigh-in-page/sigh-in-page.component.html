@@ -1,0 +1,54 @@
+
+<div class="dialog-container" >
+  <div class="dialog-header">
+    <img src="logo_for_light.png" alt="לוגו" class="logo" />
+    <button mat-icon-button (click)="onClose()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <p mat-dialog-title class="title">התגעגנו...</p>
+
+  
+  <form [formGroup]="formLogIn"
+  (ngSubmit)="login()" class="modal-content" action="/action_page.php">
+     <div>
+    <label>אימייל:</label>
+    <input type="text" formControlName="Email" />
+  </div>
+  @if (formLogIn.get('Email')?.touched) 
+            {  @if(formLogIn.get('Email')?.hasError('required'))
+                {<div class=red>השדה חובה⚠️</div>}
+                @if(formLogIn.get('Email')?.hasError('email'))
+                {<div class="red">יש להכניס אימייל תקין⚠️</div>}
+            }
+
+  <div class="inputEye">
+    <label>סיסמה</label>
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      formControlName="UserPassword"
+      />
+      <button type="button" class="eyes" (click)="PasswordVisibility()">
+        @if (!showPassword) {
+          <mat-icon>visibility</mat-icon>
+        } @else {
+          <mat-icon>visibility_off</mat-icon>
+        }
+      </button>
+  </div>
+    @if (formLogIn.get('UserPassword')?.touched) 
+              {  @if(formLogIn.get('UserPassword')?.hasError('required'))
+                  {<div class=red>השדה חובה⚠️</div>}
+                 @if (formLogIn.get('UserPassword')?.hasError('minlength')) 
+                  {<div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>}
+                 @if (formLogIn.get('UserPassword')?.hasError('pattern')) 
+                 {<div class="red">יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️</div>}
+              }
+
+       
+       <button class="btn btn-outline-secondary signupbtn" type="submit" [disabled]="formLogIn.invalid">הוספת רכזת📋</button>
+      
+  </form>
+
+
+

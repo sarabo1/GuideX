@@ -4,11 +4,13 @@ import { ServiceCoordinatorService } from '../../Services/service-coordinator.se
 import { InterfaceCoordinator } from '../../Interfaces/interface-coordinator';
 import { IdIsraelValidator} from '../../Services/israel_ID';
 import {  MatIconModule } from "@angular/material/icon";
-
+import { DropdownModule } from 'primeng/dropdown';
+import { CardModule } from 'primeng/card';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-coordinator-registrations',
-  imports: [ReactiveFormsModule,  MatIconModule],
+  imports: [ReactiveFormsModule,  MatIconModule, DropdownModule, CardModule ],
   templateUrl: './coordinator-registrations.component.html',
   styleUrls: ['./coordinator-registrations.component.scss'],
   standalone: true
@@ -16,7 +18,12 @@ import {  MatIconModule } from "@angular/material/icon";
 export class CoordinatorRegistrationsComponent {
   lastUserId : number | undefined;
   lastCoordinatorId : number | undefined;
-  constructor(private listOfCoordinators: ServiceCoordinatorService){}
+   
+
+
+  constructor(private listOfCoordinators: ServiceCoordinatorService, private router: Router) {
+   
+  }
   private IdIsrael = inject(IdIsraelValidator);
 
   ngOnInit(){
@@ -111,6 +118,8 @@ export class CoordinatorRegistrationsComponent {
         console.log("רכזת חדשה נוספה:", newCoordinator);
         this.formCoordinator.reset();
 
+        this.router.navigate(["/Home_Page"]);
+       
     } else {
         console.error("טופס לא תקין:", this.formCoordinator.errors);
     }
@@ -121,6 +130,7 @@ export class CoordinatorRegistrationsComponent {
   showPassword = false;
   PasswordVisibility() {
    this.showPassword = !this.showPassword;
+   
 }
 
 
