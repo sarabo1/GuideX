@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordinator/checker-guide-or-coordinator.component';
+import { SighInPageComponent } from '../sigh-in-page/sigh-in-page.component';
 @Component({
   selector: 'app-welcome-page',
   imports: [],
@@ -11,10 +12,22 @@ import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordina
 export class WelcomePageComponent {
   constructor(public dialog: MatDialog) {}
 
-  openDialog() {
+  openDialogRegistrations() {
 
     const dialogRef = this.dialog.open(
       CheckerGuideOrCoordinatorComponent,
+      {
+        width: '650px',
+        data: {}
+      }
+    );
+   
+     
+  }
+  openDialogLogin() {
+
+    const dialogRef = this.dialog.open(
+      SighInPageComponent,
       {
         width: '650px',
         data: {}
