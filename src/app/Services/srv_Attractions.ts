@@ -1,0 +1,862 @@
+import { Injectable } from '@angular/core';
+import { int_Attractions } from '../Interfaces/int_Attractions';
+
+
+@Injectable({
+    providedIn: 'root'
+})
+export class srv_Attractions {
+    
+ mock_Attractions: int_Attractions[] = [
+  { 
+    AttractionsId: 1, 
+    AttractionsName: "מעלית הזמן ירושלים", 
+    RegionId: 7, 
+    Address: "נחלת שבעה, ירושלים", 
+    AttractionsTypeId: 17, 
+    Description: "מיצג אינטראקטיבי היסטורי חווייתי לקבוצות וכיתות", 
+    ShomerShabat: 2,
+    Phone: "02-6248383"
+  },
+  { 
+    AttractionsId: 2,
+    AttractionsName: "בריכות צפת",
+    RegionId: 1,
+    Address: "צפת",
+    AttractionsTypeId: 11,
+    Description: "מתחם בריכות עירוני נפרד", 
+    ShomerShabat: 2,
+    Phone: "04-6972411"
+  },
+  { 
+    AttractionsId: 3, 
+    AttractionsName: "מסלול נחל כזיב", 
+    RegionId: 1, 
+    Address: "", 
+    AttractionsTypeId: 1, 
+    Description: "מסלול הליכה בטבע הגלילי", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 4, 
+    AttractionsName: "רכיבה על סוסים חוות השפלה", 
+    RegionId: 6, 
+    Address: "מושב ישעי", 
+    AttractionsTypeId: 5, 
+    Description: "טיולי סוסים בנופים המרהיבים של השפלה", 
+    ShomerShabat: 1,
+    Phone: "02-9913344"
+  },
+  { 
+    AttractionsId: 5, 
+    AttractionsName: "מרכז המבקרים של בנק ישראל", 
+    RegionId: 7, 
+    Address: "קריית הממשלה, ירושלים", 
+    AttractionsTypeId: 18, 
+    Description: "סיור מרתק ומותאם לכיתות על תולדות המטבע והכלכלה", 
+    ShomerShabat: 2,
+    Phone: "02-6552211"
+  },
+  { 
+    AttractionsId: 6, 
+    AttractionsName: "חוף נפרד טבריה", 
+    RegionId: 2, 
+    Address: "טבריה", 
+    AttractionsTypeId: 13, 
+    Description: "חוף רחצה נפרד ומסודר בכנרת", 
+    ShomerShabat: 2,
+    Phone: "04-6721155"
+  },
+  { 
+    AttractionsId: 7, 
+    AttractionsName: "איי קלימבו קיר טיפוס", 
+    RegionId: 5, 
+    Address: "קניון איילון, רמת גן", 
+    AttractionsTypeId: 25, 
+    Description: "מתחם קירות טיפוס אתגרי לכל הגילאים", 
+    ShomerShabat: 1,
+    Phone: "03-5704455"
+  },
+  { 
+    AttractionsId: 8, 
+    AttractionsName: "חריש על גלגלים", 
+    RegionId: 3, 
+    Address: "חריש", 
+    AttractionsTypeId: 2, 
+    Description: "טיולי ג'יפים ושטח למשפחות וקבוצות שומרות שבת", 
+    ShomerShabat: 2,
+    Phone: "052-7162233"
+  },
+  { 
+    AttractionsId: 9,
+    AttractionsName: "פארק מים חוף גיא",
+    RegionId: 2,
+    Address: "", 
+    AttractionsTypeId: 10,
+    Description: "פארק מים למשפחות ולקבוצות",
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 10, 
+    AttractionsName: "מרכז מבקרים רמת הגולן", 
+    RegionId: 2, 
+    Address: "רמת הגולן", 
+    AttractionsTypeId: 18, 
+    Description: "מרכז מבקרים ויין כשר למהדרין", 
+    ShomerShabat: 2,
+    Phone: "04-6968411"
+  },
+  { 
+    AttractionsId: 11, 
+    AttractionsName: "טרקטורוני דישון", 
+    RegionId: 1, 
+    Address: "מושב דישון", 
+    AttractionsTypeId: 3, 
+    Description: "טיולי שטח חווייתיים בעמק החולה ונחל דישון", 
+    ShomerShabat: 1,
+    Phone: "04-6983344"
+  },
+  { 
+    AttractionsId: 12, 
+    AttractionsName: "מוזיאון השעווה היהודי", 
+    RegionId: 7, 
+    Address: "מרכז העיר, ירושלים", 
+    AttractionsTypeId: 17, 
+    Description: "דמויות מההיסטוריה היהודית בגודל מלא - מתאים לסיורי תלמידים", 
+    ShomerShabat: 2,
+    Phone: "02-5401122"
+  },
+  { 
+    AttractionsId: 13, 
+    AttractionsName: "סדנת יצירה צפת", 
+    RegionId: 1, 
+    Address: "צפת", 
+    AttractionsTypeId: 32, 
+    Description: "סדנת אמנות ויצירה ברובע היהודי", 
+    ShomerShabat: 2,
+    Phone: "050-4123456"
+  },
+  { 
+    AttractionsId: 14, 
+    AttractionsName: "גן חיות חיפה", 
+    RegionId: 4, 
+    Address: "", 
+    AttractionsTypeId: 19, 
+    Description: "גן חיות עירוני", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 15, 
+    AttractionsName: "פארק החבלים אלון מורה", 
+    RegionId: 6, 
+    Address: "אלון מורה", 
+    AttractionsTypeId: 29, 
+    Description: "פארק אתגרי, אומגות וקירות טיפוס לקבוצות וכיתות", 
+    ShomerShabat: 2,
+    Phone: "054-8451122"
+  },
+  { 
+    AttractionsId: 16, 
+    AttractionsName: "אומגה קו המים", 
+    RegionId: 1, 
+    Address: "ראש הנקרה", 
+    AttractionsTypeId: 24, 
+    Description: "גלישת אומגה אתגרית מול הים התיכון", 
+    ShomerShabat: 1,
+    Phone: "04-9852233"
+  },
+  { 
+    AttractionsId: 17, 
+    AttractionsName: "סדנת שוקולד כפר תבור", 
+    RegionId: 3, 
+    Address: "כפר תבור", 
+    AttractionsTypeId: 33, 
+    Description: "סדנה חווייתית וטעימה עם כשרות מהדרין", 
+    ShomerShabat: 2,
+    Phone: "04-6761122"
+  },
+  { 
+    AttractionsId: 18, 
+    AttractionsName: "שיט טורנדו חסדי ה'", 
+    RegionId: 2, 
+    Address: "חוף הלידו, טבריה", 
+    AttractionsTypeId: 7, 
+    Description: "שיט אקסטרים מהיר בסירות טורנדו בהפרדה מלאה לקבוצות", 
+    ShomerShabat: 2,
+    Phone: "050-7701144"
+  },
+  { 
+    AttractionsId: 19, 
+    AttractionsName: "באולינג קניון לב חדרה", 
+    RegionId: 5, 
+    Address: "רוטשילד, חדרה", 
+    AttractionsTypeId: 27, 
+    Description: "מתחם באולינג ומשחקי וידאו למשפחות", 
+    ShomerShabat: 1,
+    Phone: "04-6325511"
+  },
+  { 
+    AttractionsId: 20, 
+    AttractionsName: "סדנת אפייה בני ברק", 
+    RegionId: 5, 
+    Address: "בני ברק", 
+    AttractionsTypeId: 34, 
+    Description: "אפיית חלות ומאפים מיוחדים לשבת", 
+    ShomerShabat: 2,
+    Phone: "03-5702211"
+  },
+  { 
+    AttractionsId: 21, 
+    AttractionsName: "פארק הירקון", 
+    RegionId: 5, 
+    Address: "", 
+    AttractionsTypeId: 39, 
+    Description: "פארק עירוני ענק", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 22, 
+    AttractionsName: "מרכז המבקרים קטיף קטיפה", 
+    RegionId: 6, 
+    Address: "גוש עציון", 
+    AttractionsTypeId: 22, 
+    Description: "קטיף עצמי של פירות יער שומר שמיטה וערלה כהלכה", 
+    ShomerShabat: 2,
+    Phone: "02-9933112"
+  },
+  { 
+    AttractionsId: 23, 
+    AttractionsName: "סיור סגווי נמל יפו", 
+    RegionId: 5, 
+    Address: "נמל יפו, תל אביב", 
+    AttractionsTypeId: 31, 
+    Description: "סיור מודרך ורכיבה על סגווי לאורך רצועת החוף", 
+    ShomerShabat: 1,
+    Phone: "03-6811122"
+  },
+  { 
+    AttractionsId: 24, 
+    AttractionsName: "חוף נפרד אשדוד", 
+    RegionId: 5, 
+    Address: "אשדוד", 
+    AttractionsTypeId: 13, 
+    Description: "חוף רחצה מותאם ונפרד לחלוטין", 
+    ShomerShabat: 2,
+    Phone: "08-8545111"
+  },
+  { 
+    AttractionsId: 25, 
+    AttractionsName: "קארטינג מהדרין ירושלים", 
+    RegionId: 7, 
+    Address: "תלפיות, ירושלים", 
+    AttractionsTypeId: 3, 
+    Description: "מסלול קארטינג מקורה המקבל קבוצות בתחרותיות חווייתית", 
+    ShomerShabat: 2,
+    Phone: "02-6722211"
+  },
+  { 
+    AttractionsId: 26, 
+    AttractionsName: "סיור מודרך חברון", 
+    RegionId: 6, 
+    Address: "חברון", 
+    AttractionsTypeId: 31, 
+    Description: "סיור היסטורי מרתק במערת המכפלה ויישוב היהודי", 
+    ShomerShabat: 2,
+    Phone: "02-9961122"
+  },
+  { 
+    AttractionsId: 27, 
+    AttractionsName: "משחקיית פעלטון גבעתיים", 
+    RegionId: 5, 
+    Address: "קניון גבעתיים", 
+    AttractionsTypeId: 28, 
+    Description: "משחקייה מקורה וממוזגת לפעוטות וילדים", 
+    ShomerShabat: 1,
+    Phone: "03-7311144"
+  },
+  { 
+    AttractionsId: 28, 
+    AttractionsName: "פארק מים שפיים", 
+    RegionId: 5, 
+    Address: "", 
+    AttractionsTypeId: 10, 
+    Description: "פארק מים גדול המותאם לימי כיף של כיתות ובתי ספר", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 29, 
+    AttractionsName: "מרכז המבקרים השל''ה הקדוש", 
+    RegionId: 1, 
+    Address: "טבריה העתיקה", 
+    AttractionsTypeId: 18, 
+    Description: "סיורים מודרכים ומיצג אורקולי תורני לקבוצות", 
+    ShomerShabat: 2,
+    Phone: "04-6712233"
+  },
+  { 
+    AttractionsId: 30, 
+    AttractionsName: "סדנת סת\"ם וקלף בצפת", 
+    RegionId: 1, 
+    Address: "קריית ברסלב, צפת", 
+    AttractionsTypeId: 32, 
+    Description: "התנסות בכתיבת אותיות על קלף אמיתי עם סופר סת\"ם ירא שמים", 
+    ShomerShabat: 2,
+    Phone: "054-8415566"
+  },
+  { 
+    AttractionsId: 31, 
+    AttractionsName: "חדר בריחה המעבדה", 
+    RegionId: 4, 
+    Address: "ההסתדרות, חיפה", 
+    AttractionsTypeId: 26, 
+    Description: "חדר בריחה טכנולוגי ומאתגר לקבוצות", 
+    ShomerShabat: 1,
+    Phone: "04-8421155"
+  },
+  { 
+    AttractionsId: 32, 
+    AttractionsName: "פארק אקסטרים עכו (סגור בשבת)", 
+    RegionId: 1, 
+    Address: "שלום הגליל, עכו", 
+    AttractionsTypeId: 29, 
+    Description: "קירות טיפוס וחבלים עם מענה לסיורי כיתות מאורגנים", 
+    ShomerShabat: 2,
+    Phone: "04-9551144"
+  },
+  { 
+    AttractionsId: 33, 
+    AttractionsName: "חדר בריחה קודש וחול", 
+    RegionId: 5, 
+    Address: "רמת גן (גבול בני ברק)", 
+    AttractionsTypeId: 26, 
+    Description: "חדר בריחה מאתגר עם עלילה היסטורית יהודית", 
+    ShomerShabat: 2,
+    Phone: "03-6162255"
+  },
+  { 
+    AttractionsId: 34, 
+    AttractionsName: "סירות פדלים פארק רעננה", 
+    RegionId: 5, 
+    Address: "פארק רעננה", 
+    AttractionsTypeId: 9, 
+    Description: "שייט משפחתי וקבוצתי רגוע באגם הציורי של הפארק", 
+    ShomerShabat: 1,
+    Phone: "09-7711122"
+  },
+  { 
+    AttractionsId: 35, 
+    AttractionsName: "מוזיאון חצר הישוב הישן", 
+    RegionId: 7, 
+    Address: "הרובע היהודי, ירושלים", 
+    AttractionsTypeId: 17, 
+    Description: "הצצה לחיי היהודים בירושלים במאות הקודמות", 
+    ShomerShabat: 2,
+    Phone: "02-6284636"
+  },
+  { 
+    AttractionsId: 36, 
+    AttractionsName: "פינת חי חסדי יוסף", 
+    RegionId: 9, 
+    Address: "נתיבות", 
+    AttractionsTypeId: 20, 
+    Description: "פינת חי וליטוף חווייתית לילדים, סגור בשבת לחלוטין", 
+    ShomerShabat: 2,
+    Phone: "08-9941122"
+  },
+  { 
+    AttractionsId: 37, 
+    AttractionsName: "טיול ריינג'רים בנוף הגליל", 
+    RegionId: 3, 
+    Address: "נוף הגליל", 
+    AttractionsTypeId: 4, 
+    Description: "נהיגת שטח עצמית ברכבי ריינג'ר מול נופי עמק יזרעאל", 
+    ShomerShabat: 1,
+    Phone: "04-6522233"
+  },
+  { 
+    AttractionsId: 38, 
+    AttractionsName: "מרכז מבקרים לחם תושיה", 
+    RegionId: 5, 
+    Address: "אזור התעשייה בני ברק", 
+    AttractionsTypeId: 18, 
+    Description: "סיור חווייתי ואפיית חלות חמות המותאם לקבוצות גדולות וכיתות", 
+    ShomerShabat: 2,
+    Phone: "03-6192244"
+  },
+  { 
+    AttractionsId: 39, 
+    AttractionsName: "טיולי אופניים משפחתיים במירון", 
+    RegionId: 1, 
+    Address: "מושב מירון", 
+    AttractionsTypeId: 6, 
+    Description: "השכרת אופניים ומסלולי רכיבה מותאמים למשפחות ולקבוצות", 
+    ShomerShabat: 2,
+    Phone: "04-6992233"
+  },
+  { 
+    AttractionsId: 40, 
+    AttractionsName: "חוות התוכים והאטרקציות", 
+    RegionId: 5, 
+    Address: "כפר הס", 
+    AttractionsTypeId: 20, 
+    Description: "מגוון ענק של תוכים מרהיבים ופינות יצירה לילדים", 
+    ShomerShabat: 1,
+    Phone: "09-7961122"
+  },
+  { 
+    AttractionsId: 41, 
+    AttractionsName: "חוויית השופר קצרין", 
+    RegionId: 2, 
+    Address: "אזור תעשייה קצרין", 
+    AttractionsTypeId: 32, 
+    Description: "סדנת ייצור שופרות חווייתית וחינוכית המארחת כיתות בשמחה", 
+    ShomerShabat: 2,
+    Phone: "054-8412345"
+  },
+  { 
+    AttractionsId: 42, 
+    AttractionsName: "מרכז המבקרים קוקה קולה (מהדרין)", 
+    RegionId: 5, 
+    Address: "רחוב כהנמן, בני ברק", 
+    AttractionsTypeId: 18, 
+    Description: "הסיור המפורסם במפעל המשקאות המוביל, מותאם במיוחד לכיתות וקבוצות", 
+    ShomerShabat: 2,
+    Phone: "03-5771122"
+  },
+  { 
+    AttractionsId: 43, 
+    AttractionsName: "קטיף עצמי בוסתן בראשית", 
+    RegionId: 2, 
+    Address: "עין זיוון", 
+    AttractionsTypeId: 22, 
+    Description: "קטיף עצמי של דובדבנים ופירות קיץ עם מרחב לפעילות כיתתית", 
+    ShomerShabat: 1,
+    Phone: "04-6993355"
+  },
+  { 
+    AttractionsId: 44, 
+    AttractionsName: "חוויה תת-ימית באילת הנפרדת", 
+    RegionId: 10, 
+    Address: "מזח החוף הדרומי, אילת", 
+    AttractionsTypeId: 7, 
+    Description: "שייט בסירת זכוכית לצפייה באלמוגים ודגים ללא חילול שבת", 
+    ShomerShabat: 2,
+    Phone: "08-6371155"
+  },
+  { 
+    AttractionsId: 45, 
+    AttractionsName: "פארק חבלים אתגרי אשדוד", 
+    RegionId: 5, 
+    Address: "פארק אתגרים, אשדוד", 
+    AttractionsTypeId: 29, 
+    Description: "מתחם טיפוס חבלים, אומגות ומסלולי מכשולים מושלם לימי גיבוש של כיתות", 
+    ShomerShabat: 1,
+    Phone: "08-8541155"
+  },
+  { 
+    AttractionsId: 46, 
+    AttractionsName: "מרכז מבקרים שמן זית", 
+    RegionId: 3, 
+    Address: "גבעת אבני", 
+    AttractionsTypeId: 18, 
+    Description: "סיור בבית הבד והדרכה לקבוצות על תהליך הפקת שמן זית זך", 
+    ShomerShabat: 2,
+    Phone: "04-6731122"
+  },
+  { 
+    AttractionsId: 47, 
+    AttractionsName: "מוזיאון המדע תל אביב", 
+    RegionId: 5, 
+    Address: "אוניברסיטת תל אביב", 
+    AttractionsTypeId: 17, 
+    Description: "תערוכות מדעיות אינטראקטיביות וניסויים מרתקים - בנוי לקבלת כיתות ובתי ספר", 
+    ShomerShabat: 1,
+    Phone: "03-6401144"
+  },
+  { 
+    AttractionsId: 48, 
+    AttractionsName: "סדנת נפחות זכוכית אמנותית", 
+    RegionId: 1, 
+    Address: "קריית האמנים, צפת", 
+    AttractionsTypeId: 32, 
+    Description: "הדגמה וסדנה מעשית של עיצוב זכוכית באש חמה על ידי אמן דתי", 
+    ShomerShabat: 2,
+    Phone: "052-6123456"
+  },
+  { 
+    AttractionsId: 49, 
+    AttractionsName: "באולינג באר שבע", 
+    RegionId: 9, 
+    Address: "מתחם ביג, באר שבע", 
+    AttractionsTypeId: 27, 
+    Description: "מסלולי באולינג חדישים ומרווחים המתאימים לתחרויות כיתתיות", 
+    ShomerShabat: 1,
+    Phone: "08-6411122"
+  },
+  { 
+    AttractionsId: 50, 
+    AttractionsName: "פארק המזרקות הלגו ברמת גן", 
+    RegionId: 5, 
+    Address: "פארק לאומי, רמת גן", 
+    AttractionsTypeId: 39, 
+    Description: "מתחם מזרקות מים חווייתי ומתקני משחקים ענקיים לקבוצות פתוחות", 
+    ShomerShabat: 2,
+    Phone: "03-6311122"
+  },
+  { 
+    AttractionsId: 51, 
+    AttractionsName: "פארק המים הצף אקווה כיף", 
+    RegionId: 2, 
+    Address: "חוף גנים, טבריה", 
+    AttractionsTypeId: 10, 
+    Description: "מכשולים ומסלולים אתגריים על המים, חוויה מטורפת לכיתות ולקבוצות", 
+    ShomerShabat: 1,
+    Phone: "04-6701122"
+  },
+  { 
+    AttractionsId: 52, 
+    AttractionsName: "מרכז המבקרים של ידיעות אחרונות", 
+    RegionId: 5, 
+    Address: "ראשון לציון", 
+    AttractionsTypeId: 18, 
+    Description: "סיור קבוצתי אינטראקטיבי בתהליך הפקת והדפסת העיתון", 
+    ShomerShabat: 2,
+    Phone: "03-9522111"
+  },
+  { 
+    AttractionsId: 53, 
+    AttractionsName: "איי ג'אמפ פארק טרמפולינות", 
+    RegionId: 5, 
+    Address: "פתח תקווה", 
+    AttractionsTypeId: 25, 
+    Description: "מתחם טרמפולינות ענק וממוזג, מתאים לסגירת אירועים כיתתיים", 
+    ShomerShabat: 1,
+    Phone: "03-9211155"
+  },
+  { 
+    AttractionsId: 54, 
+    AttractionsName: "פארק המים הצף מאליבו", 
+    RegionId: 2, 
+    Address: "", 
+    AttractionsTypeId: 10, 
+    Description: "מתחם מתנפחים צפים בכנרת", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 55, 
+    AttractionsName: "מרכז חווייתי למורשת גוש עציון", 
+    RegionId: 6, 
+    Address: "כפר עציון", 
+    AttractionsTypeId: 17, 
+    Description: "מיצג אורקולי היסטורי מרגש ומותאם לקבוצות תלמידים", 
+    ShomerShabat: 2,
+    Phone: "02-9935111"
+  },
+  { 
+    AttractionsId: 56, 
+    AttractionsName: "לייזר טאג אקסטרים", 
+    RegionId: 5, 
+    Address: "נתניה", 
+    AttractionsTypeId: 3, 
+    Description: "זירת לחימה בלייזר קבוצתית המיועדת לימי גיבוש כיתתיים", 
+    ShomerShabat: 1,
+    Phone: "09-8651122"
+  },
+  { 
+    AttractionsId: 57, 
+    AttractionsName: "שיט בסירות קטאמרן עכו", 
+    RegionId: 1, 
+    Address: "נמל עכו", 
+    AttractionsTypeId: 7, 
+    Description: "הפלגה חווייתית לקבוצות גדולות סביב חומות עכו העתיקה", 
+    ShomerShabat: 1,
+    Phone: "04-9911133"
+  },
+  { 
+    AttractionsId: 58, 
+    AttractionsName: "מרכז המבקרים חלב ודבש", 
+    RegionId: 3, 
+    Address: "עמק יזרעאל", 
+    AttractionsTypeId: 18, 
+    Description: "סיור מקצועי לקבוצות בכוורות דבורים ובתי בד מודרניים", 
+    ShomerShabat: 2,
+    Phone: "04-6511144"
+  },
+  { 
+    AttractionsId: 59, 
+    AttractionsName: "פארק אתגרים חבלים פארק רעננה", 
+    RegionId: 5, 
+    Address: "פארק רעננה", 
+    AttractionsTypeId: 29, 
+    Description: "מסלול חבלים בגובה ואומגות לפעילות תלמידים מודרכת", 
+    ShomerShabat: 1,
+    Phone: "09-7411133"
+  },
+  { 
+    AttractionsId: 60, 
+    AttractionsName: "פארק מים הלונה גל", 
+    RegionId: 2, 
+    Address: "", 
+    AttractionsTypeId: 10, 
+    Description: "פארק מציאות מים צפוני קלאסי", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 61, 
+    AttractionsName: "סיירת ניווט קבוצתית בירושלים", 
+    RegionId: 7, 
+    Address: "משכנות שאננים, ירושלים", 
+    AttractionsTypeId: 31, 
+    Description: "משחק ניווט אסטרטגי ותחרותי באמצעות קו טלפוני שמתקשרים אליו לכיתות", 
+    ShomerShabat: 2,
+    Phone: "02-5633322"
+  },
+  { 
+    AttractionsId: 62, 
+    AttractionsName: "סופרלנד פארק שעשועים", 
+    RegionId: 5, 
+    Address: "", 
+    AttractionsTypeId: 29, 
+    Description: "מתקני אקסטרים ושעשועים ענקיים", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 63, 
+    AttractionsName: "קארטינג פול פול אקסטרים", 
+    RegionId: 4, 
+    Address: "חוצות המפרץ, חיפה", 
+    AttractionsTypeId: 3, 
+    Description: "מסלול מרוצים מקצועי ומקורה המארגן ליגות לקבוצות סגורות", 
+    ShomerShabat: 1,
+    Phone: "04-8411166"
+  },
+  { 
+    AttractionsId: 64, 
+    AttractionsName: "מוזיאון כפיר לתולדות השריון", 
+    RegionId: 6, 
+    Address: "לטרון", 
+    AttractionsTypeId: 17, 
+    Description: "תצוגת טנקים ענקית וסיור לימודי מודרך המותאם לבתי ספר", 
+    ShomerShabat: 1,
+    Phone: "08-9251122"
+  },
+  { 
+    AttractionsId: 65, 
+    AttractionsName: "סדנת מדע חווייתית 'טכנודע'", 
+    RegionId: 3, 
+    Address: "חדרה", 
+    AttractionsTypeId: 32, 
+    Description: "מעבדות מדע אינטראקטיביות ופלנטריום מתקדם לכיתות חוקרות", 
+    ShomerShabat: 2,
+    Phone: "04-6333111"
+  },
+  { 
+    AttractionsId: 66, 
+    AttractionsName: "פארק מים ימית 2000", 
+    RegionId: 5, 
+    Address: "", 
+    AttractionsTypeId: 10, 
+    Description: "בריכות גלים ומגלשות אקסטרים", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 67, 
+    AttractionsName: "מרכז המבקרים שטראוס העולמית", 
+    RegionId: 1, 
+    Address: "אזור תעשייה כרמיאל", 
+    AttractionsTypeId: 18, 
+    Description: "הצצה לקווי הייצור של המעדנים האהובים וסדנת טעימות לקבוצות", 
+    ShomerShabat: 2,
+    Phone: "04-9888111"
+  },
+  { 
+    AttractionsId: 68, 
+    AttractionsName: "חדר בריחה קבוצתי 'האינפקציה'", 
+    RegionId: 5, 
+    Address: "תל אביב", 
+    AttractionsTypeId: 26, 
+    Description: "מתחם חדרי בריחה מקבילים המאפשר תחרות סימולטנית לכיתה שלמה", 
+    ShomerShabat: 1,
+    Phone: "03-6200011"
+  },
+  { 
+    AttractionsId: 69, 
+    AttractionsName: "שייט בספינת זכוכית 'ישראל'", 
+    RegionId: 10, 
+    Address: "מרינה אילת", 
+    AttractionsTypeId: 7, 
+    Description: "הפלגה קבוצתית גדולה לצפייה בשמורת האלמוגים", 
+    ShomerShabat: 1,
+    Phone: "08-6333155"
+  },
+  { 
+    AttractionsId: 70, 
+    AttractionsName: "פארק קנאביס וטבע 'חולות'", 
+    RegionId: 9, 
+    Address: "", 
+    AttractionsTypeId: 39, 
+    Description: "פארק בוטני פתוח רחב ידיים", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 71, 
+    AttractionsName: "מרכז למידה חווייתי 'חלוציות'", 
+    RegionId: 9, 
+    Address: "חבל לכיש", 
+    AttractionsTypeId: 17, 
+    Description: "סיור ציוני מרתק המשלב משימות שטח קבוצתיות לתלמידים", 
+    ShomerShabat: 2,
+    Phone: "08-6811144"
+  },
+  { 
+    AttractionsId: 72, 
+    AttractionsName: "ספארי ברמת גן", 
+    RegionId: 5, 
+    Address: "", 
+    AttractionsTypeId: 19, 
+    Description: "נסיעה חופשית וסיור בגן החיות הגדול בארץ", 
+    ShomerShabat: 0,
+    Phone: ""
+  },
+  { 
+    AttractionsId: 73, 
+    AttractionsName: "קיר טיפוס 'הסלע' קבוצות", 
+    RegionId: 7, 
+    Address: "תלפיות, ירושלים", 
+    AttractionsTypeId: 25, 
+    Description: "מתחם בולדרינג וטיפוס מקצועי עם הדרכה ייעודית לקבוצות", 
+    ShomerShabat: 2,
+    Phone: "02-6711155"
+  },
+  { 
+    AttractionsId: 74, 
+    AttractionsName: "באולינג סטרייק נתניה", 
+    RegionId: 5, 
+    Address: "אזור התעשייה נתניה", 
+    AttractionsTypeId: 27, 
+    Description: "אולם באולינג ענק המארח ערבי גיבוש וימי כיף לתלמידים", 
+    ShomerShabat: 1,
+    Phone: "09-8855111"
+  },
+  { 
+    AttractionsId: 75, 
+    AttractionsName: "פארק המים חפץ חיים", 
+    RegionId: 6, 
+    Address: "קיבוץ חפץ חיים", 
+    AttractionsTypeId: 10, 
+    Description: "פארק מים הפועל בימי הפרדה מלאים לחלוטין ומתאים לבתי ספר דתיים", 
+    ShomerShabat: 2,
+    Phone: "08-8593111"
+  },
+  { 
+    AttractionsId: 76, 
+    AttractionsName: "סיור עששיות בפארק תמנע", 
+    RegionId: 10, 
+    Address: "פארק תמנע, הערבה", 
+    AttractionsTypeId: 31, 
+    Description: "חוויית לילה קבוצתית קסומה בין עמודי שלמה ועמודי האבן", 
+    ShomerShabat: 1,
+    Phone: "08-6311177"
+  },
+  { 
+    AttractionsId: 77, 
+    AttractionsName: "מרכז מבקרים 'תנובה' רחובות", 
+    RegionId: 5, 
+    Address: "אזור תעשייה רחובות", 
+    AttractionsTypeId: 18, 
+    Description: "מסע אינטראקטיבי דיגיטלי בעולם החלב, מיועד לכיתות יסודי וחטיבה", 
+    ShomerShabat: 2,
+    Phone: "08-9444111"
+  },
+  { 
+    AttractionsId: 78, 
+    AttractionsName: "פארק המדע קרסו", 
+    RegionId: 9, 
+    Address: "העיר העתיקה, באר שבע", 
+    AttractionsTypeId: 17, 
+    Description: "קמפוס מדעי ענק עם עשרות מיצגים חווייתיים לסיורי כיתות", 
+    ShomerShabat: 1,
+    Phone: "08-6251111"
+  },
+  { 
+    AttractionsId: 79, 
+    AttractionsName: "נינג'ה פארק אקסטרים", 
+    RegionId: 5, 
+    Address: "ראשון לציון", 
+    AttractionsTypeId: 29, 
+    Description: "מתחם מכשולים מאתגר בהשראת תוכניות הנינג'ה לקבוצות נוער", 
+    ShomerShabat: 1,
+    Phone: "03-9511188"
+  },
+  { 
+    AttractionsId: 80, 
+    AttractionsName: "מתחם הניווט הדיגיטלי 'רמת הנדיב'", 
+    RegionId: 3, 
+    Address: "זכרון יעקב", 
+    AttractionsTypeId: 31, 
+    Description: "פעילות גיבוש וניווט אקולוגית בשטחי הגנים לקבוצות מאורגנות", 
+    ShomerShabat: 2,
+    Phone: "04-6291111"
+  }
+];
+    GetAttractions(){
+        return this.mock_Attractions;
+    }
+
+
+    GetTypeByNumber( AttractionsTypeId : number) : string{
+      switch(AttractionsTypeId)  {
+        case 1: return "מסלולי הליכה";
+        case 2: return "ג'יפים";
+        case 3: return "טרקטורונים";
+        case 4: return "ריינג'רים";
+        case 5: return "רכיבה על סוסים";
+        case 6: return "טיולי אופניים";
+        case 7: return "שייט";
+        case 8: return "קיאקים";
+        case 9: return "סירות פדלים";
+        case 10: return "פארקי מים";
+        case 11: return "בריכות";
+        case 12: return "מעיינות";
+        case 13: return "חופי רחצה נפרדים";
+        case 14: return "פארקי טבע";
+        case 15: return "תצפיות נוף";
+        case 16: return "אתרי מורשת";
+        case 17: return "מוזיאונים";
+        case 18: return "מרכזי מבקרים";
+        case 19: return "גני חיות";
+        case 20: return "פינות ליטוף";
+        case 21: return "חוות חקלאיות";
+        case 22: return "קטיף עצמי";
+        case 23: return "פארקי שעשועים";
+        case 24: return "אומגות";
+        case 25: return "קירות טיפוס";
+        case 26: return "חדרי בריחה";
+        case 27: return "באולינג";
+        case 28: return "משחקיות";
+        case 29: return "פארקי חבלים";
+        case 30: return "רכבות תיירותיות";
+        case 31: return "סיורים מודרכים";
+        case 32: return "סדנאות יצירה";
+        case 33: return "סדנאות שוקולד";
+        case 34: return "סדנאות אפייה";
+        case 35: return "מצפורים";
+        case 36: return "מערות";
+        case 37: return "אתרים ארכיאולוגיים";
+        case 38: return "גנים בוטניים";
+        case 39: return "פארקים עירוניים";
+        case 40: return "פיקניק ונופש יום";
+        default: return "לא ידוע";
+    }
+}
+}

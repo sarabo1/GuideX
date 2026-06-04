@@ -3,16 +3,22 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 import { ServiceUsersService } from '../../Services/service-users.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CdkObserveContent } from "@angular/cdk/observers";
 
 
 @Component({
   selector: 'app-sigh-in-page',
-  imports: [MatIcon, ReactiveFormsModule],
+  imports: [MatIcon, ReactiveFormsModule, RouterOutlet, RouterLink, RouterLink, MatDialogModule, CdkObserveContent],
   templateUrl: './sigh-in-page.component.html',
-  styleUrl: './sigh-in-page.component.scss'
+  styleUrl: './sigh-in-page.component.scss',
+  standalone: true
 })
 export class SighInPageComponent {
+
+
+
   constructor(
     public dialogRef: MatDialogRef<SighInPageComponent>,
     public users_service :ServiceUsersService,

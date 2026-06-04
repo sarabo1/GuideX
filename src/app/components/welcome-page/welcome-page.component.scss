@@ -7,13 +7,16 @@
     margin: 10px;
     background-color: #FF5C67;
     color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* הוספת אנימציה חלקה */
+    transition: transform 0.2s ease, 
+    box-shadow 0.2s ease; 
+    display: flex;
+    align-items: center
 }
 
 .btn:hover {
     color: #004aad;
-    transform: translateY(-1px); /* יוצר אפקט של התרוממות */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* הוספת צל */
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 .container{
     
@@ -22,6 +25,7 @@
 }
 img{
     width: 402px;
+    margin: 10px;
 }
 .logo_dark{
     
@@ -31,6 +35,10 @@ img{
     font-size: 24px;
     font-weight: bold;
     margin-top: 20px;
+}
+.mat-icon-btn{
+    margin-top: 5px;
+    margin-right: 3px;
 }
 
 

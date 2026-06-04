@@ -27,15 +27,15 @@ export class GuideRegistrationsComponent {
       { name: 'גליל תחתון ועמקים', code: '3' },
       { name: 'כרמל ורמות מנשה', code: '4' },
       { name: 'מישור החוף והשרון', code: '5' },
-      { name: 'רי שומרון, הרי יהודה ושפלת יהודה', code: '6' },
+      { name: 'הרי שומרון, הרי יהודה ושפלת יהודה', code: '6' },
       { name: 'ירושלים', code: '7' },
       { name: 'מדבר יהודה וים המלח', code: '8' },
       { name: 'הנגב', code: '9' },
       { name: 'אילת והערבה', code: '10' },
     ];}
   private IdIsrael = inject(IdIsraelValidator);
-   value!: string;
-  IsraelIdValidator = this.IdIsrael.idValidator();
+
+ IsraelIdValidator = this.IdIsrael.idValidator();
    formGuide = new FormGroup({
 
       UserPassword: new FormControl('', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_^+=-])[A-Za-z\d@$!%*?&.#_^+=-]{8,}$/)]),

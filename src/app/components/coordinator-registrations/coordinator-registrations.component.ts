@@ -1,12 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { ServiceCoordinatorService } from '../../Services/service-coordinator.service';
-import { InterfaceCoordinator } from '../../Interfaces/interface-coordinator';
+import { InterfaceCoordinator } from '../../Interfaces/int-coordinator';
 import { IdIsraelValidator} from '../../Services/israel_ID';
 import {  MatIconModule } from "@angular/material/icon";
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { ServiceUsersService } from '../../Services/service-users.service';
+import { SrvSchoolService } from '../../Services/srv-school.service';
 
 @Component({
   selector: 'app-coordinator-registrations',
@@ -18,17 +20,23 @@ import { Router } from '@angular/router';
 export class CoordinatorRegistrationsComponent {
   lastUserId : number | undefined;
   lastCoordinatorId : number | undefined;
+  lastSchoolId : number | undefined;
    
 
 
-  constructor(private listOfCoordinators: ServiceCoordinatorService, private router: Router) {
+  constructor(private srvUsers:ServiceUsersService , 
+                private srv_Coordinators:ServiceCoordinatorService , 
+                private srvSchools: SrvSchoolService,
+                private router: Router) {
    
   }
-  private IdIsrael = inject(IdIsraelValidator);
+ private IdIsrael = inject(IdIsraelValidator);
 
+ IsraelIdValidator = this.IdIsrael.idValidator();
   ngOnInit(){
-    this.lastUserId = this.listOfCoordinators.GetLastUserId() + 1;
-    this.lastCoordinatorId = this.listOfCoordinators.GetLastTourCoordinatorId()+1;
+    this.lastUserId = this.srvUsers.GetLastUserId() + 1;
+    this.lastCoordinatorId = this.srv_Coordinators.GetLastTourCoordinatorId()+1;
+    this.lastSchoolId = this.srvSchools.GetLastSchoolId() + 1;
   }
     religiousData = [{id: 1, name: 'חסידי' },
        { id: 2, name: 'ספרדי' }, 
@@ -46,7 +54,6 @@ export class CoordinatorRegistrationsComponent {
        { id: 3, name: 'תיכון' }, 
        { id: 4,  name: 'אחר' }];
       
-    IsraelIdValidator = this.IdIsrael.idValidator();
   formCoordinator = new FormGroup({
 
       UserPassword: new FormControl('', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_^+=-])[A-Za-z\d@$!%*?&.#_^+=-]{8,}$/)]),
@@ -65,73 +72,54 @@ export class CoordinatorRegistrationsComponent {
       AgeSchoolId: new FormControl('',  [Validators.required]),
   })
 
- // newCoordinator(){
-  //    if (this.formCoordinator.valid) {
-  //       console.log(this.formCoordinator.errors);
-  //   this.listOfCoordinators.mock_Coordinators.push(
-  //     User:this.lastUserId,
-  //     UserPassword =this.formCoordinator.UserPassword.value, 
-  //     FirstName = this.formCoordinator.FirstName.value, 
-  //     LastName = this.formCoordinator.LastName.value, 
-  //     IdNumber = this.formCoordinator.IdNumber.value, 
-  //     CityId = this.formCoordinator.CityId.value, 
-  //     PhoneNumber = this.formCoordinator.PhoneNumber.value, 
-  //     Email = this.formCoordinator.Email.value, 
-  //     tourCoordinatorId = this.LastCoordinatorId;
-  //     RoleId= this.formCoordinator.RoleId.value, 
-  //     SchoolName = this.formCoordinator.SchoolName.value, 
-  //     IsBoys = this.formCoordinator.IsBoys.value, 
-  //     PrincipalName = this.formCoordinator.PrincipalName.value, 
-  //     PhoneSecretary = this.formCoordinator.PhoneSecretary.value, 
-  //     TypeSchoolId = this.formCoordinator.TypeSchoolId.value, 
-  //     AgeSchoolId = this.formCoordinator.AgeSchoolId.value);
-  //   this.formCoordinator.reset()
-  // }
  newCoordinator() {
     if (this.formCoordinator.valid) {
-        const newCoordinator: InterfaceCoordinator = {
-            user: {
-                UserId: this.lastUserId || 0, // בהנחה שזה לא יכול להיות ריק
-                UserPassword: this.formCoordinator.get('UserPassword')?.value || '', // בהנחה שזה לא יכול להיות ריק
-                FirstName: this.formCoordinator.get('FirstName')?.value || '',
-                LastName: this.formCoordinator.get('LastName')?.value || '',
-                IdNumber: this.formCoordinator.get('IdNumber')?.value || '',
-                CityId: Number(this.formCoordinator.get('CityId')?.value), // המרה למספר
-                PhoneNumber: this.formCoordinator.get('PhoneNumber')?.value || '',
-                Email: this.formCoordinator.get('Email')?.value || ''
-            },
-            TourCoordinatorId: this.lastCoordinatorId || 0,
-            RoleId: Number(this.formCoordinator.get('RoleId')?.value), // המרה למספר
-            School: {
-                SchoolId: this.lastUserId || 0, // הכנס כאן את מזהה בית הספר המתאים
-                SchoolName: this.formCoordinator.get('SchoolName')?.value || '',
-                IsBoys: Number(this.formCoordinator.get('IsBoys')?.value), // המרה למספר
-                CityId: Number(this.formCoordinator.get('CityId')?.value), // המרה למספר
-                PrincipalName: this.formCoordinator.get('PrincipalName')?.value || '',
-                PhoneSecretary: this.formCoordinator.get('PhoneSecretary')?.value || '', // כאן הוספת ברירת מחדל
-                TypeSchoolId: Number(this.formCoordinator.get('TypeSchoolId')?.value), // המרה למספר
-                AgeSchoolId: Number(this.formCoordinator.get('AgeSchoolId')?.value) // המרה למספר
-            }
-        };
+        this.srvUsers.InsertUser(
+        this.lastUserId||0,
+         this.formCoordinator.get('UserPassword')?.value || '',
+        this.formCoordinator.get('UserPassword')?.value || '',
+        this.formCoordinator.get('FirstName')?.value || '',
+        this.formCoordinator.get('IdNumber')?.value || '',
+        Number(this.formCoordinator.get('CityId')?.value),
+        this.formCoordinator.get('PhoneNumber')?.value ?? '',
+        this.formCoordinator.get('Email')?.value || '')
 
-        this.listOfCoordinators.mock_Coordinators.push(newCoordinator);
-        console.log("רכזת חדשה נוספה:", newCoordinator);
-        this.formCoordinator.reset();
+            this.srvSchools.InsertSchool(
+                this.lastSchoolId || 0,
+                this.formCoordinator.get('SchoolName')?.value || '',
+                Number(this.formCoordinator.get('IsBoys')?.value),
+                Number(this.formCoordinator.get('CityId')?.value),
+                this.formCoordinator.get('PrincipalName')?.value || '',
+                this.formCoordinator.get('PhoneSecretary')?.value || '',
+                Number(this.formCoordinator.get('TypeSchoolId')?.value),
+                Number(this.formCoordinator.get('AgeSchoolId')?.value)
+            );
 
-        this.router.navigate(["/Home_Page"]);
-       
-    } else {
-        console.error("טופס לא תקין:", this.formCoordinator.errors);
-    }
+            this.srv_Coordinators.InsertCoordinator(
+                this.lastUserId || 0,
+                this.lastCoordinatorId || 0,
+                Number(this.formCoordinator.get('RoleId')?.value),
+                this.lastSchoolId || 0
+            );
+
+     
+            
+            this.formCoordinator.reset();
+            
+            this.router.navigate(["/Home_Page"]);
+        } else {
+            console.error("טופס לא תקין:", this.formCoordinator.errors);
+        }
+     };
     
-}
- 
+
+     
   
   showPassword = false;
   PasswordVisibility() {
    this.showPassword = !this.showPassword;
    
-}
+  }
 
 
 }    

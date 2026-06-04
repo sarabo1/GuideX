@@ -1,0 +1,78 @@
+import { Injectable } from '@angular/core';
+import { InterfaceSchool } from '../Interfaces/interface-school';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SrvSchoolService {
+
+  public mock_Schools: InterfaceSchool[] = [
+    {
+            SchoolId: 1,
+            SchoolName: 'בית יעקב מאירות',
+            IsBoys: 0,
+            CityId: 101,
+            PrincipalName: 'מרכז רבקה',
+            PhoneSecretary: '050-0000001',
+            TypeSchoolId: 1,
+            AgeSchoolId: 1
+        },
+        {
+            SchoolId: 2,
+            SchoolName: 'בית יעקב נשמתי',
+            IsBoys: 0,
+            CityId: 102,
+            PrincipalName: 'גב’ חני',
+            PhoneSecretary: '050-0000002',
+            TypeSchoolId: 2,
+            AgeSchoolId: 2
+        },
+        {
+            SchoolId: 3,
+            SchoolName: 'בית יעקב חן',
+            IsBoys: 0,
+            CityId: 103,
+            PrincipalName: 'מרה’ אסתר',
+            PhoneSecretary: '050-0000003',
+            TypeSchoolId: 1,
+            AgeSchoolId: 1
+        },
+        {
+            SchoolId: 4,
+            SchoolName: 'בית יעקב תפארת',
+            IsBoys: 0,
+            CityId: 104,
+            PrincipalName: 'מר יעקב',
+            PhoneSecretary: '050-0000004',
+            TypeSchoolId: 3,
+            AgeSchoolId: 3
+        },
+
+  ];
+GetSchools(): InterfaceSchool[] {
+    return this.mock_Schools;
+  }
+
+  GetLastSchoolId(): number {
+    const schoolIds = this.mock_Schools.map(school => school.SchoolId);
+    return Math.max(...schoolIds);
+  }
+
+  InsertSchool(SchoolId: number, SchoolName: string, 
+    IsBoys: number, CityId: number, PrincipalName: string, 
+    PhoneSecretary: string, TypeSchoolId: number, AgeSchoolId: number) {
+    const newSchool: InterfaceSchool = {
+      SchoolId: SchoolId,
+      SchoolName: SchoolName,
+      IsBoys: IsBoys,
+      CityId: CityId,
+      PrincipalName: PrincipalName,
+      PhoneSecretary: PhoneSecretary,
+      TypeSchoolId: TypeSchoolId,
+      AgeSchoolId: AgeSchoolId
+    };
+    this.mock_Schools.push(newSchool);
+  }
+
+
+}

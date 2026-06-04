@@ -11,7 +11,7 @@
   </div>
   @if (formGuide.get('FirstName')?.touched) 
             {  @if(formGuide.get('FirstName')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
+                {<div class="red">השדה חובה⚠️</div>}
                @if (formGuide.get('FirstName')?.hasError('minlength')) { 
                <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
             }
@@ -36,7 +36,7 @@
   @if (formGuide.get('IdNumber')?.touched) 
             {  @if(formGuide.get('IdNumber')?.hasError('required'))
                 {<div class=red>השדה חובה⚠️</div>}
-               @if (formGuide.get('IdNumber')?.hasError('IsraelIdValidator')) { 
+               @if (formGuide.get('IdNumber')?.hasError('invalidID')) { 
                <div class="red">יש להכניס מספר תעודת זהות תקינה </div>}
             }
 
@@ -79,8 +79,6 @@
     @if (formGuide.get('UserPassword')?.touched) 
               {  @if(formGuide.get('UserPassword')?.hasError('required'))
                   {<div class=red>השדה חובה⚠️</div>}
-                 @if (formGuide.get('UserPassword')?.hasError('minlength')) 
-                  {<div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>}
                  @if (formGuide.get('UserPassword')?.hasError('pattern')) 
                  {<div class="red">יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️</div>}
               }
@@ -98,7 +96,7 @@
       }
        
   <div>
-    <label>גיל מוסד:</label>
+    <label>השתייכות דתית:</label>
     <select formControlName="ReligiousId">
       @for (item of religiousData; track item.id) {
         <option [value]="item.id">{{ item.name }}</option>
@@ -124,7 +122,9 @@
       </div>
       <label>קבצי תעודות, יש להעלות תעודה על כל אזור שנבחר.:</label>
       <input type="file" (change)="onFileSelected($event)" multiple  />
-
+<!-- ///כסגכבליה -->
+<label>קורות חיים.:</label>
+      <input type="file" (change)="onFileSelected($event)"   />
 
             
   <button class="btn btn-outline-secondary" type="submit" [disabled]="formGuide.invalid">הוספת מדריכה</button>

@@ -38,4 +38,6 @@ export class CheckerGuideOrCoordinatorComponent {
     this.dialogRef.close(); 
   }
   
+
+  
 }

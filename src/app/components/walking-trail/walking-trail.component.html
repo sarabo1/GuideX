@@ -1,0 +1,95 @@
+
+
+
+
+<div class="mat-elevation-z8 table-walking-trail">
+
+    
+  <table mat-table [dataSource]="dataSource" class="table">
+
+    <!-- WalkingTrailName Column -->
+    <ng-container matColumnDef="WalkingTrailName">
+      <th mat-header-cell *matHeaderCellDef  class="HeaderOnTable"> שם המסלול </th>
+      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.WalkingTrailName}} </td>
+    </ng-container>
+    <!-- Description Column -->
+    <ng-container matColumnDef="Description">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> תיאור </th>
+      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.Description}} </td>
+    </ng-container>
+
+    <!-- LengthInKm Column -->
+    <ng-container matColumnDef="LengthInKm">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> אורך (ק"מ) </th>
+      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.LengthInKm}} ק"מ </td>
+    </ng-container>
+
+
+<!-- RegionId Column -->
+<ng-container matColumnDef="RegionId">
+  <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> אזור המסלול </th>
+  <td mat-cell *matCellDef="let element" class="contentTable"> {{srv_all.GetRegions(element.RegionId)}} </td>
+</ng-container>
+
+
+<!-- RouteDuration Column -->
+    <ng-container matColumnDef="RouteDuration">
+  <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">משך המסלול</th>
+  <td mat-cell *matCellDef="let element" class="contentTable">
+     @if(element.RouteDuration > 60 ){
+        @if(element.RouteDuration % 60 === 0){
+        {{ element.RouteDuration / 60 | number: '1.0-0' }} שעות
+        }
+        @if(element.RouteDuration % 60 !== 0){
+            {{ element.RouteDuration / 60 |roundDown   }} שעות ו- {{ element.RouteDuration % 60 | number: '1.0-0' }} דקות
+
+        }
+    }
+    @else if (element.RouteDuration == 60) {
+     שעה אחת
+    }
+    @else if (element.RouteDuration < 60 ) {
+      {{ element.RouteDuration }} דקות
+    }
+   
+  </td>
+</ng-container>
+    
+    <!-- Difficulty Column -->
+    <ng-container matColumnDef="Difficulty">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> דרגת קושי </th>
+      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.Difficulty}} </td>
+    </ng-container>
+
+    <!-- AgeRange Column -->
+   <ng-container matColumnDef="AgeRange">
+     <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> מתאים לגילאי </th>
+     <td mat-cell *matCellDef="let element" class="contentTable"> מתאים לגילאי {{element.MinAge}} - {{element.MaxAge}} </td>
+   </ng-container>
+
+    <!-- IsWet Column -->
+    <ng-container matColumnDef="IsWet">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> רטוב </th>
+      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.IsWet ? 'מסלול רטוב' : 'מסלול יבש'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  @if(walkingTrailId.GetWalkingTrails().length == 50){
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, 50]" 
+                 showFirstLastButtons
+                 aria-label="בחירת עמוד"
+                 class="paginator"
+                 >
+                 
+  </mat-paginator>
+}@else{
+   <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, 50, walkingTrailId.GetWalkingTrails().length]" 
+                 showFirstLastButtons
+                 aria-label="בחירת עמוד"
+                 class="paginator"
+                 >                
+  </mat-paginator>
+}
+</div>

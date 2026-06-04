@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InterfaceCoordinator } from '../Interfaces/interface-coordinator';
+import { InterfaceCoordinator } from '../Interfaces/int-coordinator';
 
 @Injectable({
   providedIn: 'root'
@@ -9,110 +9,54 @@ export class ServiceCoordinatorService {
   constructor() { }
     mock_Coordinators: InterfaceCoordinator[] = [
     {
-        user: {
-            UserId: 1,
-            UserPassword: 'securePassword123!',
-            FirstName: 'חיה',
-            LastName: 'מאירוביץ',
-            IdNumber: '123456789',
-            CityId: 101,
-            PhoneNumber: '050-1234567',
-            Email: 'haya.meirovitz@example.com'
-        },
+        UserId: 1,
         TourCoordinatorId: 202,
         RoleId: 303,
-        School: {
-            SchoolId: 404,
-            SchoolName: 'בית יעקב מאירות',
-            IsBoys: 0,
-            CityId: 101,
-            PrincipalName: 'מרכז רבקה',
-            PhoneSecretary: '050-0000001',
-            TypeSchoolId: 1,
-            AgeSchoolId: 1
-        }
+        SchoolId: 1,
     },
     {
-        user: {
-            UserId: 2,
-            UserPassword: 'anotherSecurePassword456!',
-            FirstName: 'מרים',
-            LastName: 'ברסלב',
-            IdNumber: '987654321',
-            CityId: 102,
-            PhoneNumber: '052-7654321',
-            Email: 'miriam.breslav@example.com'
-        },
+        UserId: 2,
         TourCoordinatorId: 203,
         RoleId: 304,
-        School: {
-            SchoolId: 405,
-            SchoolName: 'בית יעקב נשמתי',
-            IsBoys: 0,
-            CityId: 102,
-            PrincipalName: 'גב’ חני',
-            PhoneSecretary: '050-0000002',
-            TypeSchoolId: 2,
-            AgeSchoolId: 2
-        }
+            SchoolId: 2,
+           
+       
     },
     {
-        user: {
-            UserId: 3,
-            UserPassword: 'thirdPassword789!',
-            FirstName: 'שפרה',
-            LastName: 'רבינוביץ',
-            IdNumber: '456123789',
-            CityId: 103,
-            PhoneNumber: '053-1234567',
-            Email: 'shifra.rabinovitz@example.com'
-        },
+        UserId: 3,
         TourCoordinatorId: 204,
         RoleId: 305,
-        School: {
-            SchoolId: 406,
-            SchoolName: 'בית יעקב חן',
-            IsBoys: 0,
-            CityId: 103,
-            PrincipalName: 'מרה’ אסתר',
-            PhoneSecretary: '050-0000003',
-            TypeSchoolId: 1,
-            AgeSchoolId: 1
-        }
+            SchoolId: 3,
+           
+        
     },
     {
-        user: {
-            UserId: 4,
-            UserPassword: 'fourthPassword012!',
-            FirstName: 'נחמה',
-            LastName: 'אלשיך',
-            IdNumber: '321654987',
-            CityId: 104,
-            PhoneNumber: '054-9876543',
-            Email: 'nechama.elshich@example.com'
-        },
+       UserId: 4,
         TourCoordinatorId: 205,
         RoleId: 306,
-        School: {
-            SchoolId: 407,
-            SchoolName: 'בית יעקב תפארת',
-            IsBoys: 0,
-            CityId: 104,
-            PrincipalName: 'מר יעקב',
-            PhoneSecretary: '050-0000004',
-            TypeSchoolId: 3,
-            AgeSchoolId: 3
-        }
+         SchoolId: 4,
+           
+        
     }];
     GetCoordinators(){
         return this.mock_Coordinators;
     }
-    GetLastUserId() {
-        const userIds = this.mock_Coordinators.map(coordinator => coordinator.user.UserId);
-        return Math.max(...userIds);
-    }
+   
     GetLastTourCoordinatorId(){
         const coordinatorIds = this.mock_Coordinators.map(coordinator => coordinator.TourCoordinatorId);
         return Math.max(...coordinatorIds);
+    }
+
+    InsertCoordinator(  UserId: number,
+        TourCoordinatorId: number,
+        RoleId: number,
+        SchoolId: number ) {
+        const newCoordinator: InterfaceCoordinator = {
+            UserId: UserId,
+            TourCoordinatorId: TourCoordinatorId,
+            RoleId: RoleId,
+            SchoolId: SchoolId
+        };
+        this.mock_Coordinators.push(newCoordinator);
     }
 }

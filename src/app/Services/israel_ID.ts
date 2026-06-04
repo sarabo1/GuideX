@@ -5,6 +5,7 @@ import { AbstractControl, ValidatorFn } from '@angular/forms';
     providedIn: 'root'
 })
 export class IdIsraelValidator {
+    
     validateIsraeliID(id: string): boolean {
         // בדיקת אורך ותווים
         if (!/^\d{7,9}$/.test(id)) {

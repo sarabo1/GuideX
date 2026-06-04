@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordinator/checker-guide-or-coordinator.component';
 import { SighInPageComponent } from '../sigh-in-page/sigh-in-page.component';
+import { MatIcon } from "@angular/material/icon";
 @Component({
   selector: 'app-welcome-page',
-  imports: [],
+  imports: [MatIcon],
   templateUrl: './welcome-page.component.html',
   styleUrls: ['./welcome-page.component.scss'],
   standalone : true
