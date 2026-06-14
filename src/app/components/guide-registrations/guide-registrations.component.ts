@@ -37,12 +37,12 @@ export class GuideRegistrationsComponent {
 
  IsraelIdValidator = this.IdIsrael.idValidator();
    formGuide = new FormGroup({
-
+       selectedOrigins: new FormControl([], Validators.required), // ודא שזה מחזיר מערך
       UserPassword: new FormControl('', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_^+=-])[A-Za-z\d@$!%*?&.#_^+=-]{8,}$/)]),
       FirstName: new FormControl('',  [Validators.required, Validators.minLength(2)]),
       LastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       IdNumber: new FormControl('',  [Validators.required, this.IsraelIdValidator]),
-      CityId: new FormControl('', [Validators.required]),
+      CityId: new FormControl(''),
       PhoneNumber: new FormControl('',  [Validators.required, Validators.minLength(2)]),
       Email: new FormControl('', [Validators.required, Validators.email]),
       Origin: new FormControl('', [Validators.required]),

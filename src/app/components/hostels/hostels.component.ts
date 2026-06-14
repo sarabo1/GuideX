@@ -4,23 +4,29 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { srv_Hostels } from '../../Services/srv_Hostels';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { ServiceAllService } from '../../Services/service-all.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from "@angular/material/icon";
+import { ShowHostelsComponent } from '../show-hostels/show-hostels.component';
 
 @Component({
   selector: 'app-hostels',
-  imports: [MatPaginator, MatTableModule],
+  imports: [MatPaginator, MatTableModule, MatIcon],
   templateUrl: './hostels.component.html',
   styleUrl: './hostels.component.scss'
 })
 export class HostelsComponent {
 
  displayedColumns: string[] = [ 'HostelsName','Description',
-                           'RegionId',  'NumberOfPlaces', 'kashrutId'];
+                           'RegionId',  'NumberOfPlaces', 'kashrutId','DetailsButton'];
   dataSource: MatTableDataSource<Int_Hostels>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator | null = null; // עדיף להקצות null
 
 
-    constructor(public Hostels: srv_Hostels, paginator: MatPaginatorIntl, public srv_all: ServiceAllService) {
+    constructor(public Hostels: srv_Hostels,
+               paginator: MatPaginatorIntl, 
+               public srv_all: ServiceAllService,
+               public dialog: MatDialog) {
     paginator.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginator.nextPageLabel = 'העמוד הבא';
     paginator.previousPageLabel = 'העמוד הקודם';
@@ -59,5 +65,14 @@ export class HostelsComponent {
       this.dataSource.paginator.firstPage();
     }
   }
+
+
+  openDialogRegistrations(element: Int_Hostels) {
+        console.log("הצליח", element); // לוג עבור בדיקה
+        const dialogRef = this.dialog.open(ShowHostelsComponent, {
+            width: '850px',
+            data: element // העברת הנתונים לדיאלוג
+        });
+    }
 }
 

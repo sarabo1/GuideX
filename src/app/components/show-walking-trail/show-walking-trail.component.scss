@@ -1,0 +1,73 @@
+
+.show {
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 5px; 
+    margin: 0px; 
+    direction: rtl;
+    font-size: 16px;
+     text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3); /* שינויים: הוספת הצללה */
+
+}
+
+.background {
+    background-image: url('/to_show_wt.png');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(3px); 
+    z-index: 1; 
+}
+
+.content {
+    margin: 10px;
+    position: relative; 
+    z-index: 2; 
+    color: #655f33; 
+    padding: 20px; 
+    text-align: center;
+}
+
+
+// #615e55;
+.close-btn {
+    border: 2px solid #655f33; 
+    background-color: transparent;
+    color: #615e55; 
+    border-radius: 18px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.close-btn:hover {
+    background-color: #655f33;
+    // color: transparent; 
+    color: #DFDDCA;
+}
+
+.close-icon {
+      margin-right: 15px;
+     margin-left: 15px;
+     margin-top: 5px;
+    
+     color: inherit; /* להוריש את צבע האייקון מצבע הכפתור */
+}
+
+
+
+// h2 {
+//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
+// }
+
+// h5 {
+//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
+// }
+
+// p {
+//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
+// }

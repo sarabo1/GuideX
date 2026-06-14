@@ -6,21 +6,23 @@ import { Int_WalkingTrail } from '../../Interfaces/Int_WalkingTrail';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ServiceAllService } from '../../Services/service-all.service';
 import { DecimalPipe } from '@angular/common';
-import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { RoundDownPipe } from "../../Pipes/round-down.pipe";
+import { MatIcon } from "@angular/material/icon";
+import { MatDialog } from '@angular/material/dialog';
+import { ShowWalkingTrailComponent } from '../show-walking-trail/show-walking-trail.component';
 
 
 @Component({
   selector: 'app-walking-trail',
   templateUrl: './walking-trail.component.html',
   styleUrls: ['./walking-trail.component.scss'],
-  imports: [MatPaginatorModule, MatTableModule, DecimalPipe, MatFormField, MatLabel, RoundDownPipe],
+  imports: [MatPaginatorModule, MatTableModule, DecimalPipe, RoundDownPipe, MatIcon],
     standalone: true
 
 })
 export class WalkingTrailComponent implements AfterViewInit {
-  displayedColumns: string[] = [ 'WalkingTrailName',  'Description','LengthInKm',
-                           'RegionId', 'RouteDuration', 'Difficulty', 'AgeRange', 'IsWet'];
+  displayedColumns: string[] = [ 'WalkingTrailName',  'Description', 'RegionId',
+     'RouteDuration', 'Difficulty', 'AgeRange', 'IsWet','DetailsButton'];
   dataSource: MatTableDataSource<Int_WalkingTrail>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator | null = null; // עדיף להקצות null
@@ -28,8 +30,8 @@ export class WalkingTrailComponent implements AfterViewInit {
 
     constructor(public walkingTrailId: SrvWalkingTrailService, 
               paginator: MatPaginatorIntl,  
-              public srv_all: ServiceAllService){
-              // public roundDown : RoundDownPPipe ) {
+              public srv_all: ServiceAllService,
+              public dialog: MatDialog) {
     paginator.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginator.nextPageLabel = 'העמוד הבא';
     paginator.previousPageLabel = 'העמוד הקודם';
@@ -67,5 +69,13 @@ export class WalkingTrailComponent implements AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+   openDialogRegistrations(element: Int_WalkingTrail) {
+      console.log("הצליח", element); // לוג עבור בדיקה
+      const dialogRef = this.dialog.open(ShowWalkingTrailComponent, {
+          width: '850px',
+          data: element // העברת הנתונים לדיאלוג
+      });
   }
 }

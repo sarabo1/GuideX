@@ -14,6 +14,7 @@
      <div>
     <label>אימייל:</label>
     <input type="text" formControlName="Email" />
+
   </div>
   @if (formLogIn.get('Email')?.touched) 
             {  @if(formLogIn.get('Email')?.hasError('required'))
@@ -45,8 +46,6 @@
 @if (formLogIn.get('UserPassword')?.touched) 
               {  @if(formLogIn.get('UserPassword')?.hasError('required'))
                   {<div class=red>השדה חובה⚠️</div>}
-                 @if (formLogIn.get('UserPassword')?.hasError('minlength')) 
-                 {<div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>}
                  @if (formLogIn.get('UserPassword')?.hasError('pattern')) 
                  {<div class="red">יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️</div>}
                 }

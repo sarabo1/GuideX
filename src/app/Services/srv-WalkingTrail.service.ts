@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Int_WalkingTrail } from '../Interfaces/Int_WalkingTrail';
+import { min } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,6 @@ import { Int_WalkingTrail } from '../Interfaces/Int_WalkingTrail';
 export class SrvWalkingTrailService {
 
 public mock_WalkingTrails: Int_WalkingTrail[] = [
-
   // 1 - גליל עליון
   {
     WalkingTrailId: 1,
@@ -680,7 +680,6 @@ public mock_WalkingTrails: Int_WalkingTrail[] = [
 
 GetWalkingTrails(): Int_WalkingTrail[] {
   return this.mock_WalkingTrails;}
-
 
 }
 

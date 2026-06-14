@@ -28,5 +28,23 @@ table{
     direction: rtl;
 }
 
+.showDetails{
+    border:0px;
+    background-color: #f6f6ff96;
+     border-radius: 50px;
+    
+
+}
+.showDetails:hover{
+    background-color: #D9D0F5;
+}
+
+
+.showDetelis-icon {
+  font-weight:lighter;
+   font-size:larger;
+  color: rgb(35, 35, 34);
+  padding-top: 7px;
+}
 
 

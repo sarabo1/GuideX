@@ -9,6 +9,8 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { ServiceUsersService } from '../../Services/service-users.service';
 import { SrvSchoolService } from '../../Services/srv-school.service';
+import { MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-coordinator-registrations',
@@ -27,7 +29,8 @@ export class CoordinatorRegistrationsComponent {
   constructor(private srvUsers:ServiceUsersService , 
                 private srv_Coordinators:ServiceCoordinatorService , 
                 private srvSchools: SrvSchoolService,
-                private router: Router) {
+                private router: Router,
+            private dialogRef: MatDialogRef<CoordinatorRegistrationsComponent>) {
    
   }
  private IdIsrael = inject(IdIsraelValidator);
@@ -105,11 +108,12 @@ export class CoordinatorRegistrationsComponent {
      
             
             this.formCoordinator.reset();
-            
+               this.dialogRef.close(); // סגור את הדיאלוג
             this.router.navigate(["/Home_Page"]);
         } else {
             console.error("טופס לא תקין:", this.formCoordinator.errors);
         }
+         
      };
     
 

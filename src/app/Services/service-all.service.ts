@@ -97,7 +97,7 @@ GetKashrutName(kashrutId : number) : string{
         case 9:
             return 'בד"ץ חתם סופר פתח תקווה';
         case 10:
-            return 'כשרות מהדרין - הרב גרוס';
+            return 'בד"ץ מהדרין - הרב גרוס';
         case 11:
             return 'בד"ץ אגודת ישראל';
         default:

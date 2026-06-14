@@ -1,0 +1,59 @@
+
+.show {
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 5px; 
+    margin: 0px; 
+    direction: rtl;
+    font-size: 16px;
+     text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3); /* שינויים: הוספת הצללה */
+
+}
+
+.background {
+    background-image: url('/to_show_attraction.png');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(2px); 
+    z-index: 1; 
+}
+
+.content {
+    margin: 10px;
+    position: relative; 
+    z-index: 2; 
+    color: white; 
+    padding: 20px; 
+    text-align: center;
+}
+
+
+
+.close-btn {
+    border: 2px solid white; 
+    background-color: transparent;
+    color: white; 
+    border-radius: 18px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.close-btn:hover {
+    background-color: white;
+    // color: transparent; 
+    color: url('/to_show_attraction.png');
+}
+
+.close-icon {
+      margin-right: 15px;
+     margin-left: 15px;
+     margin-top: 5px;
+    
+     color: inherit; /* להוריש את צבע האייקון מצבע הכפתור */
+}

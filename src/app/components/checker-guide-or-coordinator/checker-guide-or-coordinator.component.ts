@@ -9,7 +9,10 @@ import { GuideRegistrationsComponent } from "../guide-registrations/guide-regist
 
 @Component({
   selector: 'app-checker-guide-or-coordinator',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, MatTabGroup, MatTab, CoordinatorRegistrationsComponent, GuideRegistrationsComponent],
+  imports: [MatDialogModule, MatButtonModule, 
+            MatIconModule, MatTabGroup, MatTab, 
+            CoordinatorRegistrationsComponent,  
+            GuideRegistrationsComponent],
   templateUrl: './checker-guide-or-coordinator.component.html',
   styleUrl: './checker-guide-or-coordinator.component.scss',
   standalone : true

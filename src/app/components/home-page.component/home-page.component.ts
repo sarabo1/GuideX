@@ -13,7 +13,7 @@ import { HostelsComponent } from "../hostels/hostels.component";
 })
 export class HomePageComponent {
     
-   
+  
 }
 
 

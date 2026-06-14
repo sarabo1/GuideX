@@ -9,7 +9,9 @@ export class ServiceUsersService {
 
   public mock_Users: InterfaceUsers[]; 
 
-  constructor(public serviceCoordinator: ServiceCoordinatorService, public serviceGuide: ServiceUsersService) { 
+//   constructor(public serviceCoordinator: ServiceCoordinatorService, public serviceGuide: ServiceUsersService) { 
+    constructor(public serviceCoordinator: ServiceCoordinatorService) {
+
       this.mock_Users = [{
             UserId: 1,
             UserPassword: 'securePassword123!',

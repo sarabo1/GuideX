@@ -1,0 +1,22 @@
+
+<div class="show">
+    <div class="background"></div>
+    <div class="content">
+       <h2><strong>{{ data.AttractionsName }}</strong></h2>
+        <h5><strong>{{ data.Description }}</strong></h5>
+        <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
+        <p><strong>סוג אטרקציה:</strong> {{ Attractions.GetTypeByNumber(data.AttractionsTypeId) }}</p>
+        @if(data.ShomerShabat ==0){
+            <h3>המקום אינו שומר שבת</h3>
+        }
+        @else{
+            @if(data.ShomerShabat == 1)
+            { <h5><strong>יש לברר בנוגע לשמירת השבת של המקום</strong></h5>}
+
+            <P><strong>כתובת:</strong> {{data.Address}}</P>
+            <P><strong>טלפון:</strong> {{data.Phone}}</P>
+        }
+        <br/>
+        <button (click)="onClose()" class="close-btn"><mat-icon class="close-icon">close</mat-icon></button>
+    </div>
+</div>
