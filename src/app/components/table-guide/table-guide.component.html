@@ -1,49 +1,56 @@
 <div class="mat-elevation-z8 table-walking-trail">
-
-    
   <table mat-table [dataSource]="dataSource" class="table">
-
     <!-- HostelsName Column -->
     <ng-container matColumnDef="HostelsName">
-      <th mat-header-cell *matHeaderCellDef  class="HeaderOnTable"> שם מקום הלינה </th>
-      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.HostelsName}} </td>
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+        שם מקום הלינה
+      </th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.HostelsName }}
+      </td>
     </ng-container>
     <!-- Description Column -->
     <ng-container matColumnDef="Description">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> תיאור </th>
-      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.Description}} </td>
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">תיאור</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.Description }}
+      </td>
     </ng-container>
 
     <!-- RegionId Column -->
     <ng-container matColumnDef="RegionId">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"> אזור</th>
-      <td mat-cell *matCellDef="let element" class="contentTable"> {{srv_all.GetRegions(element.RegionId)}}</td>
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">אזור</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ srv_all.GetRegions(element.RegionId) }}
+      </td>
     </ng-container>
-  
 
     <!-- NumberOfPlaces Column -->
     <ng-container matColumnDef="NumberOfPlaces">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">מספר מקומות</th>
-      <td mat-cell *matCellDef="let element" class="contentTable"> {{element.NumberOfPlaces}} </td>
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+        מספר מקומות
+      </th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.NumberOfPlaces }}
+      </td>
     </ng-container>
 
- <!-- kashrutId Column -->
+    <!-- kashrutId Column -->
     <ng-container matColumnDef="kashrutId">
       <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">כשרות</th>
-      <td mat-cell *matCellDef="let element" class="contentTable"> {{srv_all.GetKashrutName(element.kashrutId)}} </td>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ srv_all.GetKashrutName(element.kashrutId) }}
+      </td>
     </ng-container>
-   
-
-
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, 50]" 
-                 showFirstLastButtons
-                 aria-label="בחירת עמוד"
-                 class="paginator"
-                 >
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20, 30, 50]"
+    showFirstLastButtons
+    aria-label="בחירת עמוד"
+    class="paginator"
+  >
   </mat-paginator>
 </div>
-

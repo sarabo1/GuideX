@@ -1,41 +1,209 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Heebo', sans-serif;; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Heebo", sans-serif;
+  color: #1d1d1f;
+  background-color: #fffeff;
+}
 
 .red {
-    color: red;
-    font-size: 0.8rem;
+  color: red;
+  font-size: 0.8rem;
 }
-.table-walking-trail{
-    width: 80%;
-    margin: 20px auto;    
+.table-walking-trail {
+  width: 80%;
+  margin: 20px auto;
 }
-.HeaderOnTable{
-    font-size: 16px;
+.HeaderOnTable {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: heebo, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+.contentTable {
+  font-size: 14px;
+  font-family: heebo, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+.paginator {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  font-size: 11px;
+  font-family: heebo, sans-serif;
+}
+table {
+  direction: rtl;
+}
+
+
+
+
+////
+/// 
+.sort{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+
+.filterToFind {
+    padding: 20px;
+    border: 1px solid #5F16EB;
+    background-color: #F6F6FF;
+    border-radius: 5px;
+    margin:15px;
+    width: 70%;
+}
+//לבדוק למה לא עובד
+.filterToFind_not_showSearch{
+    
+    padding: 10px;
+    border: 1px solid #5F16EB;
+    background-color: #F6F6FF;
+    border-radius: 5px;
+    margin:15px;
+    width: 195px;
+    margin-left: calc(15px + 10%);
+    
+
+}
+.filter {
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* מרכז את התוכן בתוך השורה */
+}
+
+.filter-item {
+    margin-right: 15px; /* רווח בין הפריטים */
+}
+
+label {
     font-weight: bold;
-    font-family: heebo, sans-serif;
-    direction: rtl;
-     text-align: right;
+    margin-right: 5px; /* רווח בין התווית ל-select */
+    margin-left: 5px;
 }
-.contentTable{
-    font-size: 14px;
-    font-family: heebo, sans-serif;
-    direction: rtl;
-    text-align: right;
+
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+        margin-left: 5px;
+
+
+}
+
+.search {
+    padding: 5px 10px;
+    background-color: #FF5C67;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.2s ease, 
+    box-shadow 0.2s ease; 
+    display: flex;
+    align-items: center;
+}
+
+.search:hover {
+    color: #004aad;
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 
-.paginator{
-    direction: ltr;
+option:hover {
+  background-color: #7c79ae;
+  color: white;
+}
+
+.winSearch {
+    display: flex;
+    // justify-content: center; /* מרכז את התוכן לרוחב */
+    flex-direction: column;
+    align-items: center;
+
+}
+.winSearch_not_ShowSearch{
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.toFilter {
+ display: flex;
+     justify-content: space-between;
+    //  gap: 39px;
+}
+
+.img_search{
+    height: 55px;
+    margin-left: 4px;
+}
+
+.img_search :hover{
+    height: 65px;
+}
+.label_search{
+    display: flex;
+    align-items: flex-end;
+}
+
+
+
+.Reset_feeder{
     display: flex;
     justify-content: center;
-    font-size: 11px;
-    font-family: heebo, sans-serif;
 }
-table{
-    direction: rtl;
+.reset{
+    padding: 5px 10px;
+    color: #FF5C67;
+    background-color: transparent;
+   border:1px solid #FF5C67;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.2s ease, 
+    box-shadow 0.2s ease; 
+    display: flex;
+    align-items: center
 }
 
+.reset:hover {
+    color: #004aad;
+ background-color: #FF5C67;
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
 
-
+.reka{
+    // background-color: #FAFAFF;
+    // background-color: #FDFDFF;
+    background-color: #FFFEFF;
+        box-shadow: 0 4px 10px rgba(0.4, 0.4, 0.4, 0.4);
+        width: 94%;
+        padding: 25px;
+         margin: 25px auto;
+         border-radius: 12px;
+}
+.notFoundInFilter{
+    //לא עובד
+    text-align: center;
+    font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}

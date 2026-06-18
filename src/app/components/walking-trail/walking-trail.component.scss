@@ -1,20 +1,26 @@
 .table-walking-trail{
-    width: 80%;
+    width: 96%;
     margin: 20px auto;    
 }
 .HeaderOnTable{
-    font-size: 16px;
+     font-size: 18px;
     font-weight: bold;
     font-family: heebo, sans-serif;
     direction: rtl;
      text-align: right;
+     background-color: #F6F6FF;
+    border-bottom-color: #5F16EB;
 }
 .contentTable{
-    font-size: 14px;
+    font-size: 16px;
     font-family: heebo, sans-serif;
     direction: rtl;
     text-align: right;
+            border-bottom-color: #5F16EB;
+            
+
 }
+
 
 
 .paginator{
@@ -23,6 +29,8 @@
     justify-content: center;
     font-size: 11px;
     font-family: heebo, sans-serif;
+        background-color: #F6F6FF;
+
 }
 table{
     direction: rtl;
@@ -48,3 +56,6 @@ table{
 }
 
 
+mat-icon{
+    padding-top: 4px;
+}

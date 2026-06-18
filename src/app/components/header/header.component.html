@@ -1,11 +1,14 @@
 <div class="header">
-    
-  <div (click)="logo()"><img class="logo" src="logo_for_light.png" alt="Home Page" ></div>
-  <div>הי {{username }}</div>
+  <div (click)="logo()">
+    <img class="logo" src="logo_for_light.png" alt="Home Page" />
+  </div>
+  <div>הי {{ username }}</div>
   <div>
     <button mat-button (click)="logout()" class="btn">
       <span>להתנתקות</span>
-  <span>
-      <mat-icon class="mat-icon-btn">logout</mat-icon>
-     </span></button>
+      <span>
+        <mat-icon class="mat-icon-btn">logout</mat-icon>
+      </span>
+    </button>
+  </div>
 </div>

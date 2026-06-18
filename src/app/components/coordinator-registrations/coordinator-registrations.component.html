@@ -1,68 +1,77 @@
-<br/>
+<br />
 <form
   [formGroup]="formCoordinator"
   (ngSubmit)="newCoordinator()"
-  class="coordinator-form"
+  class="form coordinator-form"
 >
   <div>
     <label>שם פרטי:</label>
     <input type="text" formControlName="FirstName" />
   </div>
-  @if (formCoordinator.get('FirstName')?.touched) 
-            {  @if(formCoordinator.get('FirstName')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-               @if (formCoordinator.get('FirstName')?.hasError('minlength')) { 
-               <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
-            }
-
+  @if (formCoordinator.get("FirstName")?.touched) {
+    @if (formCoordinator.get("FirstName")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("FirstName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
 
   <div>
     <label>שם משפחה:</label>
     <input type="text" formControlName="LastName" />
   </div>
-  @if (formCoordinator.get('LastName')?.touched) 
-            {  @if(formCoordinator.get('LastName')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-               @if (formCoordinator.get('LastName')?.hasError('minlength')) { 
-               <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
-            }
+  @if (formCoordinator.get("LastName")?.touched) {
+    @if (formCoordinator.get("LastName")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("LastName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
 
   <div>
     <label>מספר זהות:</label>
     <input type="text" formControlName="IdNumber" />
   </div>
-  @if (formCoordinator.get('IdNumber')?.touched) 
-            {  @if(formCoordinator.get('IdNumber')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-               @if (formCoordinator.get('IdNumber')?.hasError('IsraelIdValidator')) { 
-               <div class="red">יש להכניס מספר תעודת זהות תקינה </div>}
-            }
-
-  <div>
-    <label>אימייל:</label>
-    <input type="email" formControlName="Email" />
-  </div>
-    @if (formCoordinator.get('Email')?.touched) 
-              {  @if(formCoordinator.get('Email')?.hasError('required'))
-                  {<div class=red>השדה חובה⚠️</div>}
-                @if (formCoordinator.get('Email')?.hasError('email')) { 
-                <div class="red">יש להכניס כתובת אימייל תקינה⚠️</div>}
-              }
+  @if (formCoordinator.get("IdNumber")?.touched) {
+    @if (formCoordinator.get("IdNumber")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("IdNumber")?.hasError("IsraelIdValidator")) {
+      <div class="red">יש להכניס מספר תעודת זהות תקינה</div>
+    }
+  }
 
   <div>
     <label>מספר טלפון:</label>
     <input type="text" formControlName="PhoneNumber" />
   </div>
-  @if (formCoordinator.get('PhoneNumber')?.touched) 
-            {  @if(formCoordinator.get('PhoneNumber')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-            }
+  @if (formCoordinator.get("PhoneNumber")?.touched) {
+    @if (formCoordinator.get("PhoneNumber")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
-  <div class="inputEye">
+  <div>
+    <div>
+      <label>אימייל:</label>
+      <input type="email" formControlName="Email" />
+    </div>
+    @if (formCoordinator.get("Email")?.touched) {
+      @if (formCoordinator.get("Email")?.hasError("required")) {
+        <div class="red">השדה חובה⚠️</div>
+      }
+      @if (formCoordinator.get("Email")?.hasError("email")) {
+        <div class="red">יש להכניס כתובת אימייל תקינה⚠️</div>
+      }
+    }
+
     <label>סיסמה</label>
-    <input
-      [type]="showPassword ? 'text' : 'password'"
-      formControlName="UserPassword"
+    <div class="inputEye">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="UserPassword"
       />
       <button type="button" class="eyes" (click)="PasswordVisibility()">
         @if (!showPassword) {
@@ -71,15 +80,21 @@
           <mat-icon>visibility_off</mat-icon>
         }
       </button>
+    </div>
   </div>
-    @if (formCoordinator.get('UserPassword')?.touched) 
-              {  @if(formCoordinator.get('UserPassword')?.hasError('required'))
-                  {<div class=red>השדה חובה⚠️</div>}
-                 @if (formCoordinator.get('UserPassword')?.hasError('minlength')) 
-                  {<div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>}
-                 @if (formCoordinator.get('UserPassword')?.hasError('pattern')) 
-                 {<div class="red">יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️</div>}
-              }
+  @if (formCoordinator.get("UserPassword")?.touched) {
+    @if (formCoordinator.get("UserPassword")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("UserPassword")?.hasError("minlength")) {
+      <div class="red">יש להכניס סיסמה בעלת 8 תווים לפחות ⚠️</div>
+    }
+    @if (formCoordinator.get("UserPassword")?.hasError("pattern")) {
+      <div class="red">
+        יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️
+      </div>
+    }
+  }
 
   <div>
     <label>תפקיד:</label>
@@ -88,33 +103,35 @@
         <option [value]="item.id">{{ item.name }}</option>
       }
     </select>
-  </div>  
-  @if (formCoordinator.get('FirstName')?.touched) 
-      {  @if(formCoordinator.get('FirstName')?.hasError('required'))
-            {<div class=red>השדה חובה⚠️</div>}
-      }
-
+  </div>
+  @if (formCoordinator.get("FirstName")?.touched) {
+    @if (formCoordinator.get("FirstName")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
   <div>
     <label>עיר:</label>
     <input type="number" formControlName="CityId" />
   </div>
-  @if (formCoordinator.get('CityId')?.touched) 
-      {  @if(formCoordinator.get('CityId')?.hasError('required'))
-        {<div class=red>השדה חובה⚠️</div>}
-      }
+  @if (formCoordinator.get("CityId")?.touched) {
+    @if (formCoordinator.get("CityId")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
   <div>
     <label>שם מוסד:</label>
     <input type="text" formControlName="SchoolName" />
   </div>
-  @if (formCoordinator.get('SchoolName')?.touched) 
-      {  @if(formCoordinator.get('SchoolName')?.hasError('required'))
-        {<div class=red>השדה חובה⚠️</div>}
-           @if (formCoordinator.get('SchoolName')?.hasError('minlength')) { 
-            <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
-         }
-
+  @if (formCoordinator.get("SchoolName")?.touched) {
+    @if (formCoordinator.get("SchoolName")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("SchoolName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
 
   <div>
     <label>מגדר:</label>
@@ -127,32 +144,37 @@
       </label>
     </div>
   </div>
-  @if (formCoordinator.get('IsBoys')?.touched) 
-            {  @if(formCoordinator.get('IsBoys')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-            }
+  @if (formCoordinator.get("IsBoys")?.touched) {
+    @if (formCoordinator.get("IsBoys")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
   <div>
     <label>שם מנהל:</label>
     <input type="text" formControlName="PrincipalName" />
   </div>
-  @if (formCoordinator.get('PrincipalName')?.touched) 
-            {  @if(formCoordinator.get('PrincipalName')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-               @if (formCoordinator.get('PrincipalName')?.hasError('minlength')) { 
-               <div class="red">יש להכניס מינימום 2 תווים⚠️</div>}
-            }
+  @if (formCoordinator.get("PrincipalName")?.touched) {
+    @if (formCoordinator.get("PrincipalName")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("PrincipalName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
 
   <div>
     <label>מספר טלפון מוסד:</label>
     <input type="text" formControlName="PhoneSecretary" />
   </div>
-  @if (formCoordinator.get('PhoneSecretary')?.touched) 
-            {  @if(formCoordinator.get('PhoneSecretary')?.hasError('required'))
-                {<div class=red>השדה חובה⚠️</div>}
-               @if (formCoordinator.get('PhoneSecretary')?.hasError('phoneValidator')) { 
-               <div class="red">יש להכניס מספר טלפון תקין⚠️</div>}
-            }
+  @if (formCoordinator.get("PhoneSecretary")?.touched) {
+    @if (formCoordinator.get("PhoneSecretary")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+    @if (formCoordinator.get("PhoneSecretary")?.hasError("phoneValidator")) {
+      <div class="red">יש להכניס מספר טלפון תקין⚠️</div>
+    }
+  }
 
   <div>
     <label>סוג מוסד:</label>
@@ -162,10 +184,11 @@
       }
     </select>
   </div>
-    @if (formCoordinator.get('TypeSchoolId')?.touched) 
-              {  @if(formCoordinator.get('TypeSchoolId')?.hasError('required'))
-                  {<div class=red>השדה חובה⚠️</div>}
-              }
+  @if (formCoordinator.get("TypeSchoolId")?.touched) {
+    @if (formCoordinator.get("TypeSchoolId")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
   <div>
     <label>גיל מוסד:</label>
@@ -175,16 +198,19 @@
       }
     </select>
   </div>
-    @if (formCoordinator.get('AgeSchoolId')?.touched) 
-              {  @if(formCoordinator.get('AgeSchoolId')?.hasError('required'))
-                  {<div class=red>השדה חובה⚠️</div>}
-              }
+  @if (formCoordinator.get("AgeSchoolId")?.touched) {
+    @if (formCoordinator.get("AgeSchoolId")?.hasError("required")) {
+      <div class="red">השדה חובה⚠️</div>
+    }
+  }
 
   <br />
- 
 
-  <button class="btn btn-outline-secondary" type="submit" [disabled]="formCoordinator.invalid">הוספת רכזת📋</button>
+  <button
+    class="btn btn-outline-secondary"
+    type="submit"
+    [disabled]="formCoordinator.invalid"
+  >
+    הוספת רכזת📋
+  </button>
 </form>
-
-
-

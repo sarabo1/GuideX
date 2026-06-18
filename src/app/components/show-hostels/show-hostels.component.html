@@ -1,17 +1,23 @@
-
-
 <div class="show">
-    <div class="background"></div>
-    <div class="content">
-       <h2><strong>{{ data.HostelsName }}</strong></h2>
-        <h5><strong>{{ data.Description }}</strong></h5>
-        <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
-        <P><strong>כתובת:</strong> {{data.Address}}</P>
-        <P><strong>טלפון:</strong> {{data.Phone}}</P>
-        <P><strong>מספר מיטות:</strong> {{data.NumberOfPlaces}}</P> 
-         <P><strong>כשרות המקום:</strong> {{srv_all.GetKashrutName(data.kashrutId)}}</P>
-        
-        <br/>
-        <button (click)="onClose()" class="close-btn"><mat-icon class="close-icon">close</mat-icon></button>
-    </div>
+  <div class="background"></div>
+  <div class="content">
+    <h2>
+      <strong>{{ data.HostelsName }}</strong>
+    </h2>
+    <h5>
+      <strong>{{ data.Description }}</strong>
+    </h5>
+    <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
+    <P><strong>כתובת:</strong> {{ data.Address }}</P>
+    <P><strong>טלפון:</strong> {{ data.Phone }}</P>
+    <P><strong>מספר מיטות:</strong> {{ data.NumberOfPlaces }}</P>
+    <P><strong>כשרות המקום:</strong>
+      {{ srv_all.GetKashrutName(data.kashrutId) }}</P
+    >
+
+    <br />
+    <button (click)="onClose()" class="close-btn">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+  </div>
 </div>
