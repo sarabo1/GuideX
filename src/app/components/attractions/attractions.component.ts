@@ -35,7 +35,6 @@ export class AttractionsComponent {
     'AttractionsTypeId',
     'ShomerShabat',
     'DetailsButton',
-    'EditButton',
   ];
   dataSource!: MatTableDataSource<int_Attractions>;
   
@@ -78,7 +77,7 @@ export class AttractionsComponent {
         Description: attraction.Description,
         ShomerShabat: attraction.ShomerShabat,
         Phone: attraction.Phone,
-        ImageUrl : attraction.ImageUrl
+        // ImageUrl : attraction.ImageUrl
       }),
       );
       this.dataSource = new MatTableDataSource(ELEMENT_DATA);

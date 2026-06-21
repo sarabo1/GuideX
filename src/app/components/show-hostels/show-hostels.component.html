@@ -1,21 +1,118 @@
 <div class="show">
   <div class="background"></div>
   <div class="content">
-    <h2>
-      <strong>{{ data.HostelsName }}</strong>
-    </h2>
-    <h5>
-      <strong>{{ data.Description }}</strong>
-    </h5>
-    <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
-    <P><strong>כתובת:</strong> {{ data.Address }}</P>
-    <P><strong>טלפון:</strong> {{ data.Phone }}</P>
-    <P><strong>מספר מיטות:</strong> {{ data.NumberOfPlaces }}</P>
-    <P><strong>כשרות המקום:</strong>
-      {{ srv_all.GetKashrutName(data.kashrutId) }}</P
+    <button
+      [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+      (click)="canEdit()"
     >
+      <mat-icon class="close-icon">edit</mat-icon>
+    </button>
+    <h2>
+      @if (!userCanEdit) {
+        <strong>{{ data.HostelsName }}</strong>
+      } @else {
+        <input
+          class="inputToEdit"
+          id="HostelsName"
+          type="text"
+          value="{{ data.HostelsName }}"
+        />
+      }
+    </h2>
+
+    @if (!userCanEdit) {
+      <h5>
+        <strong>{{ data.Description }}</strong>
+      </h5>
+    } @else {
+      <h6>
+        <textarea
+          cols="{{ data.Description.length / 2 }}"
+          id="Description"
+          class="inputToEdit"
+          type="text"
+          value="{{ data.Description }}"
+        >
+        </textarea>
+      </h6>
+    }
+
+    <p>
+      <strong>אזור: </strong>
+      @if (!userCanEdit) {
+        {{ srv_all.GetRegions(data.RegionId) }}
+      } @else {
+        <select class="inputToEdit" id="RegionId">
+          @for (item of RegionsArrayData; track item.id) {
+            @if (data.RegionId == item.id) {
+              <option [value]="item.id" selected>
+                {{ item.name }}
+              </option>
+            } @else {
+              <option [value]="item.id">
+                {{ item.name }}
+              </option>
+            }
+          }
+        </select>
+      }
+    </p>
+    <P
+      ><strong>כתובת:</strong>
+      @if (!userCanEdit) {
+        {{ data.Address }}
+      } @else {
+        <input class="inputToEdit" id="Address" type="text" value="{{ data.Address }}" />
+      }
+    </P>
+    <P
+      ><strong>טלפון:</strong>
+      @if (!userCanEdit) {
+        {{ data.Phone }}
+      } @else {
+        <input class="inputToEdit" id="Phone" type="text" value="{{ data.Phone }}" />
+      }
+    </P>
+    <P
+      ><strong>מספר מיטות: </strong>
+      @if (!userCanEdit) {
+        {{ data.NumberOfPlaces }}
+      } @else {
+        <input
+          class="inputToEdit"
+          type="number"
+          id="NumberOfPlaces"
+          value="{{ data.NumberOfPlaces }}"
+        />
+      }
+    </P>
+    <P
+      ><strong>כשרות המקום: </strong>
+      @if (!userCanEdit) {
+        {{ srv_all.GetKashrutName(data.kashrutId) }}
+      } @else {
+        <select class="inputToEdit" id="kashrutId">
+          @for (item of KashrutArrayData; track item.id) {
+            @if (data.kashrutId == item.id) {
+              <option [value]="item.id" selected>
+                {{ item.name }}
+              </option>
+            } @else {
+              <option [value]="item.id">
+                {{ item.name }}
+              </option>
+            }
+          }
+        </select>
+      }
+    </P>
 
     <br />
+    @if (userCanEdit) {
+      <button (click)="saveEdit()" class="close-btn">
+        <mat-icon class="close-icon">task_alt</mat-icon>
+      </button>
+    }
     <button (click)="onClose()" class="close-btn">
       <mat-icon class="close-icon">close</mat-icon>
     </button>

@@ -123,19 +123,8 @@
         </div>
       </th>
       <td mat-cell *matCellDef="let element" class="contentTable">
-        @if (element.RouteDuration > 60) {
-          @if (element.RouteDuration % 60 === 0) {
-            {{ element.RouteDuration / 60 | number: "1.0-0" }} שעות
-          }
-          @if (element.RouteDuration % 60 !== 0) {
-            {{ element.RouteDuration / 60 | roundDown }} שעות ו-
-            {{ element.RouteDuration % 60 | number: "1.0-0" }} דקות
-          }
-        } @else if (element.RouteDuration == 60) {
-          שעה אחת
-        } @else if (element.RouteDuration < 60) {
-          {{ element.RouteDuration }} דקות
-        }
+        {{walkingTrails.formatDuration(element.RouteDuration)}}
+      
       </td>
     </ng-container>
 
@@ -173,15 +162,7 @@
         </button>
       </td>
     </ng-container>
-<!-- עריכה -->
-      <ng-container matColumnDef="EditButton">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"></th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        <button class="showDetails" (click)="openDialogRegistrations(element)">
-          <mat-icon class="showDetelis-icon">edit</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

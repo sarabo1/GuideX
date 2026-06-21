@@ -1,32 +1,144 @@
 <div class="show">
   <div class="background"></div>
   <div class="content">
+    <button
+      [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+      (click)="canEdit()"
+    >
+      <mat-icon class="close-icon">edit</mat-icon>
+    </button>
     <h2>
-      <strong>{{ data.AttractionsName }}</strong>
+      @if (!userCanEdit) {
+        <strong>{{ data.AttractionsName }}</strong>
+      } @else {
+        <input
+          class="inputToEdit"
+          id="AttractionsName"
+          type="text"
+          value="{{ data.AttractionsName }}"
+        />
+      }
     </h2>
-    <h5>
-      <strong>{{ data.Description }}</strong>
-    </h5>
-    <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
+    @if (!userCanEdit) {
+      <h5>
+        <strong>{{ data.Description }}</strong>
+      </h5>
+    } @else {
+      <h6>
+        <textarea
+          cols="{{ data.Description.length / 2 }}"
+          id="Description"
+          class="inputToEdit"
+          type="text"
+          value="{{ data.Description }}"
+        >
+        </textarea>
+      </h6>
+    }
+    <p>
+      <strong>אזור:</strong>
+      @if (!userCanEdit) {
+        {{ srv_all.GetRegions(data.RegionId) }}
+      } @else {
+        <select class="inputToEdit" id="RegionId">
+          @for (item of RegionsArrayData; track item.id) {
+            @if (data.RegionId == item.id) {
+              <option [value]="item.id" selected>
+                {{ item.name }}
+              </option>
+            } @else {
+              <option [value]="item.id">
+                {{ item.name }}
+              </option>
+            }
+          }
+        </select>
+      }
+    </p>
     <p>
       <strong>סוג אטרקציה:</strong>
-      {{ Attractions.GetTypeByNumber(data.AttractionsTypeId) }}
+      @if (!userCanEdit) {
+        {{ Attractions.GetTypeByNumber(data.AttractionsTypeId) }}
+      } @else {
+        <select class="inputToEdit" id="AttractionsTypeId">
+          @for (item of AttractionsArrayData; track item.id) {
+            @if (data.AttractionsTypeId == item.id) {
+              <option [value]="item.id" selected>
+                {{ item.name }}
+              </option>
+            } @else {
+              <option [value]="item.id">
+                {{ item.name }}
+              </option>
+            }
+          }
+        </select>
+      }
     </p>
+    @if (userCanEdit) {
+      <p><strong>שמירת השבת: </strong></p>
+
+      <select (change)="changeShomerShabat()" class="inputToEdit" id="ShomerShabat">
+        
+          <option [value]="0" [selected]="data.ShomerShabat == 0">אינו שומר שבת</option>
+          <option [value]="1" [selected]="data.ShomerShabat == 1">לא ידוע</option>
+          <option [value]="2" [selected]="data.ShomerShabat == 2">שומר שבת</option>
+        
+   
+      </select>
+    }
+
     @if (data.ShomerShabat == 0) {
-      <h3>המקום אינו שומר שבת</h3>
+        @if(!userCanEdit){
+      <h3>המקום אינו שומר שבת</h3>}
     } @else {
       @if (data.ShomerShabat == 1) {
-        <h5><strong>יש לברר בנוגע לשמירת השבת של המקום</strong></h5>
+        @if(!userCanEdit){
+        <h5><strong>יש לברר בנוגע לשמירת השבת של המקום</strong></h5>}
       }
 
-      <P><strong>כתובת:</strong> {{ data.Address }}</P>
-      <P><strong>טלפון:</strong> {{ data.Phone }}</P>
+      <P
+        ><strong>כתובת:</strong>
+        @if (!userCanEdit) {
+          {{ data.Address }}
+        } @else {
+          <input
+            class="inputToEdit"
+            id="Address"
+            type="text"
+            value="{{ data.Address }}"
+          />
+        }
+      </P>
+      <P
+        ><strong>טלפון:</strong>
+        @if (!userCanEdit) {
+          {{ data.Phone }}
+        } @else {
+          <input
+            class="inputToEdit"
+            id="Phone"
+            type="text"
+            value="{{ data.Phone }}"
+          />
+        }
+      </P>
     }
-    <br />
 
-<img [src]="imageUrl" alt="תיאור התמונה" />
+    <!-- <img [src]="imageUrl" alt="תיאור התמונה" /> -->
+    <br />
+    @if (userCanEdit) {
+      <button (click)="saveEdit()" class="close-btn">
+        <mat-icon class="close-icon">task_alt</mat-icon>
+      </button>
+    }
+
     <button (click)="onClose()" class="close-btn">
       <mat-icon class="close-icon">close</mat-icon>
     </button>
+
+    
+  </div>
+  <div class="card flex justify-center gap-2">
   </div>
 </div>

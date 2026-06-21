@@ -1,73 +1,99 @@
-
 .show {
-    position: relative; 
-    overflow: hidden; 
-    border-radius: 5px; 
-    margin: 0px; 
-    direction: rtl;
-    font-size: 16px;
-     text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3); /* שינויים: הוספת הצללה */
+  position: relative;
+  overflow: hidden;
+//   overflow: visible;
+
+  border-radius: 5px;
+  margin: 0px;
+  direction: rtl;
+  font-size: 16px;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3); 
+       max-height: 730px;
 
 }
 
 .background {
-    background-image: url('/to_show_wt.png');
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    position: absolute; 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    filter: blur(3px); 
-    z-index: 1; 
+  background-image: url("/to_show_wt.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  filter: blur(3px);
+  z-index: 1;
 }
 
 .content {
-    margin: 10px;
-    position: relative; 
-    z-index: 2; 
-    color: #655f33; 
-    padding: 20px; 
-    text-align: center;
+  margin: 10px;
+  position: relative;
+  z-index: 2;
+  color: #655f33;
+  padding: 20px;
+  text-align: center;
+    max-height: calc(770px - 40px); /* חישוב גובה מקסימלי תוך כדי התחשבות ב-padding */
+  overflow-y: auto; /* אפשרות גלילה פנימית */
 }
-
 
 // #615e55;
 .close-btn {
-    border: 2px solid #655f33; 
-    background-color: transparent;
-    color: #615e55; 
-    border-radius: 18px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
+  border: 2px solid #655f33;
+  background-color: transparent;
+  color: #615e55;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px;
 }
 
 .close-btn:hover {
-    background-color: #655f33;
-    // color: transparent; 
-    color: #DFDDCA;
+  background-color: #655f33;
+  // color: transparent;
+  color: #dfddca;
 }
 
 .close-icon {
-      margin-right: 15px;
-     margin-left: 15px;
-     margin-top: 5px;
-    
-     color: inherit; /* להוריש את צבע האייקון מצבע הכפתור */
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-top: 5px;
+
+  color: inherit; /* להוריש את צבע האייקון מצבע הכפתור */
 }
 
+.edit {
+  text-align: end;
+  background-color: #655f33;
+  color: #dfddca;
+}
+.inputToEdit {
+  border: 0;
+  border-radius: 4px;
+  margin-right: 7px;
+  outline: none;
+  width: 100%; /* או הגבלה אחרת לתצוגה */
+  box-sizing: border-box; /* יישום של padding ו-border בתוך הגדלים */
+}
 
+.form-check-input:checked {
+  background-color: #655f33; /* צבע רקע כשה-checkbox מסומן */
+  border-color: #655f33; /* צבע גבול כשה-checkbox מסומן */
+}
 
-// h2 {
-//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
-// }
+.form-check-input:focus {
+  border-color: #655f33; /* צבע גבול כשה-checkbox על מנת להתמקד */
+}
 
-// h5 {
-//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
-// }
-
-// p {
-//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* שינויים: הוספת הצללה */
-// }
+.form-check-input {
+  /* צבע גבול וסטייל עבור ה-checkbox לא מסומן */
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+.centered {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* או רוחב אחר כרצוי */
+    text-align: center; /* מרכז טקסט במקרה של טקסט בתוך האלמנט */
+    margin-top:-20px;
+}

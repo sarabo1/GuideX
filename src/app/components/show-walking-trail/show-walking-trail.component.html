@@ -1,43 +1,167 @@
 <div class="show">
   <div class="background"></div>
-  <div class="content">
-    <h2>
-      <strong>{{ data.WalkingTrailName }}</strong>
-    </h2>
-    <h5>
-      <strong>{{ data.Description }}</strong>
-    </h5>
-    <p><strong>אזור:</strong> {{ srv_all.GetRegions(data.RegionId) }}</p>
-    <p>
-      <strong>משך המסלול: </strong>
-      @if (data.RouteDuration > 60) {
-        @if (data.RouteDuration % 60 === 0) {
-          {{ data.RouteDuration / 60 | number: "1.0-0" }} שעות
+  
+    <div class="content">
+      <button
+        [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+        (click)="canEdit()"
+      >
+        <mat-icon class="close-icon">edit</mat-icon>
+      </button>
+      <h2>
+        @if (!userCanEdit) {
+          <strong>{{ data.WalkingTrailName }}</strong>
+        } @else {
+          <input
+            class="inputToEdit"
+            id="WalkingTrailName"
+            type="text"
+            value="{{ data.WalkingTrailName }}"
+          />
         }
-        @if (data.RouteDuration % 60 !== 0) {
-          {{ data.RouteDuration / 60 | roundDown }} שעות ו-
-          {{ data.RouteDuration % 60 | number: "1.0-0" }} דקות
-        }
-      } @else if (data.RouteDuration == 60) {
-        שעה אחת
-      } @else if (data.RouteDuration < 60) {
-        {{ data.RouteDuration }} דקות
-      }
-    </p>
-    <p><strong>אורך המסלול: </strong> {{ data.LengthInKm }} ק"מ</p>
-    <p><strong>דרגת המסלול: </strong> {{ data.Difficulty }}</p>
-    <p><strong>מתאים לגילאי: </strong>{{ data.MinAge }} - {{ data.MaxAge }}</p>
-    <p>
-      @if (data.IsWet) {
-        מסלול רטוב
+      </h2>
+      @if (!userCanEdit) {
+        <h5>
+          <strong>{{ data.Description }}</strong>
+        </h5>
       } @else {
-        מסלול יבש
+        <h6>
+          <textarea
+            cols="{{ data.Description.length / 2 }}"
+            id="Description"
+            class="inputToEdit"
+            type="text"
+            value="{{ data.Description }}"
+          >
+          </textarea>
+        </h6>
       }
-    </p>
-    <p><strong>הוראות הגעה: </strong>{{ data.Directions }}</p>
+      <p>
+        <strong>אזור:</strong>
+        @if (!userCanEdit) {
+          {{ srv_all.GetRegions(data.RegionId) }}
+        } @else {
+          <select class="inputToEdit" id="RegionId">
+            @for (item of RegionsArrayData; track item.id) {
+              @if (data.RegionId == item.id) {
+                <option [value]="item.id" selected>
+                  {{ item.name }}
+                </option>
+              } @else {
+                <option [value]="item.id">
+                  {{ item.name }}
+                </option>
+              }
+            }
+          </select>
+        }
+      </p>
+      <p>
+        @if (!userCanEdit) {
+          <strong>משך המסלול: </strong>
+          {{ walkingTrails.formatDuration(data.RouteDuration) }}
+        } @else {
+          <strong>משך המסלול בדקות: </strong>
+          <input
+            class="inputToEdit"
+            id="RouteDuration"
+            type="number"
+            value="{{ data.RouteDuration }}"
+          />
+        }
+      </p>
+      <p>
+        <strong>אורך המסלול: </strong>
+        @if (!userCanEdit) {
+          {{ data.LengthInKm }} ק"מ
+        } @else {
+          <strong>אורך המסלול בק"מ: </strong>
+          <input
+            class="inputToEdit"
+            id="LengthInKm"
+            type="text"
+            value="{{ data.LengthInKm }}"
+          />
+        }
+      </p>
+      <p>
+        <strong>דרגת המסלול: </strong>
+        @if (!userCanEdit) {
+          {{ data.Difficulty }}
+        } @else {
+          <select class="inputToEdit" id="Difficulty">
+            <option [value]="1" [selected]="data.Difficulty == 1">1</option>
+            <option [value]="2" [selected]="data.Difficulty == 2">2</option>
+            <option [value]="3" [selected]="data.Difficulty == 3">3</option>
+            <option [value]="4" [selected]="data.Difficulty == 4">4</option>
+          </select>
+        }
+      </p>
 
-    <button (click)="onClose()" class="close-btn">
-      <mat-icon class="close-icon">close</mat-icon>
-    </button>
-  </div>
+      <p>
+        <strong>מתאים לגילאי: </strong>
+        @if (!userCanEdit) {
+          {{ data.MinAge }} - {{ data.MaxAge }}
+        } @else {
+          <P><strong>מגיל: </strong></P>
+          <input
+            class="inputToEdit"
+            id="MinAge"
+            type="number"
+            value="{{ data.MinAge }}"
+          />
+          <P><strong>עד גיל: </strong></P>
+          <input
+            class="inputToEdit"
+            id="MaxAge"
+            type="number"
+            value="{{ data.MaxAge }}"
+          />
+        }
+      </p>
+      <p>
+        @if (!userCanEdit) {
+          @if (data.IsWet) {
+            מסלול רטוב
+          } @else {
+            מסלול יבש
+          }
+        } @else {
+          <strong> <p>המסלול רטוב?</p></strong>
+          <h3 class="form-check form-switch centered">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [checked]="data.IsWet"
+              value="data.IsWet"
+              id="IsWet"
+              switch
+            />
+          </h3>
+        }
+      </p>
+      <p>@if (!userCanEdit) {<strong>הוראות הגעה: </strong>{{ data.Directions }}
+     } @else {
+        <h6>
+          <textarea
+            cols="{{ data.Directions.length / 2 }}"
+            id="Directions"
+            class="inputToEdit"
+            type="text"
+            value="{{ data.Directions }}"
+          >
+          </textarea>
+        </h6>
+      }</p>
+<br/>
+ @if (userCanEdit) {
+      <button (click)="saveEdit()" class="close-btn">
+        <mat-icon class="close-icon">task_alt</mat-icon>
+      </button>
+    }
+      <button (click)="onClose()" class="close-btn">
+        <mat-icon class="close-icon">close</mat-icon>
+      </button>
+    </div>
+  
 </div>

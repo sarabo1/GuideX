@@ -7,5 +7,5 @@ export interface int_Attractions {
   Description: string;
   ShomerShabat: number;
   Phone: string;
-  ImageUrl: string;
+//   ImageUrl: string;
 }

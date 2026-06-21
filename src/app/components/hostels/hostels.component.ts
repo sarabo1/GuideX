@@ -23,7 +23,6 @@ export class HostelsComponent {
     'NumberOfPlaces',
     'kashrutId',
     'DetailsButton',
-    'EditButton',
   ];
   dataSource!: MatTableDataSource<Int_Hostels>;
   showSearch: Boolean = false;

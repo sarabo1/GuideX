@@ -35,7 +35,6 @@ export class WalkingTrailComponent implements AfterViewInit {
     'Difficulty',
     'IsWet',
     'DetailsButton',
-    'EditButton',
   ];
   dataSource!: MatTableDataSource<Int_WalkingTrail>;
   RegionsArrayData: any;
@@ -52,6 +51,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     paginator: MatPaginatorIntl,
     public srv_all: ServiceAllService,
     public dialog: MatDialog,
+    public walkingTrails: SrvWalkingTrailService,
   ) {
     paginator.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginator.nextPageLabel = 'העמוד הבא';
@@ -94,6 +94,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     console.log('הצליח', element); // לוג עבור בדיקה
     const dialogRef = this.dialog.open(ShowWalkingTrailComponent, {
       width: '850px',
+      
       data: element, // העברת הנתונים לדיאלוג
     });
   }

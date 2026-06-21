@@ -1,15 +1,4 @@
-// .home-page-container{
-//     max-height: 467px;
-// }
 
-
-// app-header {
-//     position: sticky;
-//     top: 0;
-//     z-index: 1000;
-//     background-color: white;
-//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הוספת צל */
-// }
 app-header {
     position: sticky;
     top: 0; 
@@ -21,4 +10,35 @@ app-header {
 .home-page-container {
      max-height: calc(100% - 80px);
     overflow-y: auto;  
+}
+
+mat-icon{
+    padding-top: 4px;
+}
+.open{
+     padding: 20px 10px;
+    color: #FF5C67;
+    background-color: transparent;
+   border:1px solid #FF5C67;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px auto;
+    transition: transform 0.2s ease, 
+    box-shadow 0.2s ease; 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 94%;
+}
+
+.open:hover {
+    color: #004aad;
+//  background-color: #FF5C67;
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.btnOpen{
+    width: 100%;
+        align-items: center;
+
 }

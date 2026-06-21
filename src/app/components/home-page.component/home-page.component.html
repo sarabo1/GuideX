@@ -1,9 +1,73 @@
 <app-header></app-header>
 <div class="home-page-container">
-<!-- <app-walking-trail></app-walking-trail> -->
-<app-attractions></app-attractions>
-<!-- <app-hostels></app-hostels> -->
+  <div class="buttenOpen">
+    <div class="btnOpen">
+      <button class="open btn" (click)="openTable(1)">
+        <div>
+          <span>פתיחת מסלולים</span>
+          <span><mat-icon>map</mat-icon></span>
+        </div>
+        @if (!openTrail) {
+          <mat-icon>keyboard_double_arrow_down</mat-icon>
+        }
+      </button>
+      @if (openTrail) {
+        <app-walking-trail></app-walking-trail>
+        <button class="open btn" (click)="openTable(1)">
+          <mat-icon>keyboard_double_arrow_up</mat-icon>
+        </button>
+      }
+    </div>
+    <div class="btnOpen">
+      <button class="open btn" (click)="openTable(2)">
+        <div>
+          <span>פתיחת אטרקציות</span>
+          <span><mat-icon>attractions</mat-icon></span>
+        </div>
+        @if (!openAttraction) {
+          <mat-icon>keyboard_double_arrow_down</mat-icon>
+        }
+      </button>
+      @if (openAttraction) {
+        <app-attractions></app-attractions>
+        <button class="open btn" (click)="openTable(2)">
+          <mat-icon>keyboard_double_arrow_up</mat-icon>
+        </button>
+      }
+    </div>
+    <div class="btnOpen">
+      <button class="open btn" (click)="openTable(3)">
+        <div>
+          <span>פתיחת מקומות לינה</span>
+          <span><mat-icon>bed</mat-icon></span>
+        </div>
+        @if (!openHostels) {
+          <mat-icon>keyboard_double_arrow_down</mat-icon>
+        }
+      </button>
+      @if (openHostels) {
+        <app-hostels></app-hostels>
+        <button class="open btn" (click)="openTable(3)">
+          <mat-icon>keyboard_double_arrow_up</mat-icon>
+        </button>
+      }
+    </div>
 
-
-
+    <div class="btnOpen">
+      <button class="open btn" (click)="openTable(4)">
+        <div>
+          <span>פתיחת מדריכות</span>
+          <span><mat-icon>person_pin</mat-icon></span>
+        </div>
+        @if (!openGuide) {
+          <mat-icon>keyboard_double_arrow_down</mat-icon>
+        }
+      </button>
+      @if (openGuide) {
+        <button class="open btn" (click)="openTable(4)">
+          <mat-icon>keyboard_double_arrow_up</mat-icon>
+        </button>
+      }
+    </div>
+  </div>
 </div>

@@ -690,5 +690,38 @@ export class SrvWalkingTrailService {
     else
       return 0
   }
+  UpdateTrail(route: Int_WalkingTrail){
+    var walking = this.mock_WalkingTrails.find(wt => wt.WalkingTrailId == route.WalkingTrailId )
+    if(walking){
+      walking.WalkingTrailName = route.WalkingTrailName;
+            walking.Description = route.Description;
+      walking.Difficulty = route.Difficulty;
+      walking.Directions = route.Directions;
+      walking.IsWet = route.IsWet;
+      walking.LengthInKm = route.LengthInKm;
+      walking.MaxAge = route.MaxAge;
+      walking.MinAge = route.MinAge;
+      walking.RegionId = route.RegionId;
+      walking.RouteDuration = route.RouteDuration;
+     
+    }
+  }
+  formatDuration(minutes : number) {
+    if (minutes > 60) {
+        if (minutes % 60 === 0) {
+            return `${minutes / 60} שעות`;
+        } else {
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+            return `${hours} שעות ו- ${remainingMinutes} דקות`;
+        }
+    } else if (minutes === 60) {
+        return 'שעה אחת';
+    } else {
+        return `${minutes} דקות`;
+    }
+}
+
+
 
 }
