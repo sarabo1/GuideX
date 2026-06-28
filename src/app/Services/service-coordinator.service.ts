@@ -9,28 +9,34 @@ export class ServiceCoordinatorService {
   mock_Coordinators: InterfaceCoordinator[] = [
     {
       UserId: 1,
-      TourCoordinatorId: 202,
+      TourCoordinatorId: 1,
       RoleId: 303,
       SchoolId: 1,
     },
     {
       UserId: 2,
-      TourCoordinatorId: 203,
+      TourCoordinatorId: 2,
       RoleId: 304,
       SchoolId: 2,
     },
     {
       UserId: 3,
-      TourCoordinatorId: 204,
+      TourCoordinatorId: 3,
       RoleId: 305,
       SchoolId: 3,
     },
     {
       UserId: 4,
-      TourCoordinatorId: 205,
+      TourCoordinatorId: 4,
       RoleId: 306,
       SchoolId: 4,
     },
+    {
+      UserId: 10,
+      TourCoordinatorId: 5,
+      RoleId:5,
+      SchoolId: 4,
+    }
   ];
   GetCoordinators() {
     return this.mock_Coordinators;

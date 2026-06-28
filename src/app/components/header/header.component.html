@@ -2,13 +2,43 @@
   <div (click)="logo()">
     <img class="logo" src="logo_for_light.png" alt="Home Page" />
   </div>
-  <div>הי {{ username }}</div>
+  <div><div>
+    <h3>הי {{ username }}! כיף לפגוש אותך:)</h3></div>
+    <div>
+      <p>{{this.getGreeting()}}</p>
+    </div>
+  </div>
   <div>
-    <button mat-button (click)="logout()" class="btn">
+    <div class="container">
+      <div class="dropdown">
+        <button class="moreOptions" (click)="toggleMenu()">
+          <mat-icon class="mat-icon-btn">more_vert</mat-icon>
+        </button>
+        <div class="dropdown-menu" id="menu">
+          <p class="option">אפשרות 1</p>
+          <div class="divider"></div>
+          <button 
+            class="option logout edit">
+            <span>
+              <mat-icon class="mat-icon-btn icon">edit</mat-icon>
+            </span>
+            <span>עריכת הפרטים שלך</span>
+          </button>
+          <div class="divider"></div>
+          <button (click)="logout()"  class="option logout">
+            <span>
+              <mat-icon class="mat-icon-btn icon">logout</mat-icon>
+            </span>
+            <span>להתנתקות</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <button mat-button (click)="logout()" class="btn">
       <span>להתנתקות</span>
       <span>
         <mat-icon class="mat-icon-btn">logout</mat-icon>
       </span>
-    </button>
-  </div>
-</div>
+    </button> -->

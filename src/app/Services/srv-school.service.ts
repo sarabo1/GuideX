@@ -11,9 +11,9 @@ export class SrvSchoolService {
             SchoolId: 1,
             SchoolName: 'בית יעקב מאירות',
             IsBoys: 0,
-            CityId: 101,
-            PrincipalName: 'מרכז רבקה',
-            PhoneSecretary: '050-0000001',
+            CityId: 1,
+            PrincipalName: 'מרכזי רבקה',
+            PhoneSecretary: '0500000001',
             TypeSchoolId: 1,
             AgeSchoolId: 1
         },
@@ -21,9 +21,9 @@ export class SrvSchoolService {
             SchoolId: 2,
             SchoolName: 'בית יעקב נשמתי',
             IsBoys: 0,
-            CityId: 102,
+            CityId: 2,
             PrincipalName: 'גב’ חני',
-            PhoneSecretary: '050-0000002',
+            PhoneSecretary: '0500000002',
             TypeSchoolId: 2,
             AgeSchoolId: 2
         },
@@ -31,9 +31,9 @@ export class SrvSchoolService {
             SchoolId: 3,
             SchoolName: 'בית יעקב חן',
             IsBoys: 0,
-            CityId: 103,
-            PrincipalName: 'מרה’ אסתר',
-            PhoneSecretary: '050-0000003',
+            CityId: 1,
+            PrincipalName: 'גב’ אסתר',
+            PhoneSecretary: '0500000003',
             TypeSchoolId: 1,
             AgeSchoolId: 1
         },
@@ -41,9 +41,9 @@ export class SrvSchoolService {
             SchoolId: 4,
             SchoolName: 'בית יעקב תפארת',
             IsBoys: 0,
-            CityId: 104,
+            CityId: 2,
             PrincipalName: 'מר יעקב',
-            PhoneSecretary: '050-0000004',
+            PhoneSecretary: '0500000004',
             TypeSchoolId: 3,
             AgeSchoolId: 3
         },
@@ -73,6 +73,26 @@ GetSchools(): InterfaceSchool[] {
     };
     this.mock_Schools.push(newSchool);
   }
+  AddSchool(school : InterfaceSchool) {
+    const newSchool: InterfaceSchool = {
+      SchoolId: school.SchoolId,
+      SchoolName: school.SchoolName,
+      IsBoys: school.IsBoys,
+      CityId: school.CityId,
+      PrincipalName: school.PrincipalName,
+      PhoneSecretary: school.PhoneSecretary,
+      TypeSchoolId: school.TypeSchoolId,
+      AgeSchoolId: school.AgeSchoolId
+    };
+    this.mock_Schools.push(newSchool);
+  }
+    ExistsCity(SchoolName: string): number {
+    return (
+      this.mock_Schools.find((school) => school.SchoolName === SchoolName)?.SchoolId || 0
+    );
+  }
+
+ 
 
 
 }

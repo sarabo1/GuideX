@@ -1,0 +1,184 @@
+<div class="reka"><div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
+  <!-- <div class="filterToFind"> -->
+  <div [class]="showSearch ? 'filterToFind' : 'filterToFind_not_showSearch'">
+    <div>
+      <div (click)="ToShowSearch()" class="label_search">
+        <img src="search.png" class="img_search" />
+        @if (showSearch) {
+          <h2>חיפוש מסלול לפי נתונים</h2>
+        } @else {
+          <h6><b>חיפוש מסלול</b></h6>
+        }
+      </div>
+      @if (showSearch) {
+        <div class="toFilter">
+          <div class="filter">
+            <div class="filter-item">
+              <label for="regionSelect">אזור </label>
+              <select class="regionSelect" select id="regionSelect">
+                <option disabled selected [value]="0">בחירת אזור</option>
+                @for (item of RegionsArrayData; track item.id) {
+                  <option [value]="item.id">
+                    {{ item.name }}
+                  </option>
+                }
+                <option value="0">כל האזורים</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label for="lengthSelect">אורך (בק"מ) </label>
+              <select class="lengthSelect" id="lengthSelect">
+                <option disabled selected value="0">בחירת אורך מסלול</option>
+                <option value="1">עד 2 ק''מ</option>
+                <option value="2">2-4 ק''מ</option>
+                <option value="3">4 ק''מ ומעלה</option>
+                <option value="0">כל האורכים</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="difficultySelect">רמת קושי </label>
+              <select class="difficultySelect" id="difficultySelect">
+                <option disabled selected value="0">בחירת רמת קושי</option>
+                <option value="1">רמת קושי 1</option>
+                <option value="2">רמת קושי 2</option>
+                <option value="3">רמת קושי 3</option>
+                <option value="4">רמת קושי 4</option>
+                <option value="0">כל רמות הקושי</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-item">
+            <button mat-button class="search btn" (click)="filterTable()">
+              <span>חיפוש</span>
+              <span>
+                <mat-icon class="mat-icon-btn">search</mat-icon>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="Reset_feeder">
+          <button mat-button class="reset btn" (click)="resetFilters()">
+            <span>איפוס המסננים</span>
+            <span>
+              <mat-icon class="mat-icon-btn">filter_alt_off</mat-icon>
+            </span>
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+@if(dataSource.data.length==0 ||dataSource.data==null){
+  <h3 class="notFoundInFilter">לא נמצאו מסלולים המתאימים לחיפוש</h3>
+  <div class="Reset_feeder">
+          <button mat-button class="reset btn" (click)="resetFilters()">
+            <span>לאיפוס המסננים</span>
+            <span>
+              <mat-icon class="mat-icon-btn">filter_alt_off</mat-icon>
+            </span>
+          </button>
+        </div>
+}
+@else{
+<div class="mat-elevation-z8 table-walking-trail">
+  <table mat-table [dataSource]="dataSource" class="table">
+    <!-- WalkingTrailName Column -->
+    <ng-container matColumnDef="WalkingTrailName">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">|  שם המסלול</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.WalkingTrailName }}
+      </td>
+    </ng-container>
+    <!-- Description Column -->
+    <ng-container matColumnDef="Description">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">|  תיאור</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.Description }}
+      </td>
+    </ng-container>
+
+    <!-- RegionId Column -->
+    <ng-container matColumnDef="RegionId">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+        |  אזור המסלול
+      </th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ srv_all.GetRegions(element.RegionId) }}
+      </td>
+    </ng-container>
+
+    <!-- RouteDuration Column -->
+    <ng-container matColumnDef="RouteDuration">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+        <div class="sort">
+          |  משך המסלול
+          <button (click)="sortByNumOFPlaces()" class="showDetails">
+            @if (!sortByTime) {
+              <mat-icon>arrow_downward</mat-icon>
+            } @else {
+              <mat-icon>arrow_upward</mat-icon>
+            }
+          </button>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{walkingTrails.formatDuration(element.RouteDuration)}}
+      
+      </td>
+    </ng-container>
+
+    <!-- Difficulty Column -->
+    <ng-container matColumnDef="Difficulty">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">|  דרגת קושי</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.Difficulty }}
+      </td>
+    </ng-container>
+
+    <!-- AgeRange Column
+    <ng-container matColumnDef="AgeRange">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+        מתאים לגילאי
+      </th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        מתאים לגילאי {{ element.MinAge }} - {{ element.MaxAge }}
+      </td>
+    </ng-container> -->
+
+    <!-- IsWet Column -->
+    <!-- <ng-container matColumnDef="IsWet">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">|  רטוב</th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        {{ element.IsWet ? "מסלול רטוב" : "מסלול יבש" }}
+      </td>
+    </ng-container> -->
+
+    <ng-container matColumnDef="DetailsButton">
+      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable"></th>
+      <td mat-cell *matCellDef="let element" class="contentTable">
+        <button class="showDetails" (click)="openDialogRegistrations(element)">
+          <mat-icon class="showDetelis-icon">zoom_in</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20, 30, 50]"
+    showFirstLastButtons
+    aria-label="בחירת עמוד"
+    class="paginator"
+    [length]="dataSource?.data?.length"
+    
+  >
+  </mat-paginator>
+  
+
+</div>
+}
+</div>

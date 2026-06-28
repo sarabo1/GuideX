@@ -18,8 +18,8 @@ export class ServiceUsersService {
         LastName: 'מאירוביץ',
         IdNumber: '123456789',
         CityId: 101,
-        PhoneNumber: '050-1234567',
-        Email: 'haya.meirovitz@example.com',
+        PhoneNumber: '0501234567',
+        Email: 'haya.meir@gmail.com',
       },
       {
         UserId: 2,
@@ -28,8 +28,8 @@ export class ServiceUsersService {
         LastName: 'ברסלב',
         IdNumber: '987654321',
         CityId: 102,
-        PhoneNumber: '052-7654321',
-        Email: 'miriam.breslav@example.com',
+        PhoneNumber: '0527654321',
+        Email: 'miriam.breslav@gmail.com',
       },
       {
         UserId: 3,
@@ -38,8 +38,8 @@ export class ServiceUsersService {
         LastName: 'רבינוביץ',
         IdNumber: '456123789',
         CityId: 103,
-        PhoneNumber: '053-1234567',
-        Email: 'shifra.rabinovitz@example.com',
+        PhoneNumber: '0531234567',
+        Email: 'shifra.rabinovitz@gmail.com',
       },
       {
         UserId: 4,
@@ -48,8 +48,8 @@ export class ServiceUsersService {
         LastName: 'אלשיך',
         IdNumber: '321654987',
         CityId: 104,
-        PhoneNumber: '054-9876543',
-        Email: 'nechama.elshich@example.com',
+        PhoneNumber: '0549876543',
+        Email: 'nechama.elshich@gmail.com',
       },
       {
         UserId: 5,
@@ -58,8 +58,8 @@ export class ServiceUsersService {
         LastName: 'עדרי',
         IdNumber: '123456789',
         CityId: 101,
-        PhoneNumber: '050-1234567',
-        Email: 'haya@example.com',
+        PhoneNumber: '0501234567',
+        Email: 'haya@gmail.com',
       },
       {
         UserId: 6,
@@ -68,8 +68,8 @@ export class ServiceUsersService {
         LastName: 'עדרי',
         IdNumber: '123456789',
         CityId: 101,
-        PhoneNumber: '050-9876543',
-        Email: 'menucha@example.com',
+        PhoneNumber: '0509876543',
+        Email: 'menucha@gmail.com',
       },
       {
         UserId: 7,
@@ -78,8 +78,8 @@ export class ServiceUsersService {
         LastName: 'ברזילי',
         IdNumber: '987654321',
         CityId: 102,
-        PhoneNumber: '050-6543210',
-        Email: 'menuchab@example.com',
+        PhoneNumber: '0506543210',
+        Email: 'menuchab@gmail.com',
       },
       {
         UserId: 8,
@@ -88,8 +88,8 @@ export class ServiceUsersService {
         LastName: 'שולמן',
         IdNumber: '456123789',
         CityId: 103,
-        PhoneNumber: '050-3216549',
-        Email: 'shifrah@example.com',
+        PhoneNumber: '0503216549',
+        Email: 'shifrah@gmail.com',
       },
       {
         UserId: 9,
@@ -98,9 +98,19 @@ export class ServiceUsersService {
         LastName: 'ברוך',
         IdNumber: '321654987',
         CityId: 104,
-        PhoneNumber: '050-9876540',
-        Email: 'esther@example.com',
+        PhoneNumber: '0509876540',
+        Email: 'esther@gmail.com',
       },
+      {
+        UserId: 10,
+        UserPassword: 'Henny!11',
+        FirstName: 'הני',
+        LastName: 'בורודיאנסקי',
+        IdNumber: '216666263',
+        CityId: 104,
+        PhoneNumber: '0583268518',
+        Email: 'hhh@gmail.com',
+      }
     ];
   }
   GetUsers(): any[] {
@@ -133,4 +143,14 @@ export class ServiceUsersService {
     };
     this.mock_Users.push(newUser);
   }
+ 
+  getNameByUserId(userId: number): string {
+    const user = this.mock_Users.find((u) => u.UserId === userId);
+    return user ? user.FirstName : '';
+  }
+  getEmailByUserId(userId: number): string {
+    const user = this.mock_Users.find((u) => u.UserId === userId);
+    return user ? user.Email : '';
+  }
+
 }

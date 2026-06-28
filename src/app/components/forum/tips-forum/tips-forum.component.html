@@ -1,0 +1,101 @@
+<!-- <div>
+  <div class="icon-background"></div>
+  <div class="forumTips">
+    <div class="forumHead">
+      <br />
+      <h3>
+        חזרתם ממסלול שווה? מצאתם מקום שלא כדאי לפספס? זה המקום לשתף ולהמליץ
+      </h3>
+      <br />
+      <h4>הגעת בזמן, יש המלצות שוות!</h4>
+    </div>
+    <button class="btn aadMessage" (click)="openDialogAddMessage(0, 1)">
+      כתיבת הודעה חדשה
+    </button>
+    <br />
+    <br />
+    <br />
+    <div class="messages">
+      @for (message of allTheMessage; track message) {
+        @for (let message of allTheMessage) {
+     <div class="card">
+          @if (message.ParentForumId) {
+            <div class="card-header">
+              <mat-icon class="rotate-90">u_turn_right</mat-icon>"<i
+                >{{ srv_forum.getTitleByForumId(message.ParentForumId) }}"</i
+              >
+            </div>
+          }
+
+          <div class="card-body">
+            <div class="titleAndHeader">
+              <h5>{{ message.Title }}</h5>
+              <div class="toDateAndUserEmail">
+                  <p>{{ maskEmail(srv_user.getEmailByUserId(message.UserId)) }}</p>
+                <p class="marginDate">
+                  {{ message.Date | date: "dd/MM/yyyy" }}
+                </p>
+              </div>
+            </div>
+
+            <p>{{ message.Message }}</p>
+
+            <button
+              class="btn aadMessage"
+              (click)="openDialogAddMessage(message.ForumId, 1)"
+            >
+              תגובה להודעה זו
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<p>{{Srv_Date.getJewDate(message.Date)}}</p> --> 
+
+
+<div>
+  <div class="icon-background"></div>
+  <div class="forumTips">
+    <div class="forumHead">
+      <h3>
+        חזרתם ממסלול שווה? מצאתם מקום שלא כדאי לפספס? זה המקום לשתף ולהמליץ
+      </h3>
+      <h4>הגעת בזמן, יש המלצות שוות!</h4>
+    </div>
+    <button class="btn aadMessage" (click)="openDialogAddMessage(0, 1)">
+      כתיבת הודעה חדשה
+    </button>
+    
+    <div class="messages">
+      @for (message of allTheMessage; track message) {
+        <div class="card">
+          @if (message.ParentForumId) {
+            <div class="card-header">
+              <mat-icon class="rotate-90">u_turn_right</mat-icon>
+              <i>{{ srv_forum.getTitleByForumId(message.ParentForumId) }}</i>
+            </div>
+          }
+
+          <div class="card-body">
+            <div class="titleAndHeader">
+              <h5>{{ message.Title }}</h5>
+              <div class="toDateAndUserEmail">
+                <p>{{ maskEmail(srv_user.getEmailByUserId(message.UserId)) }}</p>
+                <p class="marginDate">{{ message.Date | date: "dd/MM/yyyy" }}</p>
+              </div>
+            </div>
+
+            <p>{{ message.Message }}</p>
+
+            <button class="btn aadMessage" (click)="openDialogAddMessage(message.ForumId, 1)">
+              תגובה להודעה זו
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

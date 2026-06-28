@@ -1,10 +1,14 @@
-<app-header></app-header>
+<!-- <app-header></app-header> -->
+
 <div class="home-page-container">
+  
+  <!-- <router-outlet></router-outlet>  -->
+  <br /><br />
   <div class="buttenOpen">
     <div class="btnOpen">
-      <button class="open btn" (click)="openTable(1)">
+      <button class="open btn" [disabled]="openTrail" (click)="openTable(1)">
         <div>
-          <span>פתיחת מסלולים</span>
+          <span>מסלולים</span>
           <span><mat-icon>map</mat-icon></span>
         </div>
         @if (!openTrail) {
@@ -19,9 +23,13 @@
       }
     </div>
     <div class="btnOpen">
-      <button class="open btn" (click)="openTable(2)">
+      <button
+        class="open btn"
+        [disabled]="openAttraction"
+        (click)="openTable(2)"
+      >
         <div>
-          <span>פתיחת אטרקציות</span>
+          <span>אטרקציות</span>
           <span><mat-icon>attractions</mat-icon></span>
         </div>
         @if (!openAttraction) {
@@ -36,9 +44,9 @@
       }
     </div>
     <div class="btnOpen">
-      <button class="open btn" (click)="openTable(3)">
+      <button class="open btn" [disabled]="openHostels" (click)="openTable(3)">
         <div>
-          <span>פתיחת מקומות לינה</span>
+          <span>מקומות לינה</span>
           <span><mat-icon>bed</mat-icon></span>
         </div>
         @if (!openHostels) {
@@ -54,9 +62,9 @@
     </div>
 
     <div class="btnOpen">
-      <button class="open btn" (click)="openTable(4)">
+      <button class="open btn" [disabled]="openGuide" (click)="openTable(4)">
         <div>
-          <span>פתיחת מדריכות</span>
+          <span>מדריכות</span>
           <span><mat-icon>person_pin</mat-icon></span>
         </div>
         @if (!openGuide) {
@@ -68,6 +76,24 @@
           <mat-icon>keyboard_double_arrow_up</mat-icon>
         </button>
       }
+    </div>
+    <div class="btnOpen">
+      <div>
+        <button
+          class="open btn"
+          (click)="openTipsForum()"
+        >
+          <div>
+            <span>פורום חוויות והמלצות</span>
+            <span><mat-icon>speaker_notes</mat-icon></span>
+          </div>
+          
+        </button>
+       
+      </div>
+      
+    
+       
     </div>
   </div>
 </div>

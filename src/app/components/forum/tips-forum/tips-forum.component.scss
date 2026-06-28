@@ -1,0 +1,97 @@
+
+
+// .forumTips{
+//     // display: flex;
+   
+// }
+
+// .rotate-90 {
+//   transform: rotate(90deg);
+// }
+// .messages{
+//         display: flex;
+//     flex-direction: row;
+//     flex-wrap: wrap;
+//     justify-content: center
+// }
+// .card{
+//     margin: 12px;
+//     width: 80%;
+// }
+// .titleAndHeader{
+//     display: flex;
+//     justify-content: space-between
+
+// }
+// .aadMessage{
+//     background-color: rgb(231, 162, 175);
+//  align-items: center;
+// }
+// .marginDate {
+//     border-right: 1px solid black;
+//     padding-right: 7px;
+// }
+// .toDateAndUserEmail{
+//     display: flex;
+//     gap: 7px;
+//     align-items: center;
+//     justify-content: flex-end;
+// }
+
+
+
+.forumTips {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    width: 85%; /* שנה את הערך כאן לפי הצורך */
+    // max-width: 400px; /* אפשר לקבוע מקסימום רוחב אם רוצים לייצר אחידות */
+    margin: 12px auto; /* ממרכז את הכרטיסים */
+}
+
+.titleAndHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aadMessage {
+    background-color: rgb(231, 162, 175);
+    border: none;
+    border-radius: 3px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.marginDate {
+    border-right: 1px solid black;
+    padding-right: 7px;
+}
+
+.toDateAndUserEmail {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    justify-content: flex-end;
+}

@@ -1,11 +1,11 @@
 
-app-header {
-    position: sticky;
-    top: 0; 
-    z-index: 1000; /* מופיע מעל כל התוכן האחר */
-    height: 80px; /* הגובה של ה-header, עדכן לפי הצורך */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הוספת צל */
-}
+// app-header {
+//     position: sticky;
+//     top: 0; 
+//     z-index: 1000; /* מופיע מעל כל התוכן האחר */
+//     height: 80px; /* הגובה של ה-header, עדכן לפי הצורך */
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* הוספת צל */
+// }
 
 .home-page-container {
      max-height: calc(100% - 80px);
@@ -42,3 +42,4 @@ mat-icon{
         align-items: center;
 
 }
+ 

@@ -1,0 +1,167 @@
+מחזיר רק מערך אחד של קבצים ריק!!!!
+
+<form [formGroup]="formGuide" (ngSubmit)="newGuide()" class="guide-form form">
+  <div>
+    <label>שם פרטי:</label>
+    <input type="text" formControlName="FirstName" />
+  </div>
+  @if (formGuide.get("FirstName")?.touched) {
+    @if (formGuide.get("FirstName")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+    @if (formGuide.get("FirstName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
+
+  <div>
+    <label>שם משפחה:</label>
+    <input type="text" formControlName="LastName" />
+  </div>
+  @if (formGuide.get("LastName")?.touched) {
+    @if (formGuide.get("LastName")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+    @if (formGuide.get("LastName")?.hasError("minlength")) {
+      <div class="red">יש להכניס מינימום 2 תווים⚠️</div>
+    }
+  }
+
+  <div>
+    <label>מספר זהות:</label>
+    <input type="text" formControlName="IdNumber" />
+  </div>
+  @if (formGuide.get("IdNumber")?.touched) {
+    @if (formGuide.get("IdNumber")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+    @if (formGuide.get("IdNumber")?.hasError("invalidID")) {
+      <div class="red">יש להכניס מספר תעודת זהות תקינה</div>
+    }
+  }
+
+  <div>
+    <label>מספר טלפון:</label>
+    <input type="text" formControlName="PhoneNumber" />
+  </div>
+
+  @if (formGuide.get("PhoneNumber")?.touched) {
+    @if (formGuide.get("PhoneNumber")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (
+      formGuide.get("PhoneNumber")?.hasError("invalidPhone")
+    ) {
+      <p class="red">יש להכניס מספר פלאפון נייד תקין</p>
+    }
+  }
+
+  <div>
+    <label>אימייל:</label>
+    <input type="email" formControlName="Email" />
+  </div>
+  @if (formGuide.get("Email")?.touched) {
+    @if (formGuide.get("Email")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+    @if (formGuide.get("Email")?.hasError("email")) {
+      <div class="red">יש להכניס כתובת אימייל תקינה⚠️</div>
+    }
+  }
+
+  <label>סיסמה</label>
+  <div class="inputEye">
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      formControlName="UserPassword"
+    />
+    <button type="button" class="eyes" (click)="PasswordVisibility()">
+      @if (!showPassword) {
+        <mat-icon>visibility</mat-icon>
+      } @else {
+        <mat-icon>visibility_off</mat-icon>
+      }
+    </button>
+  </div>
+  @if (formGuide.get("UserPassword")?.touched) {
+    @if (formGuide.get("UserPassword")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+    @if (formGuide.get("UserPassword")?.hasError("invalidpassword")) {
+      <div class="red">
+        יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים
+      </div>
+    }
+  }
+
+  <div>
+    <label>עיר:</label>
+    <input
+      type="text"
+      formControlName="CityId"
+      (input)="filterCity($event)"
+      placeholder="חפש עיר..."
+      list="citiesList"
+    />
+    <datalist id="citiesList">
+      <option disabled>בחר עיר</option>
+      @for (city of filteredCities; track city) {
+        <option [value]="city">{{ city }}</option>
+      }
+    </datalist>
+  </div>
+  @if (formGuide.get("CityId")?.touched) {
+    @if (formGuide.get("CityId")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+  }
+
+  <div>
+    <label>השתייכות דתית:</label>
+    <select formControlName="ReligiousId">
+      @for (item of religiousData; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (formGuide.get("ReligiousId")?.touched) {
+    @if (formGuide.get("ReligiousId")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+  }
+
+  <div class="form-group">
+    <label for="items">בחרי אזורי התמחות:</label>
+    <div class="dropdown">
+      <div class="dropdown-content">
+        <div class="checkbox-group">
+          @for (item of Origins; track item.id) {
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [value]="item.id"
+                (change)="onCheckboxChange($event)"
+                [checked]="isChecked(item.id)"
+              />
+              {{ item.name }}
+            </label>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <label>קבצי תעודות, יש להעלות תעודה על כל אזור שנבחר.:</label>
+  <input type="file" (change)="onFileSelected($event)" multiple />
+  <!-- ///כסגכבליה -->
+  <label>קורות חיים.:</label>
+  <input type="file" (change)="onOneFileSelected($event)" />
+
+  <button
+    class="btn btn-outline-secondary"
+    type="submit"
+    [disabled]="formGuide.invalid"
+  >
+    הוספת מדריכה <mat-icon>person_add</mat-icon>
+  </button>
+</form>
+  

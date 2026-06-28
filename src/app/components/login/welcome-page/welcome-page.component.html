@@ -1,0 +1,94 @@
+<div class="textOnWlcomePage">
+  <div class="toPicture">
+    <div class="container">
+      <button class="btn" 
+      
+      (click)="openDialogRegistrations()">
+        <span>רוצה להיצטרף אלינו?</span>
+        <span>
+          <mat-icon class="mat-icon-btn">person_add</mat-icon>
+        </span>
+        <!-- <div class="tooltip-container">
+     <span class="tooltip-text">טקסט תחתון</span>
+     <span>רוצה להיצטרף אלינו?</span>
+        <span>
+          <mat-icon class="mat-icon-btn">person_add</mat-icon>
+        </span>
+   </div> -->
+      </button>
+      <button class="btn" (click)="openDialogLogin()">
+        <span> אנחנו כבר מכירות!</span>
+        <span>
+          <mat-icon class="mat-icon-btn">login</mat-icon>
+        </span>
+      </button>
+    </div>
+    <div class="logo_dark">
+      <img src="logo_for_dark.png" alt="לוגו" class="logo" />
+    </div>
+  </div>
+  <p class="welcome-text">
+    ברוכה הבאה ל-GuideX, כאן תגלו מידע רחב על טיולים, אכסניות, אטרקציות ומדריכות
+    טיולים
+  </p>
+
+  <div class="messages">
+    <div class="message-container">
+      @for (message of messages; track message; let i = $index) {
+        @if (
+          i >= currentMessageIndex && i < currentMessageIndex + numMessages
+        ) {
+          <p>
+            "{{ message.text }}"
+            <span class="message-sender">({{ message.sender }})</span>
+          </p>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="card-container">
+    <div class="card">
+      <h2>
+        <img src="lll.png" class="picCard" /><br />
+        מציאת מסלולים
+      </h2>
+      <p>
+        כי למצוא מסלול לבד זה נחמד… עד שזה נהיה 18 שעות ביממה. כאן מוצאים מהר,
+        בלי בלאגן — לפי אזור, גיל וזהו.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>
+        <img src="bbb.png" class="picCard" /><br />
+        מדריכות מוסמכות
+      </h2>
+      <p>
+        כי “אני מכירה את השטח” זה נחמד, אבל כאן יש באמת מי שעברה הכשרה, זמינה
+        ומתאימה לנו.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>
+        <img src="ccc.png" class="picCard" /><br />
+        מקומות לינה
+      </h2>
+      <p>
+        כי אף אחד לא רוצה לגלות בסוף היום שה“צימר” זה בעצם מחסן משודרג. רק
+        מקומות מאושרים ומסוננים.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>
+        <img src="forum.png" class="picCard" /><br />
+        קהילה ופורום
+      </h2>
+      <p>
+        כי תמיד יש מישהי שכבר הייתה שם, חזרה עם תשובות, וחסכה לכולם כאב ראש.
+      </p>
+    </div>
+  </div>
+</div>

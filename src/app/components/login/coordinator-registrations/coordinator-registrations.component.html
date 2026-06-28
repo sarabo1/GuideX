@@ -1,0 +1,245 @@
+<br />
+<form
+  [formGroup]="formCoordinator"
+  (ngSubmit)="newCoordinator()"
+  class="form coordinator-form"
+>
+  <div>
+    <label>שם פרטי:</label>
+    <input type="text" formControlName="FirstName" />
+  </div>
+  @if (formCoordinator.get("FirstName")?.touched) {
+    @if (formCoordinator.get("FirstName")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+    @if (formCoordinator.get("FirstName")?.hasError("minlength")) {
+      <p class="red">יש להכניס מינימום 2 תווים⚠️</p>
+    }
+  }
+
+  <div>
+    <label>שם משפחה:</label>
+    <input type="text" formControlName="LastName" />
+  </div>
+  @if (formCoordinator.get("LastName")?.touched) {
+    @if (formCoordinator.get("LastName")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+    @if (formCoordinator.get("LastName")?.hasError("minlength")) {
+      <p class="red">יש להכניס מינימום 2 תווים⚠️</p>
+    }
+  }
+
+  <div>
+    <label>מספר זהות:</label>
+    <input type="text" formControlName="IdNumber" />
+  </div>
+  @if (formCoordinator.get("IdNumber")?.touched) {
+    @if (formCoordinator.get("IdNumber")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (formCoordinator.get("IdNumber")?.hasError("invalidID")) {
+      <p class="red">יש להכניס מספר תעודת זהות תקינה</p>
+    }
+  }
+
+  <div>
+    <label>מספר פלאפון נייד:</label>
+    <input type="text" formControlName="PhoneNumber" />
+  </div>
+  @if (formCoordinator.get("PhoneNumber")?.touched) {
+    @if (formCoordinator.get("PhoneNumber")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (formCoordinator.get("PhoneNumber")?.hasError("invalidPhone")) {
+      <p class="red">יש להכניס מספר פלאפון נייד תקין</p>
+    }
+  }
+
+  <div>
+    <div>
+      <label>אימייל:</label>
+      <input type="email" formControlName="Email" />
+    </div>
+    @if (formCoordinator.get("Email")?.touched) {
+      @if (formCoordinator.get("Email")?.hasError("required")) {
+        <p class="red">אויששש, שכחת אותי....</p>
+      }
+      @if (formCoordinator.get("Email")?.hasError("email")) {
+        <p class="red">יש להכניס כתובת אימייל תקינה⚠️</p>
+      }
+    }
+
+    <label>סיסמה</label>
+    <div class="inputEye">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="UserPassword"
+      />
+      <button type="button" class="eyes" (click)="PasswordVisibility()">
+        @if (!showPassword) {
+          <mat-icon>visibility</mat-icon>
+        } @else {
+          <mat-icon>visibility_off</mat-icon>
+        }
+      </button>
+    </div>
+  </div>
+  @if (formCoordinator.get("UserPassword")?.touched) {
+    @if (formCoordinator.get("UserPassword")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+
+    @if (formCoordinator.get("UserPassword")?.hasError("invalidpassword")) {
+      <p class="red">
+        יש להכניס סיסמה עם אותיות גדולות וקטנות, מספרים ותווים מיוחדים⚠️
+      </p>
+    }
+  }
+
+  <div>
+    <label>תפקידך במוסד:</label>
+    <select formControlName="RoleId">
+      <option disabled>בחרי את תפקידך במוסד</option>
+      @for (item of RoleIdData; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+  </div>
+  @if (formCoordinator.get("RoleId")?.touched) {
+    @if (formCoordinator.get("RoleId")?.hasError("required")) {
+      <div class="red">אויששש, שכחת אותי....</div>
+    }
+  }
+  <div>
+    <label>שם המוסד:</label>
+    <input
+      type="text"
+      formControlName="SchoolName"
+      (input)="filterSchool($event)"
+      placeholder="בחרי מהרשימה או הקלידי"
+      list="SchoolsList"
+      (change)="SearchInList($event)"
+    />
+
+    <datalist id="SchoolsList">
+      
+      @for (school of filteredSchools; track school.SchoolId) {
+        <option [value]="school.SchoolName">{{ school.SchoolName }}</option>
+      }
+    </datalist>
+  </div>
+  @if (formCoordinator.get("SchoolName")?.touched) {
+    @if (formCoordinator.get("SchoolName")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (formCoordinator.get("SchoolName")?.hasError("minlength")) {
+      <p class="red">יש להכניס מינימום 2 תווים</p>
+    }
+  }
+
+  <div>
+    <label>עיר המוסד:</label>
+    <input
+      type="text"
+      formControlName="CityId"
+      (input)="filterCity($event)"
+      placeholder="חפש עיר..."
+      list="citiesList"
+      
+    />
+    <datalist id="citiesList">
+      <option disabled>בחר עיר</option>
+      @for (city of filteredCities; track city) {
+        <option [value]="city">{{ city }}</option>
+      }
+    </datalist>
+  </div>
+  @if (formCoordinator.get("CityId")?.touched) {
+    @if (formCoordinator.get("CityId")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+  }
+
+
+
+  <div>
+    <label>מגדר:</label>
+    <div>
+      <label>
+        <input type="radio" formControlName="IsBoys" value="1" /> מוסד לבנים
+      </label>
+      <label>
+        <input type="radio" formControlName="IsBoys"value="0" /> מוסד לבנות
+      </label>
+    </div>
+  </div>
+  @if (formCoordinator.get("IsBoys")?.touched) {
+    @if (formCoordinator.get("IsBoys")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+  }
+
+  <div>
+    <label>שם מנהל:</label>
+    <input type="text" formControlName="PrincipalName" />
+  </div>
+  @if (formCoordinator.get("PrincipalName")?.touched) {
+    @if (formCoordinator.get("PrincipalName")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (formCoordinator.get("PrincipalName")?.hasError("minlength")) {
+      <p class="red">יש להכניס מינימום 2 תווים</p>
+    }
+  }
+
+  <div>
+    <label>מספר טלפון נייד מוסד:</label>
+    <input type="text"  formControlName="PhoneSecretary" />
+  </div>
+  @if (formCoordinator.get("PhoneSecretary")?.touched) {
+    @if (formCoordinator.get("PhoneSecretary")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    } @else if (
+      formCoordinator.get("PhoneSecretary")?.hasError("invalidPhone")
+    ) {
+      <p class="red">יש להכניס מספר פלאפון נייד תקין</p>
+    }
+  }
+
+  <div>
+    <label>סוג מוסד:</label>
+    <select formControlName="TypeSchoolId">
+      <option disabled>בחרי את סוג המוסד</option>
+      @for (item of religiousData; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+  </div>
+  @if (formCoordinator.get("TypeSchoolId")?.touched) {
+    @if (formCoordinator.get("TypeSchoolId")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+  }
+
+  <div>
+    <label>גיל מוסד:</label>
+    <select formControlName="AgeSchoolId" >
+      <option disabled>בחרי את גיל המוסד</option>
+      @for (item of AgeSchoolIdData; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+  </div>
+  @if (formCoordinator.get("AgeSchoolId")?.touched) {
+    @if (formCoordinator.get("AgeSchoolId")?.hasError("required")) {
+      <p class="red">אויששש, שכחת אותי....</p>
+    }
+  }
+
+  <br />
+
+  <button
+    class="btn btn-outline-secondary"
+    type="submit"
+    [disabled]="formCoordinator.invalid"
+  >
+    הוספת רכזת<mat-icon>person_add</mat-icon>
+  </button>
+</form>
