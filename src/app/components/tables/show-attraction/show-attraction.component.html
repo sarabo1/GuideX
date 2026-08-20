@@ -1,36 +1,54 @@
-<div class="show">
+<!-- <div class="show">
   <div class="background"></div>
   <div class="content">
+    <div class="likeAndEdit">
     <button
       [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
       (click)="canEdit()"
     >
       <mat-icon class="close-icon">edit</mat-icon>
     </button>
+     <button
+      class="likeButton"
+      (click)="toggleFavorite()"
+    >
+
+      <img
+        class="img_like"
+        [src]="
+          isLiked
+            ? 'heart_full_blue.png'
+            : 'heart_blue.png'
+        "
+      />
+
+    </button>
+    </div>
+
     <h2>
       @if (!userCanEdit) {
-        <strong>{{ data.AttractionsName }}</strong>
+        <strong>{{ data.attractionsName }}</strong>
       } @else {
         <input
           class="inputToEdit"
           id="AttractionsName"
           type="text"
-          value="{{ data.AttractionsName }}"
+          value="{{ data.attractionsName }}"
         />
       }
     </h2>
     @if (!userCanEdit) {
       <h5>
-        <strong>{{ data.Description }}</strong>
+        <strong>{{ data.description }}</strong>
       </h5>
     } @else {
       <h6>
         <textarea
-          cols="{{ data.Description.length / 2 }}"
+          cols="{{ data.description.length / 2 }}"
           id="Description"
           class="inputToEdit"
           type="text"
-          value="{{ data.Description }}"
+          value="{{ data.description }}"
         >
         </textarea>
       </h6>
@@ -38,8 +56,9 @@
     <p>
       <strong>אזור:</strong>
       @if (!userCanEdit) {
-        {{ srv_all.GetRegions(data.RegionId) }}
-      } @else {
+        <!-- {{ srv_all.GetRegions(data.RegionId) }} -->
+<!-- {{data.reigionId}} -->
+<!-- } @else {
         <select class="inputToEdit" id="RegionId">
           @for (item of RegionsArrayData; track item.id) {
             @if (data.RegionId == item.id) {
@@ -73,8 +92,8 @@
             }
           }
         </select>
-      }
-    </p>
+      } -->
+<!-- </p>
     @if (userCanEdit) {
       <p><strong>שמירת השבת: </strong></p>
 
@@ -110,8 +129,8 @@
           />
         }
       </P>
-      <P
-        ><strong>טלפון:</strong>
+      <P -->
+<!-- ><strong>טלפון:</strong>
         @if (!userCanEdit) {
           {{ data.Phone }}
         } @else {
@@ -120,13 +139,12 @@
             id="Phone"
             type="text"
             value="{{ data.Phone }}"
-          />
-        }
+          /> -->
+<!-- }
       </P>
     }
-
-    <!-- <img [src]="imageUrl" alt="תיאור התמונה" /> -->
-    <br />
+ <img [src]="imageUrl" alt="תיאור התמונה" /> -->
+<!-- <br />
     @if (userCanEdit) {
       <button (click)="saveEdit()" class="close-btn">
         <mat-icon class="close-icon">task_alt</mat-icon>
@@ -137,8 +155,212 @@
       <mat-icon class="close-icon">close</mat-icon>
     </button>
 
-    
-  </div>
+     -->
+<!-- </div>
   <div class="card flex justify-center gap-2">
+  </div>
+</div> -->
+<div class="show">
+  <div class="background"></div>
+
+  <div class="content">
+    @if (!isAddNew) {
+      <div class="likeAndEdit">
+        <div>
+        <button
+          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+          (click)="deleteAttraction()"
+        >
+          <mat-icon class="close-icon">delete</mat-icon>
+        </button>
+
+
+        <button
+          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+          (click)="canEdit()"
+        >
+          <mat-icon class="close-icon">edit</mat-icon>
+        </button>
+</div>
+
+        <button class="likeButton" (click)="toggleFavorite()">
+          <img
+            class="img_like"
+            [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
+          />
+        </button>
+       
+
+      
+      </div>
+    } @else {
+      <br />
+      <h3>
+        <strong>הוספת אטרקציה</strong>
+      </h3>
+      <br />
+    }
+<br/>
+    <!-- שם -->
+    <h2>
+      @if (!userCanEdit) {
+        <strong>{{ data.attractionsName }}</strong>
+      } @else {
+        <input
+          class="inputToEdit"
+          id="AttractionsName"
+          type="text"
+          [value]="data.attractionsName"
+          [placeholder]="isAddNew ? 'שם האטרקציה' : ''"
+        />
+      }
+    </h2>
+
+    <!-- תיאור -->
+    @if (!userCanEdit) {
+      <h5>
+        <strong>{{ data.description }}</strong>
+      </h5>
+    } @else {
+      <textarea
+        id="Description"
+        class="inputToEdit"
+        [placeholder]="isAddNew ? 'תאור האטרקציה' : ''"
+        >{{ data.description }}</textarea
+      >
+    }
+
+    <!-- אזור -->
+    <p>
+      <!-- {{data | json}} -->
+      <strong>אזור:</strong>
+
+      @if (!userCanEdit) {
+        @if (data.reigionId) {
+          {{ data.reigionId | regionName | async }}
+        }
+      } @else {
+        <select class="inputToEdit" id="RegionId">
+          <option disabled [selected]="data.reigionId == 0">בחירת אזור</option>
+          @for (item of RegionsArrayData; track item.regionId) {
+            <option
+              [value]="item.regionId"
+              [selected]="item.regionId == data.reigionId"
+            >
+              <!-- {{ item | json}} -->
+              {{ item.regionName }}
+            </option>
+          }
+        </select>
+      }
+    </p>
+
+    <!-- סוג אטרקציה -->
+    <p>
+      <strong>סוג אטרקציה:</strong>
+
+      @if (!userCanEdit) {
+        @if (data.attractionTypeId) {
+          {{ data.attractionTypeId | attractionTypeName | async }}
+        }
+      } @else {
+        <select class="inputToEdit" id="AttractionsTypeId">
+          <option disabled [selected]="data.attractionTypeId == 0">
+            בחירת סוג אטרקציה
+          </option>
+
+          @for (item of AttractionsArrayData; track item) {
+            <option
+              [value]="item.attractionTypeId"
+              [selected]="item.attractionTypeId == data.attractionTypeId"
+            >
+              <!-- {{ item | json}} -->
+              {{ item.attractionTypeName }}
+            </option>
+          }
+        </select>
+      }
+    </p>
+
+    <!-- שומר שבת -->
+    @if (userCanEdit) {
+      <p>
+        <strong>שמירת שבת:</strong>
+      </p>
+
+      <select
+        id="ShomerShabat"
+        class="inputToEdit"
+        (change)="changeShomerShabat()"
+      >
+        <option [value]="0" [selected]="data.shomerShabat == 0">
+          אינו שומר שבת
+        </option>
+
+        <option [value]="1" [selected]="data.shomerShabat == 1">לא ידוע</option>
+
+        <option [value]="2" [selected]="data.shomerShabat == 2">
+          שומר שבת
+        </option>
+      </select>
+    }
+
+    @if (data.shomerShabat == 0) {
+      @if (!userCanEdit) {
+        <h3>המקום אינו שומר שבת</h3>
+      }
+    } @else {
+      @if (data.shomerShabat == 1) {
+        @if (!userCanEdit) {
+          <h5>
+            <strong> יש לברר בנוגע לשמירת השבת של המקום </strong>
+          </h5>
+        }
+      }
+
+      <!-- כתובת -->
+      <p>
+        <strong>כתובת:</strong>
+
+        @if (!userCanEdit) {
+          {{ data.address }}
+        } @else {
+          <input
+            class="inputToEdit"
+            id="Address"
+            type="text"
+            [value]="data.address"
+          />
+        }
+      </p>
+
+      <!-- טלפון -->
+      <p>
+        <strong>טלפון:</strong>
+
+        @if (!userCanEdit) {
+          {{ data.phone }}
+        } @else {
+          <input
+            class="inputToEdit"
+            id="Phone"
+            type="text"
+            [value]="data.phone"
+          />
+        }
+      </p>
+    }
+
+    <br />
+
+    @if (userCanEdit) {
+      <button (click)="saveEdit()" class="close-btn">
+        <mat-icon class="close-icon"> task_alt </mat-icon>
+      </button>
+    }
+
+    <button (click)="onClose()" class="close-btn">
+      <mat-icon class="close-icon"> close </mat-icon>
+    </button>
   </div>
 </div>

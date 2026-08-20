@@ -38,16 +38,21 @@ import { MatDialogRef } from '@angular/material/dialog';
   standalone: true,
 })
 export class GuideRegistrationsComponent {
-  selectedOrigins: number[] = [];
-  Origins: any;
+  // selectedAreasOfExpertises: number[] = [];
+  AreasOfExpertises: any;
   cities: string[] = [];
   filteredCities: string[] = [];
   showPassword = false;
   CertificatesFiles: File[] = [];
-  resumeFile: File | null = null;
+  resumeFiles: File | null = null;
 
   LastGuideId: number;
   lastUserId: number;
+
+  userIdExist: number = 0;
+  guideIdExist: number = 0;
+
+  // guideDetails: any;
 
   constructor(
     private dialogRef: MatDialogRef<GuideRegistrationsComponent>,
@@ -57,7 +62,7 @@ export class GuideRegistrationsComponent {
     public srv_guides: Srv_Guide,
     public srv_user: ServiceUsersService,
   ) {
-    this.Origins = srv_all.getRegionsArray();
+    this.AreasOfExpertises = srv_all.getRegionsArray();
     this.LastGuideId = srv_guides.GetLastGuideId() + 1;
     this.lastUserId = srv_user.GetLastUserId() + 1;
   }
@@ -95,23 +100,19 @@ export class GuideRegistrationsComponent {
       Validators.required,
       this.phoneValidator,
     ]),
-    Email: new FormControl('', [
-      Validators.required,
-       Validators.email
-      ]),
+    Email: new FormControl('', [Validators.required, Validators.email]),
     UserPassword: new FormControl('', [
       Validators.required,
       this.passwordValidator,
     ]),
-    CityId: new FormControl('', [
-      Validators.required
-    ]),
-    ReligiousId: new FormControl('', [
-      Validators.required
-    ]),
-    selectedOrigins: new FormControl<number[]>([], [Validators.required]),
-    CertificatesFiles: new FormControl<File[]>([],[Validators.required]), // קבצי תעודות (מרובים)
-    resumeFile: new FormControl<File | null>(null,[Validators.required]), // קורות חיים (קובץ אחד)
+    CityId: new FormControl('', [Validators.required]),
+    ReligiousId: new FormControl('', [Validators.required]),
+    selectedAreasOfExpertises: new FormControl<number[]>(
+      [],
+      [Validators.required],
+    ),
+    CertificatesFiles: new FormControl<File[]>([]), // קבצי תעודות (מרובים)
+    resumeFiles: new FormControl<File | null>(null), // קורות חיים (קובץ אחד)
   });
 
   religiousData = [
@@ -137,8 +138,15 @@ export class GuideRegistrationsComponent {
     }
 
     if (this.formGuide.valid) {
+      let idUserId = 0;
+      if (this.userIdExist != 0) {
+        idUserId = this.userIdExist;
+      } else {
+        idUserId = this.lastUserId;
+      }
+
       const userData = {
-        userId: this.lastUserId,
+        userId: idUserId,
         userPassword: this.formGuide.value.UserPassword || '',
         firstName: this.formGuide.value.FirstName || '',
         lastName: this.formGuide.value.LastName || '',
@@ -152,33 +160,43 @@ export class GuideRegistrationsComponent {
       this.srv_user.InsertUser(
         userData.userId,
         userData.userPassword,
-        userData.userPassword,
         userData.firstName,
+        userData.lastName,
         userData.idNumber,
         userData.cityId,
         userData.phoneNumber,
         userData.email,
       );
-      const resumeFile = this.formGuide.value.resumeFile as File;
-      const certificatesFiles = this.formGuide.value.CertificatesFiles as File[];
+      // const resumeFiles = this.formGuide.value.resumeFiles as File;
+      // const certificatesFiles = this.formGuide.value.CertificatesFiles as File[];
+
+      const certificatesFiles = this.formGuide.value
+        .CertificatesFiles as File[];
+      const resumeFiles = this.formGuide.value.resumeFiles as File;
+
+      let idGuideId = 0;
+      if (this.userIdExist != 0) {
+        idGuideId = this.guideIdExist;
+      } else {
+        idGuideId = this.LastGuideId;
+      }
       const guideData = {
-        userId: this.lastUserId,
-        guideId: this.LastGuideId,
-        origin: this.selectedOrigins,
+        userId: idUserId,
+        guideId: idGuideId,
+        areasofexpertise: this.formGuide.value.selectedAreasOfExpertises || [],
         religiousId: Number(this.formGuide.value.ReligiousId) || 0,
         certificatesFiles,
-        resumeFile,
+        resumeFiles,
       };
-      console.log(guideData.resumeFile);
+      console.log(guideData.resumeFiles);
       this.srv_guides.addGuide(
         guideData.userId,
         guideData.guideId,
-        guideData.origin,
+        guideData.areasofexpertise,
         guideData.religiousId,
         guideData.certificatesFiles,
-        guideData.resumeFile,
+        guideData.resumeFiles,
       );
-      
 
       console.log('Guide Data:', guideData);
 
@@ -197,23 +215,62 @@ export class GuideRegistrationsComponent {
     this.showPassword = !this.showPassword;
   }
 
+  // onFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files) {
+  //     const filesArray = Array.from(input.files);
+  //     this.formGuide.patchValue({ CertificatesFiles: filesArray });
+  //   }
+
+  // }
+  // onFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (input.files) {
+  //     this.CertificatesFiles = Array.from(input.files);
+  //   }
+  // }
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files) {
-      const filesArray = Array.from(input.files);
-      this.formGuide.patchValue({ CertificatesFiles: filesArray });
-    }
 
-    console.log("קבציפ רבים");
+    if (input.files) {
+      const files = Array.from(input.files);
+
+      // 1. לטופס (ולידציה)
+      this.formGuide.get('CertificatesFiles')?.setValue(files);
+
+      // 2. לתצוגה
+      this.CertificatesFiles = files;
+    }
   }
+
+  // onOneFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files) {
+  //     const file = input.files[0]; // קובץ אחד בלבד
+  //     this.formGuide.patchValue({ resumeFiles: file });
+  //   }
+  // }
+  // onOneFileSelected(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (input.files && input.files.length > 0) {
+  //     this.resumeFiles = input.files[0];
+  //   }
+  // }
 
   onOneFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files) {
-      const file = input.files[0]; // קובץ אחד בלבד
-      this.formGuide.patchValue({ resumeFile: file });
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      // 1. לטופס
+      this.formGuide.get('resumeFiles')?.setValue(file);
+
+      // 2. לתצוגה
+      this.resumeFiles = file;
     }
-    console.log('Selected file:', File);
   }
 
   filterCity(event: Event) {
@@ -224,40 +281,126 @@ export class GuideRegistrationsComponent {
     );
   }
 
+  // onCheckboxChange(event: Event) {
+  //   const checkbox = event.target as HTMLInputElement;
+
+  //   if (checkbox.checked) {
+  //     this.selectedAreasOfExpertises.push(Number(checkbox.value));
+  //   } else {
+  //     const index = this.selectedAreasOfExpertises.indexOf(Number(checkbox.value));
+
+  //     if (index > -1) {
+  //       this.selectedAreasOfExpertises.splice(index, 1);
+  //     }
+  //   }
+
+  //   this.formGuide.patchValue({
+  //     selectedAreasOfExpertises: [...this.selectedAreasOfExpertises],
+  //   });
+
+  //   this.formGuide.get('selectedAreasOfExpertises')?.markAsTouched();
+  //   this.formGuide.get('selectedAreasOfExpertises')?.updateValueAndValidity();
+
+  //   console.log(
+  //     'selectedAreasOfExpertises:',
+  //     this.formGuide.get('selectedAreasOfExpertises')?.value,
+  //   );
+
+  //   // עדכון ה-FormControl
+  //   this.formGuide.patchValue({
+  //     selectedAreasOfExpertises: [...this.selectedAreasOfExpertises],
+  //   });
+
+  //   console.log('selectedAreasOfExpertises:', this.selectedAreasOfExpertises); // לוג להראות את הערכים הנוכחיים
+  // }
+
   onCheckboxChange(event: Event) {
     const checkbox = event.target as HTMLInputElement;
+    const control = this.formGuide.get('selectedAreasOfExpertises');
+
+    let current: number[] = control?.value ?? [];
 
     if (checkbox.checked) {
-      this.selectedOrigins.push(Number(checkbox.value));
+      current = [...current, Number(checkbox.value)];
     } else {
-      const index = this.selectedOrigins.indexOf(Number(checkbox.value));
-
-      if (index > -1) {
-        this.selectedOrigins.splice(index, 1);
-      }
+      current = current.filter((x) => x !== Number(checkbox.value));
     }
 
-    this.formGuide.patchValue({
-      selectedOrigins: [...this.selectedOrigins],
-    });
-
-    this.formGuide.get('selectedOrigins')?.markAsTouched();
-    this.formGuide.get('selectedOrigins')?.updateValueAndValidity();
-
-    console.log(
-      'selectedOrigins:',
-      this.formGuide.get('selectedOrigins')?.value,
-    );
-
-    // עדכון ה-FormControl
-    this.formGuide.patchValue({
-      selectedOrigins: [...this.selectedOrigins],
-    });
-
-    console.log('selectedOrigins:', this.selectedOrigins); // לוג להראות את הערכים הנוכחיים
+    control?.setValue(current);
+    control?.markAsTouched();
+    control?.updateValueAndValidity();
   }
 
-  isChecked(code: number): boolean {
-    return this.selectedOrigins.includes(code);
+  // isChecked(code: number): boolean {
+  //   return this.selectedAreasOfExpertises.includes(code);
+  // }
+
+  isChecked(num: number): boolean {
+    const selected =
+      this.formGuide.get('selectedAreasOfExpertises')?.value ?? [];
+    return selected.includes(num);
+  }
+
+  searchGuide() {
+    const numberId = this.formGuide.get('IdNumber');
+    if (numberId?.invalid) return;
+
+    const idNumber = String(this.formGuide.value.IdNumber);
+    const guideDetails = this.getGuideDetailsByIdNumber(idNumber);
+
+    console.log('idNmber: ', idNumber);
+    console.log(guideDetails);
+
+    if (guideDetails == null) {
+      this.CertificatesFiles = [];
+      this.resumeFiles = null;
+      this.formGuide.get('resumeFiles')?.setValue(null);
+      this.formGuide.get('CertificatesFiles')?.setValue([]);
+      this.formGuide.get('selectedAreasOfExpertises')?.setValue([]);
+      this.formGuide.get('ReligiousId')?.setValue('');
+      this.guideIdExist = 0;
+      this.userIdExist = 0;
+      return;
+    }
+
+    this.guideIdExist = guideDetails.GuideId;
+    this.userIdExist = guideDetails.UserId;
+    // this.formGuide.get('resumeFiles')?.setValue(guideDetails.resumeFiles);
+    this.resumeFiles = guideDetails.resumeFiles;
+    // this.formGuide
+    //   .get('CertificatesFiles')
+    //   ?.setValue(guideDetails.CertificatesFiles);
+    this.CertificatesFiles = guideDetails.CertificatesFiles;
+    this.formGuide
+      .get('ReligiousId')
+      ?.setValue(String(guideDetails.ReligiousId));
+    this.formGuide
+      .get('selectedAreasOfExpertises')
+      ?.setValue(guideDetails.AreasOfExpertise);
+  }
+
+  private getGuideDetailsByIdNumber(idNumber: string): any | null {
+    const guideService = this.srv_guides as any;
+
+    if (typeof guideService.getGuideDetailsByIdNumber === 'function') {
+      return guideService.getGuideDetailsByIdNumber(idNumber);
+    }
+
+    if (typeof guideService.GetGuideByIdNumber === 'function') {
+      return guideService.GetGuideByIdNumber(idNumber);
+    }
+
+    if (typeof guideService.GetGuideById === 'function') {
+      return guideService.GetGuideById(idNumber);
+    }
+
+    if (Array.isArray(guideService.guides)) {
+      return (
+        guideService.guides.find((guide: any) => guide.idNumber === idNumber) ??
+        null
+      );
+    }
+
+    return null;
   }
 }

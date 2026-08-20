@@ -16,40 +16,7 @@ body {
   margin-top: -30px;
 }
 
-.table-walking-trail {
-  width: 80%;
-  margin: 20px auto;
-}
-.HeaderOnTable {
-  font-size: 16px;
-  font-weight: bold;
-  font-family: heebo, sans-serif;
-  direction: rtl;
-  text-align: right;
-}
-.contentTable {
-  font-size: 14px;
-  font-family: heebo, sans-serif;
-  direction: rtl;
-  text-align: right;
-}
 
-.paginator {
-  direction: ltr;
-  display: flex;
-  justify-content: center;
-  font-size: 11px;
-  font-family: heebo, sans-serif;
-}
-table {
-  direction: rtl;
-}
-
-
-
-
-////
-/// 
 .sort{
     display: flex;
     flex-wrap: nowrap;
@@ -75,7 +42,7 @@ table {
     border-radius: 5px;
     margin:15px;
     width: 195px;
-    margin-left: calc(15px + 10%);
+    margin-left: calc(15px + 5%);
     
 
 }
@@ -84,6 +51,7 @@ table {
     display: flex;
     justify-content: space-around;
     align-items: center; /* מרכז את התוכן בתוך השורה */
+    flex-wrap: wrap;
 }
 
 .filter-item {
@@ -202,6 +170,7 @@ option:hover {
         padding: 25px;
          margin: 25px auto;
          border-radius: 12px;
+
 }
 .notFoundInFilter{
     //לא עובד
@@ -209,4 +178,32 @@ option:hover {
     font-size: 24px;
   font-weight: bold;
   margin-top: 20px;
+}
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+
+.img_like{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    
+}
+.likeButton{
+    border: 0px;
+    background-color: transparent;
+  
+   
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.1);
+    }
+}
+.likeAndEdit{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

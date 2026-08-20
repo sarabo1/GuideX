@@ -2,68 +2,111 @@ import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DecimalPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowWalkingTrailComponent } from '../show-walking-trail/show-walking-trail.component';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { RoundDownPipe } from '../../../Pipes/round-down.pipe';
 import { Int_WalkingTrail } from '../../../Interfaces/Int_WalkingTrail';
 import { SrvWalkingTrailService } from '../../../Services/srv-WalkingTrail.service';
 import { ServiceAllService } from '../../../Services/service-all.service';
+import { srv_Favorite } from '../../../Services/srv_Favorite';
+import { AuthService } from '../../../Services/auth-service.service';
+import { CommonModule } from '@angular/common';
+import { regionNamePipe } from '../../../Pipes/regionName';
+import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-walking-trail',
+  standalone: true,
   templateUrl: './walking-trail.component.html',
   styleUrls: ['./walking-trail.component.scss'],
   imports: [
     MatPaginatorModule,
     MatTableModule,
     MatIcon,
-    PaginatorModule,
+    CommonModule,
+    regionNamePipe,
+    MatSortModule,
+    MatSortHeader,
+    CommonModule,
   ],
-  standalone: true,
 })
 export class WalkingTrailComponent implements AfterViewInit {
   displayedColumns: string[] = [
+    'like',
     'WalkingTrailName',
     'Description',
     'RegionId',
     'RouteDuration',
     'Difficulty',
-   
     'DetailsButton',
   ];
+
   dataSource!: MatTableDataSource<Int_WalkingTrail>;
+  areasofexpertisealData: Int_WalkingTrail[] = [];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+
   RegionsArrayData: any;
   showSearch: Boolean = false;
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null; // עדיף להקצות null
-  originalData: Int_WalkingTrail[] = [];
 
-  selectedRegion: number = 0; // ברירת המחדל
+  selectedRegion: number = 0;
   selectedDifficulty: number = 0;
   selectedLength: number = 0;
 
+  userDetails: any;
+
+  isLiked: { [key: string]: boolean } = {};
+
   constructor(
-    public walkingTrailId: SrvWalkingTrailService,
-    paginator: MatPaginatorIntl,
+    public walkingTrail: SrvWalkingTrailService,
+    paginatorIntl: MatPaginatorIntl,
     public srv_all: ServiceAllService,
     public dialog: MatDialog,
-    public walkingTrails: SrvWalkingTrailService,
+    public srv_favorite: srv_Favorite,
+    public authService: AuthService,
   ) {
-    paginator.itemsPerPageLabel = 'מסלולים בעמוד:';
-    paginator.nextPageLabel = 'העמוד הבא';
-    paginator.previousPageLabel = 'העמוד הקודם';
-    paginator.firstPageLabel = 'העמוד הראשון';
-    paginator.lastPageLabel = 'העמוד האחרון';
+    paginatorIntl.itemsPerPageLabel = 'מסלולים בעמוד:';
+    paginatorIntl.nextPageLabel = 'העמוד הבא';
+    paginatorIntl.previousPageLabel = 'העמוד הקודם';
+    paginatorIntl.firstPageLabel = 'העמוד הראשון';
+    paginatorIntl.lastPageLabel = 'העמוד האחרון';
+
+    this.userDetails = this.authService.getUserData();
+
+    this.RegionsArrayData = this.srv_all.getRegionsArray();
 
     this.loadData();
-    
-    this.RegionsArrayData = this.srv_all.getRegionsArray();
+    this.initLikedState();
   }
+
+  //
+  getKey(type: string, id: number): string {
+    return `${type}-${id}`;
+  }
+
+  initLikedState() {
+    const userId = this.userDetails?.userId;
+    if (!userId) return;
+
+    const favs = this.srv_favorite.getFavoriteByCoordinatorId(userId);
+
+    favs.forEach((f) => {
+      if (f.WalkingTrailId) {
+        this.isLiked[this.getKey('trail', f.WalkingTrailId)] = true;
+      }
+      if (f.HostelsId) {
+        this.isLiked[this.getKey('hostel', f.HostelsId)] = true;
+      }
+      if (f.AttractionsId) {
+        this.isLiked[this.getKey('attraction', f.AttractionsId)] = true;
+      }
+    });
+  }
+
   loadData() {
-    const rawData: Int_WalkingTrail[] = this.walkingTrailId.GetWalkingTrails();
-    this.originalData = rawData; // שמור את הנתונים המקוריים
+    const rawData: Int_WalkingTrail[] = this.walkingTrail.GetWalkingTrails();
+
+    this.areasofexpertisealData = rawData;
 
     const ELEMENT_DATA: Int_WalkingTrail[] = rawData.map((trail) => ({
       WalkingTrailId: trail.WalkingTrailId,
@@ -77,23 +120,41 @@ export class WalkingTrailComponent implements AfterViewInit {
       MinAge: trail.MinAge,
       MaxAge: trail.MaxAge,
       IsWet: trail.IsWet,
+      SeasonSummer: trail.SeasonSummer,
+      SeasonWinter: trail.SeasonWinter,
+      SeasonSpring: trail.SeasonSpring,
+      SeasonAutumn: trail.SeasonAutumn,
     }));
+
     this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator; // עדכון הפאג'ינטור אם קיים
-    }
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    if (this.paginator && this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  toggleFavorite(
+    userId: number,
+    id: number,
+    type: 'attraction' | 'hostel' | 'trail',
+  ): void {
+    const key = this.getKey(type, id);
+
+    if (this.srv_favorite.isFavorite(userId, id, type)) {
+      this.srv_favorite.removeFavorite(userId, id, type);
+      this.isLiked[key] = false;
+    } else {
+      this.srv_favorite.addFavorite(userId, id, type);
+      this.isLiked[key] = true;
+    }
   }
 
   openDialogRegistrations(element: Int_WalkingTrail) {
-    console.log('הצליח', element); // לוג עבור בדיקה
-    const dialogRef = this.dialog.open(ShowWalkingTrailComponent, {
+    this.dialog.open(ShowWalkingTrailComponent, {
       width: '850px',
-      
-      data: element, // העברת הנתונים לדיאלוג
+      data: element,
     });
   }
 
@@ -102,6 +163,9 @@ export class WalkingTrailComponent implements AfterViewInit {
   }
 
   filterTable() {
+    const anyWordElement = document.getElementById(
+      'searchControl',
+    ) as HTMLInputElement | null;
     const regionSelect = document.getElementById(
       'regionSelect',
     ) as HTMLSelectElement | null;
@@ -111,120 +175,86 @@ export class WalkingTrailComponent implements AfterViewInit {
     const difficultySelect = document.getElementById(
       'difficultySelect',
     ) as HTMLSelectElement | null;
-    if (regionSelect && lengthSelect && difficultySelect) {
-      const regionValue = Number(regionSelect.value); // קבלת הערך שנבחר ב-regionSelect
-      const lengthValue = Number(lengthSelect.value); // קבלת הערך שנבחר ב-lengthSelect
-      const difficultyValue = Number(difficultySelect.value); // קבלת הערך שנבחר ב-difficultySelect
-      let filteredData: Int_WalkingTrail[] = this.originalData;
 
-      // filteredData = this.originalData
-      if (regionValue !== 0) {
-        filteredData = filteredData.filter((x) => x.RegionId === regionValue);
-      }
-      if (lengthValue !== 0) {
-        filteredData = filteredData.filter(
-          (x) =>
-            this.walkingTrailId.GetLengthToFilter(x.LengthInKm) === lengthValue,
-        );
-      }
-      if (difficultyValue !== 0) {
-        filteredData = filteredData.filter(
-          (x) => x.Difficulty == difficultyValue,
-        );
-      }
-      this.dataSource.data = filteredData;
-      console.log(this.dataSource.data.length);
+    if (!regionSelect || !lengthSelect || !difficultySelect) return;
+
+    const regionValue = Number(regionSelect.value);
+    const lengthValue = Number(lengthSelect.value);
+    const difficultyValue = Number(difficultySelect.value);
+    const searchText = anyWordElement?.value.trim() ?? '';
+
+    let filteredData: Int_WalkingTrail[] = this.areasofexpertisealData;
+
+    if (searchText) {
+      filteredData = filteredData.filter(
+        (x) =>
+          String(x.Description).includes(searchText) ||
+          String(x.Difficulty).includes(searchText) ||
+          String(x.Directions).includes(searchText) ||
+          String(x.LengthInKm).includes(searchText) ||
+          String(x.RouteDuration).includes(searchText) ||
+          String(x.WalkingTrailName).includes(searchText) ||
+          String(this.srv_all.GetRegions(x.RegionId)).includes(searchText),
+      );
     }
-    //this.loadData();
+
+    if (regionValue !== 0) {
+      filteredData = filteredData.filter((x) => x.RegionId === regionValue);
+    }
+
+    if (lengthValue !== 0) {
+      filteredData = filteredData.filter(
+        (x) =>
+          this.walkingTrail.GetLengthToFilter(x.LengthInKm) === lengthValue,
+      );
+    }
+
+    if (difficultyValue !== 0) {
+      filteredData = filteredData.filter(
+        (x) => x.Difficulty === difficultyValue,
+      );
+    }
+
+    this.dataSource.data = filteredData;
+    this.paginator?.firstPage();
   }
 
   resetFilters() {
     this.selectedRegion = 0;
-    const selectElementElement = document.getElementById(
+    this.selectedDifficulty = 0;
+    this.selectedLength = 0;
+
+    const regionSelect = document.getElementById(
       'regionSelect',
     ) as HTMLSelectElement;
-    selectElementElement.value = '0';
-
-    this.selectedDifficulty = 0;
-    const selectedDifficultyElement = document.getElementById(
+    const lengthSelect = document.getElementById(
       'lengthSelect',
     ) as HTMLSelectElement;
-    selectedDifficultyElement.value = '0';
-
-    this.selectedLength = 0;
-    const selectedLengthElement = document.getElementById(
+    const difficultySelect = document.getElementById(
       'difficultySelect',
     ) as HTMLSelectElement;
-    selectedLengthElement.value = '0';
 
-    this.dataSource.data = this.originalData; // החזר לנתונים המקוריים
-    
+    if (regionSelect) regionSelect.value = '0';
+    if (lengthSelect) lengthSelect.value = '0';
+    if (difficultySelect) difficultySelect.value = '0';
+
+    this.dataSource.data = this.areasofexpertisealData;
+    this.paginator?.firstPage();
   }
-  //לעשות מיון
-  
+
   sortByTime: boolean = false;
 
   sortByNumOFPlaces() {
-    if (this.sortByTime) {
-      this.sortByTime = !this.sortByTime;
-      console.log('down');
-      if (this.dataSource && this.dataSource.data) {
-        this.dataSource.data = this.dataSource.data.sort(
-          (a, b) => b.RouteDuration - a.RouteDuration,
-        );
-        return this.dataSource;
-      } else {
-        console.error('dataSource or data is null');
-        return [];
-      }
-    } else {
-      this.sortByTime = !this.sortByTime;
-      console.log('up');
-      if (this.dataSource && this.dataSource.data) {
-        this.dataSource.data = this.dataSource.data.sort(
-          (a, b) => a.RouteDuration - b.RouteDuration,
-        );
-        return this.dataSource;
-      } else {
-        console.error('dataSource or data is null');
-        return [];
-      }
-    }
+    this.sortByTime = !this.sortByTime;
+
+    if (!this.dataSource?.data) return [];
+
+    this.dataSource.data = this.dataSource.data.sort((a, b) =>
+      this.sortByTime
+        ? b.RouteDuration - a.RouteDuration
+        : a.RouteDuration - b.RouteDuration,
+    );
+
+    return this.dataSource;
   }
-
 }
-
-
-  // resetFilters() {
-  //   // לשנות את הSELECTים
-  //   this.selectedRegion = 0; // החזרת ברירות מחדל
-  //   const selectElementElement = document.getElementById(
-  //     'regionSelect',
-  //   ) as HTMLSelectElement;
-  //   selectElementElement.value = '0'; // מחזירים את הבחירה לשורה הראשונה
-
-  //   this.selectedDifficulty = 0; // החזרת ברירות מחדל
-  //   const selectedDifficultyElement = document.getElementById(
-  //     'lengthSelect',
-  //   ) as HTMLSelectElement;
-  //   selectedDifficultyElement.value = '0';
-
-  //   this.selectedLength = 0;
-  //   const selectedLengthElement = document.getElementById(
-  //     'difficultySelect',
-  //   ) as HTMLSelectElement;
-  //   selectedLengthElement.value = '0';
-
-  //   this.dataSource.data = this.originalData;
-  //   console.log(this.dataSource.data.length);
-
-  //    // עדכון ה-paginator
-  //   if (this.paginator) {
-  //     console.log(this.originalData.length)
-  //       this.paginator.length = this.originalData.length; // עדכון מספר הפריטים בפאג'ינטור
-  //             console.log(this.paginator.length)
-
-  //       this.dataSource.paginator = this.paginator; // חיבור מחדש
-  //       console.log(this.dataSource.paginator)
-  //   }
-  // }

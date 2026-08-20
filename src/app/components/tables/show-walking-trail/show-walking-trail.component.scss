@@ -73,7 +73,10 @@
   margin-right: 7px;
   outline: none;
   width: 100%; /* או הגבלה אחרת לתצוגה */
-  box-sizing: border-box; /* יישום של padding ו-border בתוך הגדלים */
+  box-sizing: border-box; 
+  color:white;  
+  background-color:rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid white; /* קו תחתון */
 }
 
 .form-check-input:checked {

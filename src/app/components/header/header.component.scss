@@ -10,20 +10,7 @@
 .logo{
     height: 100px;
 }
-// .btn {
-//     margin: 10px;
-//     background-color: #FF5C67;
-//     color: white;
-//     transition: transform 0.2s ease, 
-//     box-shadow 0.2s ease; 
-//     display: flex;
-//     align-items: center
-// }
-// .btn:hover {
-//     color: #004aad;
-//     transform: translateY(-1px); 
-//     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-// }
+
 .logout{
     color: #FF5C67;
     width: 100%;
@@ -32,7 +19,8 @@
     display: flex;
     align-items: center;
     &:hover{
-        color: #004aad;
+        // color: #5F17E5; 
+        color: #0657c2;
     // transform: translateY(-1px); 
         //  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
@@ -56,6 +44,11 @@
         background-color: #dbd9f7;
     }
 }
+:host {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
 
 
 
@@ -123,4 +116,21 @@
     padding: 10px;
     margin: 0px;
  }
+
+.dateAndGreeting{
+    display: flex;
+    justify-content: space-between;
+}
+.title{
+    margin-bottom: 0px;
+}
+.text{
+    margin: 0px;
+}
+.img_like{
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    
+}
 

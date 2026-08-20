@@ -1,10 +1,8 @@
-
 export interface Int_Guide {
-    UserId : number;
-    GuideId:number;
-   Origin :number[],
-   ReligiousId : number;
-   CertificatesFiles : File[]
-   resumeFiles: File
-   
+  UserId: number;
+  GuideId: number;
+  AreasOfExpertise: number[];
+  ReligiousId: number;
+  CertificatesFiles: File[];
+  resumeFiles: File;
 }

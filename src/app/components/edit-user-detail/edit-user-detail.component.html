@@ -1,0 +1,91 @@
+<div class="all">
+  <div class="header">
+    <h3>עריכת הפרטים האישיים לך...</h3>
+    <button mat-icon-button (click)="onClose()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="aa">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="form coordinator-form"
+    >
+      <ng-container>
+        @for (field of fields; track field) {
+          <div>
+            <label>{{ field.label }}</label>
+
+            @switch (field.type) {
+              @case ("text") {
+                <input type="text" [formControlName]="field.key" />
+              }
+
+              @case ("number") {
+                <input type="number" [formControlName]="field.key" />
+              }
+              @case ("email") {
+                <input type="email" [formControlName]="field.key" />
+              }
+              @case ("select") {
+                <select [formControlName]="field.key">
+                  @for (option of field.options; track option) {
+                    <option [value]="option">{{ option }}</option>
+                  }
+                </select>
+              }
+              @case ("radio") {
+                @for (option of field.options; track option) {
+                  <label>
+                    <input
+                      type="radio"
+                      [formControlName]="field.key"
+                      [value]="option"
+                    />
+                    {{ option === "1" ? "מוסד לבנים" : "מוסד לבנות" }}
+                  </label>
+                }
+              }
+              @case ("checkbox") {
+                <input type="checkbox" [formControlName]="field.key" />
+              }
+            }
+          </div>
+
+          <div>
+            @if (form.get(field.key); as control) {
+              @if (control && control.touched && control.invalid) {
+                @if (control.errors) {
+                  @if (control.errors["required"]) {
+                    <span>אויששש, שכחת אותי....</span>
+                  }
+                  @if (control.errors["minlength"]) {
+                    <span
+                      >יש להכניס מינימום {{ field["minLength"] }} תווים⚠️</span
+                    >
+                  }
+                  @if (
+                    field.key === "IdNumber" && control.errors["invalidID"]
+                  ) {
+                    <span>יש להכניס מספר תעודת זהות תקינה</span>
+                  }
+                  @if (
+                    field.key === "PhoneNumber" &&
+                    control.errors["invalidPhone"]
+                  ) {
+                    <span>יש להכניס מספר פלאפון נייד תקין</span>
+                  }
+                  @if (field.key === "Email" && control.errors["email"]) {
+                    <span>יש להכניס כתובת אימייל תקינה⚠️</span>
+                  }
+                }
+              }
+            }
+          </div>
+        }
+      </ng-container>
+
+      <button type="submit">שליחה</button>
+    </form>
+  </div>
+</div>

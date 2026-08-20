@@ -60,6 +60,7 @@ export class WelcomePageComponent {
     //   this.router.navigate(['welcome/Home_Page']);
 
     // }
+    
   }
   checkUserStatus() {
     if (this.authService.isLoggedIn()) {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -47,6 +47,7 @@ export class CoordinatorRegistrationsComponent {
     private dialogRef: MatDialogRef<CoordinatorRegistrationsComponent>,
     private srvCities: SrvCities,
   ) {}
+
   private IdIsrael = inject(IdIsraelValidator);
   IsraelIdValidator = this.IdIsrael.idValidator;
 
@@ -68,11 +69,22 @@ export class CoordinatorRegistrationsComponent {
     });
     console.log(this.cities);
 
-     this.schools= this.srvSchools.GetSchools();
-      
-      this.filteredSchools = this.schools;
-    ;
+    this.schools = this.srvSchools.GetSchools();
+
+    this.filteredSchools = this.schools;
   }
+
+  writeData() {
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+    this.formCoordinator.get('PrincipalName')?.setValue('');
+  }
+
   religiousData = [
     { id: 1, name: 'חסידי' },
     { id: 2, name: 'ספרדי' },
@@ -133,11 +145,11 @@ export class CoordinatorRegistrationsComponent {
     ]),
     TypeSchoolId: new FormControl('', [Validators.required]),
     AgeSchoolId: new FormControl('', [Validators.required]),
-  }); 
+  });
 
   newCoordinator() {
     const selectedCity = this.formCoordinator.get('CityId')?.value;
-    
+
     if (!selectedCity || !this.filteredCities.includes(selectedCity)) {
       alert('אנא בחר עיר מהרשימה.');
       return;
@@ -149,8 +161,6 @@ export class CoordinatorRegistrationsComponent {
       CityIdToSave = this.srvCities.GetLastCityId() + 1;
       this.srvCities.AddCity(selectedCity);
     }
-
-
 
     const selectedSchool = this.formCoordinator.get('SchoolName')?.value || '';
     const schoolExists = this.filteredSchools.some(
@@ -166,7 +176,6 @@ export class CoordinatorRegistrationsComponent {
     }
 
     if (this.formCoordinator.valid) {
-
       const userData = {
         userId: this.lastUserId || 0,
         userPassword: this.formCoordinator.get('UserPassword')?.value || '',
@@ -192,7 +201,6 @@ export class CoordinatorRegistrationsComponent {
         userData.email,
       );
 
-  
       const coordinatorData = {
         userId: this.lastUserId || 0,
         coordinatorId: this.lastCoordinatorId || 0,
@@ -208,36 +216,37 @@ export class CoordinatorRegistrationsComponent {
         coordinatorData.roleId,
         coordinatorData.schoolId,
       );
-if(needToAddSchool){
-         // הגדרת אובייקט לשימוש נתוני בית הספר
-      const schoolData = {
-        schoolId: schoolIdToSave,
-        schoolName: this.formCoordinator.get('SchoolName')?.value || '',
-        isBoys: Number(this.formCoordinator.get('IsBoys')?.value),
-        cityId: CityIdToSave,
-        principalName: this.formCoordinator.get('PrincipalName')?.value || '',
-        phoneSecretary: this.formCoordinator.get('PhoneSecretary')?.value || '',
-        typeSchoolId: Number(this.formCoordinator.get('TypeSchoolId')?.value),
-        ageSchoolId: Number(this.formCoordinator.get('AgeSchoolId')?.value),
-      };
+      if (needToAddSchool) {
+        // הגדרת אובייקט לשימוש נתוני בית הספר
+        const schoolData = {
+          schoolId: schoolIdToSave,
+          schoolName: this.formCoordinator.get('SchoolName')?.value || '',
+          isBoys: Number(this.formCoordinator.get('IsBoys')?.value),
+          cityId: CityIdToSave,
+          principalName: this.formCoordinator.get('PrincipalName')?.value || '',
+          phoneSecretary:
+            this.formCoordinator.get('PhoneSecretary')?.value || '',
+          typeSchoolId: Number(this.formCoordinator.get('TypeSchoolId')?.value),
+          ageSchoolId: Number(this.formCoordinator.get('AgeSchoolId')?.value),
+        };
 
-      // הוספת לוג כדי לראות את נתוני בית הספר
-      console.log('School Data:', schoolData); // שינוי
+        // הוספת לוג כדי לראות את נתוני בית הספר
+        console.log('School Data:', schoolData); // שינוי
 
-      this.srvSchools.InsertSchool(
-        schoolData.schoolId,
-        schoolData.schoolName,
-        schoolData.isBoys,
-        schoolData.cityId,
-        schoolData.principalName,
-        schoolData.phoneSecretary,
-        schoolData.typeSchoolId,
-        schoolData.ageSchoolId,
-      );
-    }
-//הכנסה ל LOCAL STRONGE
-const userObj = { email: userData.email, userId: userData.userId };
-localStorage.setItem('user_data', JSON.stringify(userObj));
+        this.srvSchools.InsertSchool(
+          schoolData.schoolId,
+          schoolData.schoolName,
+          schoolData.isBoys,
+          schoolData.cityId,
+          schoolData.principalName,
+          schoolData.phoneSecretary,
+          schoolData.typeSchoolId,
+          schoolData.ageSchoolId,
+        );
+      }
+      //הכנסה ל LOCAL STRONGE
+      const userObj = { email: userData.email, userId: userData.userId };
+      localStorage.setItem('user_data', JSON.stringify(userObj));
       this.formCoordinator.reset();
       this.dialogRef.close(); // סגור את הדיאלוג
       this.router.navigate(['welcome/Home_Page']);
@@ -260,7 +269,7 @@ localStorage.setItem('user_data', JSON.stringify(userObj));
     );
   }
 
-  filterSchool(event: Event){
+  filterSchool(event: Event) {
     const input = event.target as HTMLInputElement;
     const schoolToFilter = input.value.toLowerCase();
 
@@ -269,7 +278,6 @@ localStorage.setItem('user_data', JSON.stringify(userObj));
     );
   }
 
-
   SearchInList(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value; // קבלת ערך השדה
     const foundSchool = this.filteredSchools.find(
@@ -277,56 +285,63 @@ localStorage.setItem('user_data', JSON.stringify(userObj));
     );
 
     if (!foundSchool) {
-        this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('IsBoys')?.setValue( '',
-    );
-    this.formCoordinator.get('CityId')?.setValue('',
-    );
-    this.formCoordinator.get('PhoneSecretary')?.setValue('');
-    this.formCoordinator.get('TypeSchoolId')?.setValue( '',
-    );
-    this.formCoordinator.get('AgeSchoolId')?.setValue( '',
-    );
-        this.setSchoolFieldsEnabled(true); // אם לא נמצא מוסד, השבת שדות 
+      this.formCoordinator.get('PrincipalName')?.setValue('');
+      this.formCoordinator.get('IsBoys')?.setValue('');
+      this.formCoordinator.get('CityId')?.setValue('');
+      this.formCoordinator.get('PhoneSecretary')?.setValue('');
+      this.formCoordinator.get('TypeSchoolId')?.setValue('');
+      this.formCoordinator.get('AgeSchoolId')?.setValue('');
+      this.setSchoolFieldsEnabled(true); // אם לא נמצא מוסד, השבת שדות
       return;
     }
 
+    this.formCoordinator
+      .get('PrincipalName')
+      ?.setValue(foundSchool.PrincipalName || '');
+    this.formCoordinator
+      .get('IsBoys')
+      ?.setValue(foundSchool.IsBoys != null ? String(foundSchool.IsBoys) : '');
+    this.formCoordinator
+      .get('CityId')
+      ?.setValue(
+        foundSchool.CityId != null
+          ? String(this.srvCities.getCityById(foundSchool.CityId))
+          : '',
+      );
+    this.formCoordinator
+      .get('PhoneSecretary')
+      ?.setValue(foundSchool.PhoneSecretary || '');
+    this.formCoordinator
+      .get('TypeSchoolId')
+      ?.setValue(
+        foundSchool.TypeSchoolId != null
+          ? String(foundSchool.TypeSchoolId)
+          : '',
+      );
+    this.formCoordinator
+      .get('AgeSchoolId')
+      ?.setValue(
+        foundSchool.AgeSchoolId != null ? String(foundSchool.AgeSchoolId) : '',
+      );
 
-    this.formCoordinator.get('PrincipalName')?.setValue(foundSchool.PrincipalName || '');
-    this.formCoordinator.get('IsBoys')?.setValue(
-      foundSchool.IsBoys != null ? String(foundSchool.IsBoys) : '',
-    );
-    this.formCoordinator.get('CityId')?.setValue(
-      foundSchool.CityId != null ? String(this.srvCities.getCityById(foundSchool.CityId)) : '',
-    );
-    this.formCoordinator.get('PhoneSecretary')?.setValue(foundSchool.PhoneSecretary || '');
-    this.formCoordinator.get('TypeSchoolId')?.setValue(
-      foundSchool.TypeSchoolId != null ? String(foundSchool.TypeSchoolId) : '',
-    );
-    this.formCoordinator.get('AgeSchoolId')?.setValue(
-      foundSchool.AgeSchoolId != null ? String(foundSchool.AgeSchoolId) : '',
-    );
-
-     this.setSchoolFieldsEnabled(false); // אם נמצא מוסד, אפשר את השדות
-    
+    this.setSchoolFieldsEnabled(false); // אם נמצא מוסד, אפשר את השדות
   }
 
   setSchoolFieldsEnabled(enabled: boolean) {
     if (enabled) {
-        this.formCoordinator.get('PhoneSecretary')?.enable();
-        this.formCoordinator.get('PrincipalName')?.enable();
-        this.formCoordinator.get('IsBoys')?.enable();
-        this.formCoordinator.get('CityId')?.enable();
-        this.formCoordinator.get('TypeSchoolId')?.enable();
-        this.formCoordinator.get('AgeSchoolId')?.enable();
+      this.formCoordinator.get('PhoneSecretary')?.enable();
+      this.formCoordinator.get('PrincipalName')?.enable();
+      this.formCoordinator.get('IsBoys')?.enable();
+      this.formCoordinator.get('CityId')?.enable();
+      this.formCoordinator.get('TypeSchoolId')?.enable();
+      this.formCoordinator.get('AgeSchoolId')?.enable();
     } else {
-        this.formCoordinator.get('PhoneSecretary')?.disable();
-        this.formCoordinator.get('PrincipalName')?.disable();
-        this.formCoordinator.get('IsBoys')?.disable();
-        this.formCoordinator.get('CityId')?.disable();
-        this.formCoordinator.get('TypeSchoolId')?.disable();
-        this.formCoordinator.get('AgeSchoolId')?.disable();
+      this.formCoordinator.get('PhoneSecretary')?.disable();
+      this.formCoordinator.get('PrincipalName')?.disable();
+      this.formCoordinator.get('IsBoys')?.disable();
+      this.formCoordinator.get('CityId')?.disable();
+      this.formCoordinator.get('TypeSchoolId')?.disable();
+      this.formCoordinator.get('AgeSchoolId')?.disable();
     }
+  }
 }
-}
-

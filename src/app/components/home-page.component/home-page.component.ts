@@ -6,18 +6,18 @@ import { WalkingTrailComponent } from '../tables/walking-trail/walking-trail.com
 import { AttractionsComponent } from '../tables/attractions/attractions.component';
 import { HostelsComponent } from '../tables/hostels/hostels.component';
 import { Router, RouterOutlet } from '@angular/router';
+import { FevoriteComponent } from "../fevorite/fevorite.component";
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   imports: [
-    HeaderComponent,
     WalkingTrailComponent,
     AttractionsComponent,
     HostelsComponent,
     ScrollTopModule,
     MatIcon,
-    RouterOutlet
+    FevoriteComponent
 ],
   styleUrls: ['./home-page.component.scss'],
   standalone: true,
@@ -27,14 +27,25 @@ export class HomePageComponent {
   openAttraction: boolean;
   openHostels: boolean;
   openGuide: boolean;
-  constructor(
-    private router: Router,
-  ) {
+  showBtnTable: boolean = false;
+  constructor(private router: Router) {
     this.openTrail = false;
     this.openAttraction = false;
     this.openHostels = false;
     this.openGuide = false;
   }
+  // openBtnTable() {
+  //   this.showBtnTable = !this.showBtnTable;
+  //   this.scroll()
+  // }
+openBtnTable() {
+  this.showBtnTable = !this.showBtnTable;
+  if(this.showBtnTable){
+  setTimeout(() => {
+    this.scroll();
+  }, 100); // עיכוב קטן כדי לוודא שהרכיבים הוצגו
+}
+}
   openTable(tableNum: number) {
     switch (tableNum) {
       case 1:
@@ -52,10 +63,21 @@ export class HomePageComponent {
     }
   }
 
-  openTipsForum(){
-    console.log("הגעתי")
-    this.router.navigate(['welcome/forum/community']);
-       
+  // openTipsForum(){
+  //   // console.log("הגעתי")
+  //   this.router.navigate(['welcome/forum/community']);
 
+  // }
+
+  openTipsForum(forumType: number) {
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/forum'], {
+      queryParams: { ForumType: forumType },
+    });
+  }
+  scroll() {
+    const section = document.getElementById('search-section');
+    section?.scrollIntoView({ behavior: 'smooth' });
+    
   }
 }

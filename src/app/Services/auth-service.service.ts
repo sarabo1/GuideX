@@ -7,9 +7,13 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private router: Router) {}
 
-  // שמירת המייל ב-localStorage
+  // שמירה ב-localStorage
   login(email: string, userId : string) {
+    // login(Token : any) {
+
        const userObj = { email: email, userId : userId  };
+            //  const userObj = { token :  Token };
+
        localStorage.setItem('user_data', JSON.stringify(userObj));
        console.log(JSON.stringify(userObj))
       
@@ -35,8 +39,8 @@ getUserData() {
     const savedData = localStorage.getItem('user_data');
     if (savedData) {
       const user = JSON.parse(savedData);
-      console.log(user.email);
-      console.log(user.userId);
+      // console.log(user.email);
+      // console.log(user.userId);
       
       return user;
     }

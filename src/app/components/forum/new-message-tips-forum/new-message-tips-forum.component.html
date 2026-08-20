@@ -6,13 +6,13 @@
   </div>
     <div>
       @if (data.parent) {
-        <h5>כתיבת תגובה להודעה</h5>
+        <h5 class="display-6">כתיבת תגובה להודעה</h5>
         <p>
           <strong>תגובה להודעה: </strong
           >{{ srv_forum.getTitleByForumId(data.parent) }}
         </p>
       } @else {
-        <h5>הודעה חדשה</h5>
+        <h5 class="display-6">הודעה חדשה</h5>
       }
     </div>
    
@@ -23,11 +23,11 @@
     action="/action_page.php"
   >
     <p>
-      <label><strong>כותרת ההודעה: </strong> </label><br />
+      <label><p>כותרת ההודעה: </p> </label><br />
       <input id="titleName" class="erere" formControlName="titleName" />
     </p>
     <p>
-      <label><strong>תוכן ההודעה: </strong></label> <br /><textarea
+      <label><p>תוכן ההודעה: </p></label> <br /><textarea
         id="message"
         class="erere"
         formControlName="message"

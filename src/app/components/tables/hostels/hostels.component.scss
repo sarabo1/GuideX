@@ -17,6 +17,8 @@
     direction: rtl;
     text-align: right;
     border-bottom-color: #5F16EB;
+      font-weight: 300;
+
 }
 
 
@@ -30,7 +32,20 @@
 table{
     direction: rtl;
 }
-
+.img_like{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    
+}
+.likeButton{
+    border: 0px;
+    background-color: transparent;
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.1);
+    }
+}
 
 .showDetails{
     border:0px;

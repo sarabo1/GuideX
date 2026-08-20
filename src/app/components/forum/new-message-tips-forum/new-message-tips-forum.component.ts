@@ -1,6 +1,5 @@
 import { Component, Inject, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SrvForumMessageService } from '../../../Services/srv-forum-message.service';
 import { MatIcon } from '@angular/material/icon';
 import {
   FormControl,
@@ -12,6 +11,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { NoWhitespaceValidatorService } from '../../../Services/noWhitespace_validator';
 import { int_ForumMessage } from '../../../Interfaces/int_ForumMessage';
 import { ForumMessageStoreService } from '../../../Services/forum-message-store.service';
+import { SrvForumMessageService } from '../../../Services/srv-Forum-message.service';
 
 @Component({
   selector: 'app-new-message-tips-forum',
@@ -29,7 +29,7 @@ export class NewMessageTipsForumComponent {
     @Inject(MAT_DIALOG_DATA) public data: { parent: number; typeForum: number },
     public srv_forum: SrvForumMessageService,
     public authService: AuthService,
-    private forumMessageStore: ForumMessageStoreService
+    private forumMessageStore: ForumMessageStoreService,
   ) {}
   ngOnInit() {
     this.userDetails = this.authService.getUserData();
@@ -74,12 +74,10 @@ export class NewMessageTipsForumComponent {
       Message: message,
       ForumTypeId: forumType,
     };
-    this.srv_forum.addNewForumMsg(userId, parent, title, message, forumType);
-    this.forumMessageStore.addMessage(newMessage); // הוסף את ההודעה לסטור
- 
-      this.formNewMesagge.reset();
+    // this.srv_forum.addNewForumMsg(userId, parent, title, message, forumType);
+
+    this.forumMessageStore.addMessage(newMessage);
+    this.formNewMesagge.reset();
     this.onClose();
-    
   }
 }
-

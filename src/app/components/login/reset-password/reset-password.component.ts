@@ -63,7 +63,7 @@ export class ResetPasswordComponent {
   });
 
   showPasswordFirst = false;
-  PasswordFVisibility() {
+  PasswordFirstVisibility() {
     this.showPasswordFirst = !this.showPasswordFirst;
   }
   showPasswordSecond = false;
@@ -78,21 +78,52 @@ export class ResetPasswordComponent {
     const email = this.ResetPassword.get('Email')?.value;
     const phoneNumber = this.ResetPassword.get('PhoneNumber')?.value;
     const idNumber = this.ResetPassword.get('IdNumber')?.value;
-    this.findUser = this.srv_users
-      .GetUsers()
-      .find(
-        (u) =>
-          u.Email == email &&
-          u.IdNumber == idNumber &&
-          u.PhoneNumber == phoneNumber,
-      );
-    console.log(this.findUser);
-    if (this.findUser) {
-      this.findUserInList = true;
-    } else {
-      this.notExistsUser = true;
-      this.findUser = null;
-    }
+    const EmPhId: any = {
+      Email: email,
+      PhoneNumber: phoneNumber,
+      idNumber: idNumber,
+    };
+    console.log("הגעתי לפה!!! עודמעט אני אבצע קריאת שרת")
+    
+    // this.findUser = this.srv_users.getUserByEmailIdNumberPhone(EmPhId)
+    //   // .GetUsers()
+    //   // .find(
+    //   //   (u) =>
+    //   //     u.Email == email &&
+    //   //     u.IdNumber == idNumber &&
+    //   //     u.PhoneNumber == phoneNumber,
+    //   // );
+    // console.log(this.findUser);
+    // if (this.findUser) {
+    //   this.findUserInList = true;
+    // } else {
+    //   this.notExistsUser = true;
+    //   this.findUser = null;
+    // }
+
+      const request: any = this.srv_users.getUserByEmailIdNumberPhone(EmPhId);
+
+      if (request?.subscribe) {
+        request.subscribe(
+          (response: any) => {
+            console.log('User found:', response);
+
+            if (response) {
+              this.findUserInList = true; // משתמש נמצא
+              this.findUser = response; // שמור את התגובה
+            } else {
+              this.notExistsUser = true; // משתמש לא נמצא
+              this.findUser = null;
+            }
+          },
+          (error: unknown) => {
+            console.log("לא הצלחתי לבצע קריאת שרת");
+            console.error('Error:', error);
+          }
+        );
+      } else {
+        console.error('getUserByEmailIdNumberPhone did not return an observable.');
+      }
   }
 
   isAnyFieldValid(): boolean {

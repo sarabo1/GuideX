@@ -13,4 +13,9 @@ export interface Int_WalkingTrail {
    MinAge : number;
    MaxAge : number;
    IsWet : boolean;
-}
+ 
+    SeasonSummer: boolean;
+    SeasonWinter: boolean;
+    SeasonSpring: boolean;
+    SeasonAutumn: boolean;
+  }

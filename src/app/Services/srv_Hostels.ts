@@ -555,4 +555,11 @@ export class srv_Hostels {
     
     }
   }
+
+  getHostelById(hostelId: number) {
+   
+    var a =  this.mock_Hostels.find((h) => h.HostelsId == hostelId);
+    console.log(a)
+    return a
+  }
 }

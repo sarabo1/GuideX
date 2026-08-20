@@ -1,0 +1,263 @@
+// // .card {
+// //   transition: transform 0.3s;
+// //   height: 100%;
+// // }
+
+// // .card:hover {
+// //   transform: scale(1.0001);
+// // }
+// // .card-body {
+// //   display: flex;
+// //     flex-direction: column;
+// //     height: 100%;
+// //     justify-content: flex-start;
+// //     align-items: stretch;
+// // }
+// // .details{
+// //       display: flex;
+// //     flex-direction: column;
+// //     height: 100%;
+// //     align-items: center;
+// // }
+// // .row{
+// //   justify-content: center;
+// //     align-items: stretch;
+// // }
+// // .showDetails{
+// //    cursor: zoom-in;
+// // }
+ 
+
+
+// // פלטת צבעים יוקרתית ומותאמת
+// $accent-color: #4f46e5;       // אינדיגו מודרני
+// $rose-color: #f43f5e;         // צבע רוז/ורוד עדין ללב מלא
+// $text-dark: #1f2937;          // אפור כהה מאוד לקריאות
+// $text-muted: #6b7280;         // אפור לטקסט משני
+// $border-color: #e5e7eb;        // גבולות מעודנים
+// $card-bg: #ffffff;
+
+// // הגדרת המיכל הראשי של המועדפים (ה-container הקיים ב-HTML)
+// .container.mt-4 {
+//   margin-top: 100px !important; // העמוד מתחיל 100px מלמעלה
+//   direction: rtl;
+//   // font-family: system-ui, -apple-system, sans-serif;
+//   position: relative;
+//   z-index: 1;
+//   padding-bottom: 3rem;
+
+//   // הזרקת הרקע ה"חתיך" בצורה מובנית
+//   &::before {
+//     content: "";
+//     position: fixed; // נשאר מקובע ברקע הגלילה
+//     top: 100px;      // מתחיל גם הוא מהקו של ה-100 פיקסלים
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     z-index: -1;     // מאחורי הקארדים
+//     opacity: 0.35;
+//     background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
+//     background-size: 24px 24px;
+//     pointer-events: none;
+//   }
+
+//   .row{
+//     justify-content: center;
+//   }
+//   // כותרת "המועדפים שלי"
+//   h5.display-6 {
+//     // 
+
+//     // קו תחתון קטן ויפה מתחת לכותרת
+//     &::after {
+//       content: "";
+//       position: absolute;
+//       bottom: -10px;
+//       left: 25%;
+//       right: 25%;
+//       height: 4px;
+//       background-color: $accent-color;
+//       border-radius: 2px;
+//     }
+//   }
+
+//   // כרטיסיית מועדף
+//   .card.shadow-sm {
+//     background-color: $card-bg;
+//     border: 1px solid $border-color;
+//     border-radius: 20px; // פינות מעוגלות ורכות
+//     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01) !important;
+//     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 0.5), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+//     overflow: hidden;
+//     height: 100%; // שכל הכרטיסיות באותה שורה יהיו באותו גובה
+
+//     &:hover {
+//       transform: translateY(-1px);
+//       box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+//       border-color: rgba($accent-color, 0.2);
+//     }
+
+//     .card-body {
+//       padding: 1.5rem;
+//       display: flex;
+//       flex-direction: column;
+//       justify-content: space-between;
+//       position: relative;
+//       min-height: 130px;
+
+//       // אזור כפתור הלב (הורדת עיצובי דיפולט של כפתור)
+//       .likeButton {
+//         background: transparent;
+//         border: none;
+//         padding: 0;
+//         cursor: pointer;
+//         position: absolute;
+//         top: 1.5rem;
+//         left: 1.5rem; // ממוקם בצד שמאל למעלה בתוך הכרטיסייה
+//         z-index: 2;
+//         transition: transform 0.2s ease;
+
+//         &:hover {
+//           transform: scale(1.1);
+//         }
+
+      
+
+//         .img_like {
+//           width: 26px;
+//           height: 26px;
+//           object-fit: contain;
+//           filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+//         }
+//       }
+
+//       // אזור פירוט התוכן (שם האטרקציה/מסלול/הוסטל)
+//       .details {
+//         margin-top: 0.5rem;
+//         padding-left: 2.5rem; // מונע מהטקסט הארוך לעלות על כפתור הלייק משמאל
+
+//         .card-title, .card-text {
+//           margin: 0;
+//           font-size: 1.15rem;
+//            font-weight: 350;
+//           line-height: 1.4;
+//           color: $text-dark;
+          
+//           // הגדרת הטקסט כאלמנט לחיץ (Show Details)
+//           &.showDetails {
+//             cursor: pointer;
+//             transition: color 0.15s ease;
+//             display: inline-block;
+
+//             &:hover {
+//               color: $accent-color;
+//               // text-decoration: underline;
+//               // text-underline-offset: 4px;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+// הגדרת המיכל הראשי של המועדפים (ה-container הקיים ב-HTML)
+.container.mt-4 {
+  margin-top: 100px !important; // העמוד מתחיל 100px מלמעלה
+  direction: rtl;
+  
+  padding-bottom: 3rem;
+
+  // הזרקת הרקע עם הנקודות
+  &::before {
+    content: "";
+    position: fixed; // נשאר מקובע ברקע הגלילה
+    top: 0;           // מתחיל מהחלק העליון של הדף
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;     // מאחורי הקארדים
+    opacity: 0.35;
+    background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px); // צבע הנקודות
+    background-size: 24px 24px; // גודל הנקודות
+    pointer-events: none; // מאפשר קליקים על אלמנטים מעל הרקע
+  }
+
+  .row {
+    justify-content: center;
+  }
+
+  // כותרת "המועדפים שלי"
+  h5.display-6 {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      right: 25%;
+      height: 4px;
+      background-color: #4f46e5; // צבע קו התחתון
+      border-radius: 2px;
+    }
+  }
+
+  .card.shadow-sm {
+    border-radius: 20px; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01) !important;
+    transition: transform 0.25s ease;    
+ 
+    &:hover {
+      box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 130px;
+
+      .likeButton {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 2;
+
+        .img_like {
+          width: 26px;
+          height: 26px;
+          object-fit: contain;
+        }
+      }
+
+      .details {
+        margin-top: 0.5rem;
+
+        .card-title, .card-text {
+          color: #1f2937; 
+        }
+      }
+    }
+  }
+}
+
+
+.container.mt-4 {
+  
+  position: fixed; // נשאר מקובע ברקע הגלילה
+    margin-top: 100px;    
+    top:0;       // מתחיל מהחלק העליון של הדף
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none; // מאפשר קליקים על אלמנטים מעל הרקע
+    &::before{
+          top: 100px;
+    }
+}
+

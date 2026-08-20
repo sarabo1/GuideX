@@ -1,8 +1,6 @@
-
-
 // .forumTips{
 //     // display: flex;
-   
+
 // }
 
 // .rotate-90 {
@@ -38,60 +36,279 @@
 //     justify-content: flex-end;
 // }
 
+// .forumTips {
+//     padding: 20px;
+//     background-color: #f9f9f9;
+//     border-radius: 5px;
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+// }
 
+// .rotate-90 {
+//     transform: rotate(90deg);
+// }
 
+// .messages {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 12px;
+
+// }
+
+// .card {
+//     background-color: #fff;
+//     border: 1px solid #ddd;
+//     border-radius: 5px;
+//     padding: 15px;
+//     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+//     width: 85%; /* שנה את הערך כאן לפי הצורך */
+//     // max-width: 400px; /* אפשר לקבוע מקסימום רוחב אם רוצים לייצר אחידות */
+//     margin: 12px auto; /* ממרכז את הכרטיסים */
+// }
+
+// .titleAndHeader {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+// }
+
+// .aadMessage {
+//     background-color: rgb(231, 162, 175);
+//     border: none;
+//     border-radius: 3px;
+//     padding: 10px 15px;
+//     cursor: pointer;
+// }
+
+// .marginDate {
+//     border-right: 1px solid black;
+//     padding-right: 7px;
+// }
+
+// .toDateAndUserEmail {
+//     display: flex;
+//     gap: 7px;
+//     align-items: center;
+//     justify-content: flex-end;
+// }
+
+// .titleOfForum{
+//    display: flex;
+//        flex-direction: column;
+//     align-items: center;
+// }
+// .new{
+//     margin: 0 auto;
+// }
+
+// פלטת צבעים מודרנית
+$primary-color: #4f46e5; // אינדיגו מודרני ויוקרתי
+$primary-hover: #4338ca;
+$text-main: #1f2937; // אפור כהה מאוד לקריאות מקסימלית
+$text-muted: #6b7280; // אפור עדין לפרטים משניים
+$bg-global: #f9fafb; // רקע דף רך
+$card-bg: #ffffff; // רקע כרטיסייה נקי
+$border-color: #e5e7eb; // גבולות מעודנים
+
+// עטיפה גלובלית לכל האזור (ה-div החיצוני ביותר)
+div:has(> .icon-background) {
+  background-color: $bg-global;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  direction: rtl;
+  font-family: heebo, sans-serif;
+  position: relative;
+  overflow: hidden;
+
+  // הרקע העדין מאחורה
+  .icon-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.3;
+    background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+}
+
+// מיכל הפורום המרכזי
 .forumTips {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+  position: relative;
+  z-index: 1;
+  max-width: 950px;
+  margin: 0 auto;
 
-.rotate-90 {
-    transform: rotate(90deg);
-}
+  // עיצוב כללי לכפתורים בפורום
+  .btn.aadMessage {
+    background-color: $primary-color;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 4px 6px -1px rgba($primary-color, 0.1),
+      0 2px 4px -1px rgba($primary-color, 0.06);
 
-.messages {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    
-}
+    &:hover {
+      background-color: $primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 15px -3px rgba($primary-color, 0.2);
+    }
 
-.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    &:active {
+      transform: translateY(1px);
+    }
+  }
 
-    width: 85%; /* שנה את הערך כאן לפי הצורך */
-    // max-width: 400px; /* אפשר לקבוע מקסימום רוחב אם רוצים לייצר אחידות */
-    margin: 12px auto; /* ממרכז את הכרטיסים */
-}
-
-.titleAndHeader {
+  // שורת כותרת עליונה ותחתונה (מכילה את כותרות הפורום וכפתור הודעה חדשה)
+  .titleOfForum {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+    gap: 1.5rem;
+    flex-wrap: wrap;
 
-.aadMessage {
-    background-color: rgb(231, 162, 175);
-    border: none;
-    border-radius: 3px;
-    padding: 10px 15px;
-    cursor: pointer;
-}
+    // התאמה ספציפית לכפתור התחתון שיהיה ממורכז ויפה
+    &:last-of-type {
+      justify-content: center;
+      margin-top: 1rem;
 
-.marginDate {
-    border-right: 1px solid black;
-    padding-right: 7px;
-}
+      .btn.aadMessage {
+        padding: 0.85rem 3.5rem;
+        font-size: 1.05rem;
+      }
+    }
 
-.toDateAndUserEmail {
+    .forumHead {
+      flex: 1;
+      min-width: 280px;
+
+      h3 {
+        color: $text-main;
+        font-size: 1.5rem;
+        font-weight: 800;
+        line-height: 1.35;
+        margin: 0 0 0.5rem 0;
+      }
+
+      h4 {
+        color: $text-muted;
+        font-size: 1rem;
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+  }
+
+  // אזור רשימת הכרטיסיות (נפטרים מה-br המיותרים בעזרת gap)
+  .messages {
     display: flex;
-    gap: 7px;
-    align-items: center;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  // עיצוב כרטיסיית הודעה בודדת
+  .card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.03),
+      0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.05),
+        0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    }
+
+    // כותרת עליונה המציינת שזו תגובה
+    .card-header {
+      background-color: #f3f4f6;
+      padding: 0.65rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid $border-color;
+      color: $text-muted;
+      font-size: 0.85rem;
+
+      .rotate-90 {
+        transform: rotate(90deg);
+        font-size: 1.1rem;
+        width: auto;
+        height: auto;
+      }
+
+      i {
+        font-style: italic;
+        font-weight: 500;
+      }
+    }
+
+    // גוף הכרטיסייה
+    .card-body {
+      padding: 1.5rem;
+
+      // כותרת ההודעה + פרטי שולח ותאריך
+      .titleAndHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 1rem;
+        margin-bottom: 1.25rem;
+
+        h5 {
+          color: $text-main;
+          font-size: 1.2rem;
+          font-weight: 700;
+          margin: 0;
+          flex: 1;
+        }
+
+        .toDateAndUserEmail {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: $text-muted;
+          font-size: 0.85rem;
+
+          p {
+            margin: 0;
+          }
+
+          // עיצוב הקו המפריד בין המייל לתאריך
+          .marginDate {
+            position: relative;
+            padding-right: 0.75rem;
+
+            &::before {
+              content: "|";
+              position: absolute;
+              right: -0.25rem;
+              color: $text-muted;
+            }
+          }
+        }
+      }
+    }
+  }
 }
+

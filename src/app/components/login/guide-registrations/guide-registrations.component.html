@@ -1,7 +1,8 @@
-מחזיר רק מערך אחד של קבצים ריק!!!!
+בטלתי את החובה לקבצים ועכשיו זה לא מתעדכן.
 
 <form [formGroup]="formGuide" (ngSubmit)="newGuide()" class="guide-form form">
   <div>
+    <br />
     <label>שם פרטי:</label>
     <input type="text" formControlName="FirstName" />
   </div>
@@ -29,7 +30,7 @@
 
   <div>
     <label>מספר זהות:</label>
-    <input type="text" formControlName="IdNumber" />
+    <input type="text" formControlName="IdNumber" (input)="searchGuide()" />
   </div>
   @if (formGuide.get("IdNumber")?.touched) {
     @if (formGuide.get("IdNumber")?.hasError("required")) {
@@ -48,9 +49,7 @@
   @if (formGuide.get("PhoneNumber")?.touched) {
     @if (formGuide.get("PhoneNumber")?.hasError("required")) {
       <p class="red">אויששש, שכחת אותי....</p>
-    } @else if (
-      formGuide.get("PhoneNumber")?.hasError("invalidPhone")
-    ) {
+    } @else if (formGuide.get("PhoneNumber")?.hasError("invalidPhone")) {
       <p class="red">יש להכניס מספר פלאפון נייד תקין</p>
     }
   }
@@ -135,7 +134,7 @@
     <div class="dropdown">
       <div class="dropdown-content">
         <div class="checkbox-group">
-          @for (item of Origins; track item.id) {
+          @for (item of AreasOfExpertises; track item.id) {
             <label class="checkbox-label">
               <input
                 type="checkbox"
@@ -150,12 +149,26 @@
       </div>
     </div>
   </div>
-  <label>קבצי תעודות, יש להעלות תעודה על כל אזור שנבחר.:</label>
-  <input type="file" (change)="onFileSelected($event)" multiple />
-  <!-- ///כסגכבליה -->
-  <label>קורות חיים.:</label>
-  <input type="file" (change)="onOneFileSelected($event)" />
+  <!-- <label>קבצי תעודות, יש להעלות תעודה על כל אזור שנבחר:</label>
+  <input type="file" (change)="onFileSelected($event)" multiple /> -->
+  <label>קבצי תעודות:</label>
+  <input type="file" multiple (change)="onFileSelected($event)" />
+  <p>קבצים שנבחרו:</p>
+  <ul>
+    @for (file of CertificatesFiles; track file.name) {
+      <li>
+        {{ file.name }}
+      </li>
+    }
+  </ul>
 
+  <!-- <label>קורות חיים:</label>
+  <input type="file"  (change)="onOneFileSelected($event)" /> -->
+  <label>קורות חיים:</label>
+  <input type="file" (change)="onOneFileSelected($event)" />
+  @if (resumeFiles) {
+    <p>קובץ נבחר: {{ resumeFiles.name }}</p>
+  }
   <button
     class="btn btn-outline-secondary"
     type="submit"
@@ -164,4 +177,3 @@
     הוספת מדריכה <mat-icon>person_add</mat-icon>
   </button>
 </form>
-  

@@ -29,7 +29,9 @@ mat-icon{
     align-items: center;
     flex-direction: column;
     width: 94%;
+    
 }
+
 
 .open:hover {
     color: #004aad;
@@ -37,9 +39,46 @@ mat-icon{
     transform: translateY(-1px); 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
+.open:disabled {
+    border-bottom: none; /* הסרת הבורדר */
+border-bottom-left-radius: 0px;   border-bottom-right-radius: 0px;    
+}
+.toClose{
+ border-top: none; /* הסרת הבורדר */
+border-top-left-radius: 0px;   border-top-right-radius: 0px;  
+}
+.toClose  :hover{
+ border-top: 1px solid #FF5C67; /* הסרת הבורדר */
+border-top-left-radius: 0px;   border-top-right-radius: 0px;  
+}
 .btnOpen{
     width: 100%;
         align-items: center;
 
 }
  
+.forumBtn{
+    margin: 10px auto;
+    display: flex;
+    max-width: 1200px;
+    flex-wrap: wrap;
+        justify-content: center;
+        vertical-align: middle;
+}
+.buttonShow{
+    width: 450px;
+}
+.footer{
+    display: flex;
+    align-items: center;
+    background-color: #FF5C67;
+    height: 80px;
+    justify-content: center;
+    color: white;
+    margin-top: auto;
+    bottom: 0;
+}
+.arrow{
+    display: flex;
+    justify-content: center;
+}

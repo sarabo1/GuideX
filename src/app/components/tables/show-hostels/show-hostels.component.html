@@ -1,12 +1,29 @@
 <div class="show">
   <div class="background"></div>
   <div class="content">
+    <div class="likeAndEdit">
     <button
       [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
       (click)="canEdit()"
     >
       <mat-icon class="close-icon">edit</mat-icon>
     </button>
+     <button
+      class="likeButton"
+      (click)="toggleFavorite()"
+    >
+
+      <img
+        class="img_like"
+        [src]="
+          isLiked
+            ? 'heart_full_blue.png'
+            : 'heart_blue.png'
+        "
+      />
+
+    </button>
+    </div>
     <h2>
       @if (!userCanEdit) {
         <strong>{{ data.HostelsName }}</strong>
@@ -40,19 +57,17 @@
     <p>
       <strong>אזור: </strong>
       @if (!userCanEdit) {
-        {{ srv_all.GetRegions(data.RegionId) }}
+        {{ data.RegionId | regionName | async  }}
       } @else {
         <select class="inputToEdit" id="RegionId">
-          @for (item of RegionsArrayData; track item.id) {
-            @if (data.RegionId == item.id) {
-              <option [value]="item.id" selected>
-                {{ item.name }}
-              </option>
-            } @else {
-              <option [value]="item.id">
-                {{ item.name }}
-              </option>
-            }
+          @for (item of RegionsArrayData; track item) {
+            <option
+              [value]="item.regionId"
+              [selected]="item.regionId == data.RegionId"
+            >
+              <!-- {{ item | json}} -->
+              {{ item.regionName }}
+            </option>
           }
         </select>
       }

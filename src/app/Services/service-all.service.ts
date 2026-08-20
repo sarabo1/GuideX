@@ -1,24 +1,29 @@
 import { Injectable } from '@angular/core';
+import { ServiceUsersService } from './service-users.service';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceAllService {
-  getRegionsArray() {
-    return [
-      { id: 1, name: 'גליל עליון' },
-      { id: 2, name: 'צפון' },
-      { id: 3, name: 'גליל תחתון ועמקים' },
-      { id: 4, name: 'כרמל ורמות מנשה' },
-      { id: 5, name: 'מישור החוף והשרון' },
-      { id: 6, name: 'הרי שומרון, הרי יהודה ושפלת יהודה' },
-      { id: 7, name: 'ירושלים' },
-      { id: 8, name: 'מדבר יהודה וים המלח' },
-      { id: 9, name: 'הנגב' },
-      { id: 10, name: 'אילת והערבה' },
-    ];
-  }
-  constructor() {}
+  // getRegionsArray() {
+  //   return [
+  //     { id: 1, name: 'גליל עליון' },
+  //     { id: 2, name: 'צפון' },
+  //     { id: 3, name: 'גליל תחתון ועמקים' },
+  //     { id: 4, name: 'כרמל ורמות מנשה' },
+  //     { id: 5, name: 'מישור החוף והשרון' },
+  //     { id: 6, name: 'הרי שומרון, הרי יהודה ושפלת יהודה' },
+  //     { id: 7, name: 'ירושלים' },
+  //     { id: 8, name: 'מדבר יהודה וים המלח' },
+  //     { id: 9, name: 'הנגב' },
+  //     { id: 10, name: 'אילת והערבה' },
+  //   ];
+  // }
+  constructor(public Srv_Users:ServiceUsersService,
+    public http : HttpClient,
+  ) {}
   getRollName(roleId: number): string | undefined {
     switch (roleId) {
       case 1:
@@ -98,6 +103,14 @@ export class ServiceAllService {
     }
   }
 
+    getRegionsArray() {
+      const baseUrl ='https://localhost:7098/All_Regions'
+      return this.http.get<any>(baseUrl).pipe(
+         tap((data: any) => console.log('Attraction types:', data)) // לוג של המידע המוחזר
+       );
+        
+    }
+
   GetKashrutName(kashrutId: number): string {
     switch (kashrutId) {
       case 1:
@@ -142,4 +155,5 @@ export class ServiceAllService {
     { id: 11, name: 'בד"ץ אגודת ישראל' },
   ];
 }
+
 }

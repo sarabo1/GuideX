@@ -13,4 +13,12 @@ export class SucceededAlertComponent {
 public dialogRef: MatDialogRef<SucceededAlertComponent>, 
   @Inject(MAT_DIALOG_DATA) public data: string ){}
  
+
+
+   ngOnInit() {
+    setTimeout(() => {
+      this.dialogRef.close(); // סוגר את הדיאלוג
+    }, 2000); // 7000 מילישניות = 7 שניות
+  }
 }
+

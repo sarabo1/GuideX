@@ -10,25 +10,25 @@ export class ServiceCoordinatorService {
     {
       UserId: 1,
       TourCoordinatorId: 1,
-      RoleId: 303,
+      RoleId: 3,
       SchoolId: 1,
     },
     {
       UserId: 2,
       TourCoordinatorId: 2,
-      RoleId: 304,
+      RoleId: 4,
       SchoolId: 2,
     },
     {
       UserId: 3,
       TourCoordinatorId: 3,
-      RoleId: 305,
+      RoleId: 5,
       SchoolId: 3,
     },
     {
       UserId: 4,
       TourCoordinatorId: 4,
-      RoleId: 306,
+      RoleId: 2,
       SchoolId: 4,
     },
     {
@@ -62,5 +62,8 @@ export class ServiceCoordinatorService {
       SchoolId: SchoolId,
     };
     this.mock_Coordinators.push(newCoordinator);
+  }
+   userExist(userId: number): boolean {
+    return this.mock_Coordinators.some(c => c.UserId === userId);
   }
 }

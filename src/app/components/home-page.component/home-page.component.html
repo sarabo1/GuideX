@@ -1,10 +1,61 @@
 <!-- <app-header></app-header> -->
 
 <div class="home-page-container">
-  
-  <!-- <router-outlet></router-outlet>  -->
-  <br /><br />
+
+
+  <br/><br/><br/><br/>
+  <!-- <app-fevorite></app-fevorite> -->
+  <br /><br /><br /><br />
   <div class="buttenOpen">
+    <div class="btnOpen">
+      <div class="forumBtn">
+        <div class="buttonShow">
+          <button class="open btn" (click)="openBtnTable()" >
+            <div>
+              <span>מידע כללי</span>
+              <br />
+              <span><mat-icon>library_books</mat-icon></span>
+            </div>
+          </button>
+        </div>
+        <div class="buttonShow">
+          <button class="open btn" (click)="openTipsForum(1)">
+            <div>
+              <span>פורום חוויות והמלצות</span>
+              <br />
+              <span><mat-icon>speaker_notes</mat-icon></span>
+            </div>
+          </button>
+        </div>
+        <div class="buttonShow">
+          <button class="open btn" (click)="openTipsForum(2)">
+            <div>
+              <span>פורום מידע כללי</span> <br />
+              <span><mat-icon>live_help</mat-icon></span>
+            </div>
+          </button>
+        </div>
+        <div class="buttonShow">
+          <button class="open btn" (click)="openTipsForum(3)">
+            <div>
+              <span>פורום בטיחות</span> <br />
+              <span><mat-icon>warning</mat-icon></span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+     <br />
+     
+  </div>
+  @if (showBtnTable) {
+
+    <div class="arrow">
+    <img src="arrow1.gif" ></div>
+    <div class="btnOpen" id="search-section">
+      <p class="open btn">חיפוש חופשי</p>
+    </div>
+
     <div class="btnOpen">
       <button class="open btn" [disabled]="openTrail" (click)="openTable(1)">
         <div>
@@ -17,7 +68,7 @@
       </button>
       @if (openTrail) {
         <app-walking-trail></app-walking-trail>
-        <button class="open btn" (click)="openTable(1)">
+        <button class="open btn toClose" (click)="openTable(1)">
           <mat-icon>keyboard_double_arrow_up</mat-icon>
         </button>
       }
@@ -38,7 +89,7 @@
       </button>
       @if (openAttraction) {
         <app-attractions></app-attractions>
-        <button class="open btn" (click)="openTable(2)">
+        <button class="open btn toClose" (click)="openTable(2)">
           <mat-icon>keyboard_double_arrow_up</mat-icon>
         </button>
       }
@@ -55,7 +106,7 @@
       </button>
       @if (openHostels) {
         <app-hostels></app-hostels>
-        <button class="open btn" (click)="openTable(3)">
+        <button class="open btn  toClose" (click)="openTable(3)">
           <mat-icon>keyboard_double_arrow_up</mat-icon>
         </button>
       }
@@ -72,28 +123,12 @@
         }
       </button>
       @if (openGuide) {
-        <button class="open btn" (click)="openTable(4)">
+        <button class="open btn  toClose" (click)="openTable(4)">
           <mat-icon>keyboard_double_arrow_up</mat-icon>
         </button>
       }
     </div>
-    <div class="btnOpen">
-      <div>
-        <button
-          class="open btn"
-          (click)="openTipsForum()"
-        >
-          <div>
-            <span>פורום חוויות והמלצות</span>
-            <span><mat-icon>speaker_notes</mat-icon></span>
-          </div>
-          
-        </button>
-       
-      </div>
-      
-    
-       
-    </div>
-  </div>
+  }
+<br/>
+  <!-- <div class="footer"> <P>Henny  0583268518</P></div> -->
 </div>

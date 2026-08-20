@@ -4,6 +4,7 @@ import { ResetPasswordComponent } from './components/login/reset-password/reset-
 import { WelcomePageComponent } from './components/login/welcome-page/welcome-page.component';
 import { TipsForumComponent } from './components/forum/tips-forum/tips-forum.component';
 import { HomeComponent } from './components/home/home.component';
+import { FevoriteComponent } from './components/fevorite/fevorite.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomePageComponent },
@@ -13,7 +14,8 @@ export const routes: Routes = [
     path: 'welcome',
     component: HomeComponent,
     children: [
-      { path: 'forum/community', component: TipsForumComponent },
+      { path: 'forum', component: TipsForumComponent },
+      { path: 'Favorites', component: FevoriteComponent },
       { path: 'Home_Page', component: HomePageComponent },
     ],
   },

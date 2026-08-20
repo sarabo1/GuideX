@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ServiceCoordinatorService } from './service-coordinator.service';
 import { InterfaceUsers } from '../Interfaces/interface-users';
+import { Srv_Guide } from './srv-guide.service';
+import { HttpClient } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +13,11 @@ export class ServiceUsersService {
   public mock_Users: InterfaceUsers[];
 
   //   constructor(public serviceCoordinator: ServiceCoordinatorService, public serviceGuide: ServiceUsersService) {
-  constructor(public serviceCoordinator: ServiceCoordinatorService) {
+  constructor(
+    public serviceCoordinator: ServiceCoordinatorService,
+    public srv_guide: Srv_Guide,
+    public  http: HttpClient
+  ) {
     this.mock_Users = [
       {
         UserId: 1,
@@ -96,7 +104,7 @@ export class ServiceUsersService {
         UserPassword: 'fourthPassword012!',
         FirstName: 'אסתר',
         LastName: 'ברוך',
-        IdNumber: '321654987',
+        IdNumber: '333191690',
         CityId: 104,
         PhoneNumber: '0509876540',
         Email: 'esther@gmail.com',
@@ -107,14 +115,36 @@ export class ServiceUsersService {
         FirstName: 'הני',
         LastName: 'בורודיאנסקי',
         IdNumber: '216666263',
-        CityId: 104,
+        CityId: 4,
         PhoneNumber: '0583268518',
         Email: 'hhh@gmail.com',
-      }
+      },
+    {
+      UserId:11,
+      UserPassword: 'sarabo1@gmail.com',
+        FirstName: '4',
+        LastName: 'בורודיאנסקי',
+        IdNumber: '040862047',
+        CityId: 1,
+        PhoneNumber: '0548468518',
+        Email: 'sarabo@gmail.com',
+
+    }
     ];
+
   }
   GetUsers(): any[] {
     return this.mock_Users;
+    
+  }
+  aaa(){
+    const base = 'https://localhost:7098/api/Login/hi'
+       this.http.get<any>(base).subscribe(    response => {
+            console.log('Response:', response);
+        },
+        error => {
+            console.error('Error:', error);
+        });
   }
   GetLastUserId() {
     const userIds = this.mock_Users.map((user) => user.UserId);
@@ -131,6 +161,8 @@ export class ServiceUsersService {
     PhoneNumber: string,
     Email: string,
   ) {
+    const findUser =this.mock_Users.find(a => a.UserId == UserId)?.UserId
+    if(!findUser){
     const newUser: InterfaceUsers = {
       UserId: UserId,
       UserPassword: UserPassword,
@@ -141,9 +173,39 @@ export class ServiceUsersService {
       PhoneNumber: PhoneNumber,
       Email: Email,
     };
+  
     this.mock_Users.push(newUser);
+  }else{
+    this.updateUserData(findUser,UserPassword,
+    FirstName,
+    LastName,
+    // IdNumber,
+    CityId,
+    PhoneNumber,
+    Email)
+    
   }
- 
+
+  }
+
+  updateUserData(userId : number, UserPassword: string,
+    FirstName: string,
+    LastName: string,
+    // IdNumber: string,
+    CityId: number,
+    PhoneNumber: string,
+    Email: string,){
+      const findUser = this.mock_Users.find(u => u.UserId==userId)
+      if(!findUser)return
+        findUser.CityId = CityId;
+      findUser.Email = Email;
+      findUser.FirstName = FirstName;
+      findUser.LastName = LastName;
+      findUser.PhoneNumber = PhoneNumber;
+      findUser.UserPassword = UserPassword
+
+  }
+
   getNameByUserId(userId: number): string {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user.FirstName : '';
@@ -152,5 +214,36 @@ export class ServiceUsersService {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user.Email : '';
   }
+  getUserById(userId: number) {
+    const user = this.mock_Users.find((u) => u.UserId === userId);
+    return user ? user : '';
+  }
+  searchByIdNumber(idNumber: string) {
+    var findByIdNumber =
+      this.mock_Users.find((u) => u.IdNumber === idNumber) || null;
+    if (findByIdNumber) {
+      if (this.srv_guide.searchByUserId(findByIdNumber.UserId)) {
+        return this.srv_guide.searchByUserId(findByIdNumber.UserId)
+      }
+      return null
+    }
+    return null;
+  }
 
+getUserByEmailIdNumberPhone(EmPhId: JSON) {
+    const baseUrl = 'https://localhost:7098/api/Login/resetFirst';
+    return this.http.post<any>(baseUrl, EmPhId).pipe(
+        tap(response => {
+            console.log('User found:', response);
+            if (!response) {
+                console.log("לא מצאתי משתמש");
+            }
+        }),
+        catchError(error => {
+            console.log("לא הצלחתי לבצע קריאת שרת");
+            // console.error('Error:', error);
+            return of(null); // מחזיר Observable עם ערך null במקרה של שגיאה
+        })
+    );
+  }
 }
