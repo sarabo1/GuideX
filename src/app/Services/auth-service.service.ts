@@ -7,17 +7,13 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private router: Router) {}
 
-  // שמירה ב-localStorage
-  login(email: string, userId : string) {
-    // login(Token : any) {
+     // שמירה ב-localStorage
+  login(email: string, userId: string, token: string) {
+    const userObj = { email: email, userId: userId, token: token }; // הוספת הטוקן לאובייקט
 
-       const userObj = { email: email, userId : userId  };
-            //  const userObj = { token :  Token };
-
-       localStorage.setItem('user_data', JSON.stringify(userObj));
-       console.log(JSON.stringify(userObj))
-      
-   }
+    localStorage.setItem('user_data', JSON.stringify(userObj));
+    console.log(JSON.stringify(userObj));
+  }
 
   // בדיקה האם יש משתמש מחובר
   isLoggedIn(): boolean {
@@ -34,20 +30,17 @@ export class AuthService {
  // שליפת הנתונים מה-localStorage
 getUserData() {
   try {
-        
-
-    const savedData = localStorage.getItem('user_data');
+  const savedData = localStorage.getItem('user_data');
     if (savedData) {
       const user = JSON.parse(savedData);
-      // console.log(user.email);
-      // console.log(user.userId);
-      
       return user;
     }
   } catch (error) {
     
-    console.error('Error parsing user data from localStorage:', error);
+    console.error('שגיאה בהמרת המשתמש מהLOCALSTORAGE:', error);
   }
   return null; // במקרה של שגיאה או אם אין נתונים
 }
+
 }
+

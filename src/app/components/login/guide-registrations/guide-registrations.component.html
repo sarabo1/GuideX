@@ -134,15 +134,15 @@
     <div class="dropdown">
       <div class="dropdown-content">
         <div class="checkbox-group">
-          @for (item of AreasOfExpertises; track item.id) {
+          @for (item of AreasOfExpertises; track item.regionId) {
             <label class="checkbox-label">
               <input
                 type="checkbox"
-                [value]="item.id"
+                [value]="item.regionId"
                 (change)="onCheckboxChange($event)"
-                [checked]="isChecked(item.id)"
+                [checked]="isChecked(item.regionId)"
               />
-              {{ item.name }}
+              {{ item.regionName }}
             </label>
           }
         </div>

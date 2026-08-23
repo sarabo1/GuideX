@@ -3,7 +3,7 @@
     <button class="filterToFind_not_showSearch" (click)="newAttraction()">הוספת אטרקציה</button>
   </div>
   <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
-    <!-- <div class="filterToFind"> -->
+    
     <div [class]="showSearch ? 'filterToFind' : 'filterToFind_not_showSearch'">
       <div>
         <div (click)="ToShowSearch()" class="label_search">
@@ -79,7 +79,6 @@
   @if (isLoading) {
     <h3>טוען נתונים...</h3>
   }
-  <!-- @if (dataSource.data.length == 0 || dataSource.data == null) { -->
   @else if (dataSource?.data?.length === 0) {
     <h3 class="notFoundInFilter">לא נמצאו אטרקציות המתאימות לחיפוש</h3>
     <div class="Reset_feeder">

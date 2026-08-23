@@ -10,7 +10,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ServiceAllService } from '../../../Services/service-all.service';
@@ -21,6 +20,7 @@ import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { Srv_Guide } from '../../../Services/srv-guide.service';
 import { ServiceUsersService } from '../../../Services/service-users.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { regionNamePipe } from "../../../Pipes/regionName";
 
 @Component({
   selector: 'app-guide-registrations',
@@ -32,27 +32,24 @@ import { MatDialogRef } from '@angular/material/dialog';
     CommonModule,
     MatFormFieldModule,
     MatSelectModule,
-  ],
+    regionNamePipe
+],
   templateUrl: './guide-registrations.component.html',
   styleUrl: './guide-registrations.component.scss',
   standalone: true,
 })
 export class GuideRegistrationsComponent {
-  // selectedAreasOfExpertises: number[] = [];
-  AreasOfExpertises: any;
+  AreasOfExpertises: any[] = [];
   cities: string[] = [];
   filteredCities: string[] = [];
   showPassword = false;
   CertificatesFiles: File[] = [];
   resumeFiles: File | null = null;
-
   LastGuideId: number;
   lastUserId: number;
-
   userIdExist: number = 0;
   guideIdExist: number = 0;
 
-  // guideDetails: any;
 
   constructor(
     private dialogRef: MatDialogRef<GuideRegistrationsComponent>,
@@ -62,7 +59,10 @@ export class GuideRegistrationsComponent {
     public srv_guides: Srv_Guide,
     public srv_user: ServiceUsersService,
   ) {
-    this.AreasOfExpertises = srv_all.getRegionsArray();
+    //this.AreasOfExpertises = srv_all.getRegionsArray();
+      this.srv_all.getRegionsArray().subscribe((areas) => {
+      this.AreasOfExpertises = areas;
+    });
     this.LastGuideId = srv_guides.GetLastGuideId() + 1;
     this.lastUserId = srv_user.GetLastUserId() + 1;
   }
@@ -281,38 +281,6 @@ export class GuideRegistrationsComponent {
     );
   }
 
-  // onCheckboxChange(event: Event) {
-  //   const checkbox = event.target as HTMLInputElement;
-
-  //   if (checkbox.checked) {
-  //     this.selectedAreasOfExpertises.push(Number(checkbox.value));
-  //   } else {
-  //     const index = this.selectedAreasOfExpertises.indexOf(Number(checkbox.value));
-
-  //     if (index > -1) {
-  //       this.selectedAreasOfExpertises.splice(index, 1);
-  //     }
-  //   }
-
-  //   this.formGuide.patchValue({
-  //     selectedAreasOfExpertises: [...this.selectedAreasOfExpertises],
-  //   });
-
-  //   this.formGuide.get('selectedAreasOfExpertises')?.markAsTouched();
-  //   this.formGuide.get('selectedAreasOfExpertises')?.updateValueAndValidity();
-
-  //   console.log(
-  //     'selectedAreasOfExpertises:',
-  //     this.formGuide.get('selectedAreasOfExpertises')?.value,
-  //   );
-
-  //   // עדכון ה-FormControl
-  //   this.formGuide.patchValue({
-  //     selectedAreasOfExpertises: [...this.selectedAreasOfExpertises],
-  //   });
-
-  //   console.log('selectedAreasOfExpertises:', this.selectedAreasOfExpertises); // לוג להראות את הערכים הנוכחיים
-  // }
 
   onCheckboxChange(event: Event) {
     const checkbox = event.target as HTMLInputElement;
@@ -331,9 +299,6 @@ export class GuideRegistrationsComponent {
     control?.updateValueAndValidity();
   }
 
-  // isChecked(code: number): boolean {
-  //   return this.selectedAreasOfExpertises.includes(code);
-  // }
 
   isChecked(num: number): boolean {
     const selected =
@@ -365,11 +330,7 @@ export class GuideRegistrationsComponent {
 
     this.guideIdExist = guideDetails.GuideId;
     this.userIdExist = guideDetails.UserId;
-    // this.formGuide.get('resumeFiles')?.setValue(guideDetails.resumeFiles);
     this.resumeFiles = guideDetails.resumeFiles;
-    // this.formGuide
-    //   .get('CertificatesFiles')
-    //   ?.setValue(guideDetails.CertificatesFiles);
     this.CertificatesFiles = guideDetails.CertificatesFiles;
     this.formGuide
       .get('ReligiousId')

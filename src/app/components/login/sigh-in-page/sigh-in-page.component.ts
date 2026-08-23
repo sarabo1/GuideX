@@ -19,6 +19,7 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordinator/checker-guide-or-coordinator.component';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../../Services/auth-service.service';
 
 @Component({
   selector: 'app-sigh-in-page',
@@ -41,6 +42,7 @@ export class SighInPageComponent {
     public users_service: ServiceUsersService,
     private router: Router,
     public http : HttpClient,
+    public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
@@ -68,49 +70,41 @@ export class SighInPageComponent {
     this.showPassword = !this.showPassword;
   }
 
-  //יש פה בעיה חייבים לסדר זאת!!!!!
-//   login() {
-// const aaa = 'https://localhost:7098/api/Login/login';
-//    const userCredentials = {
-//     Email: this.formLogIn.get('Email')?.value,
-//     UserPassword: this.formLogIn.get('UserPassword')?.value
-// };
-// const foundUser;
-// this.http.post<any>(aaa, userCredentials).subscribe(
-//     response => {
-//         console.log('User found:', response);
-//         this.foundUser = response;
-//     },
-//     error => {
-//         console.error('Error:', error);
-//     }
-// ); // const foundUser = this.users_service
-    
-//       // .GetUsers()
-//       // .find(
-//       //   (u) =>
-//       //     u.Email == this.formLogIn.get('Email')?.value &&
-//       //     u.UserPassword == this.formLogIn.get('UserPassword')?.value,
-//       // );
+// login() {
+//     const aaa = 'https://localhost:7098/api/Login/login';
+//     const userInput = {
+//         Email: this.formLogIn.get('Email')?.value,
+//         UserPassword: this.formLogIn.get('UserPassword')?.value
+//     };
 
-//     if (foundUser) {
-//       //הכנסת הנתונים בLOCAL SToreNGE
-//       const userObj = {
-//         email: foundUser.Email,
-//         userId: foundUser.UserId,
-//       };
-//       localStorage.setItem('user_data', JSON.stringify(userObj));
-//            this.userNotFount = false 
-//       this.formLogIn.reset();
-//       this.onClose(); 
-//       this.router.navigate(['welcome/Home_Page']);
-//     }
-//     else{
-//       this.userNotFount = true
-//     }
-
-//   }
-
+//     this.http.post<any>(aaa, userInput).subscribe(
+//         response => {
+//             console.log('User found:', response);
+            
+//             // בדוק אם נמצא משתמש
+//             if (response) { // כאן אתה בודק אם response קיים
+//                 // הכנסת הנתונים ב-Local Storage
+//                 const userObj = {
+//                   // response
+//                     email: response.email,
+//                     userId: response.userId,
+//                 };
+//                 console.log(userObj)
+//                 localStorage.setItem('user_data', JSON.stringify(userObj));
+//                 this.userNotFount = false; 
+//                 this.formLogIn.reset();
+//                 this.onClose(); 
+//                 this.router.navigate(['welcome/Home_Page']);
+//             } else {
+//                 this.userNotFount = true; // במקרה שהמשתמש לא נמצא
+//             }
+//         },
+//         error => {
+//             // console.error('Error:', error);
+//             this.userNotFount = true; // אם הייתה שגיאה בבקשה
+//         }
+//     );
+// }
 login() {
     const aaa = 'https://localhost:7098/api/Login/login';
     const userInput = {
@@ -123,30 +117,31 @@ login() {
             console.log('User found:', response);
             
             // בדוק אם נמצא משתמש
-            if (response) { // כאן אתה בודק אם response קיים
-                // הכנסת הנתונים ב-Local Storage
+            if (response) {
                 const userObj = {
-                  // response
                     email: response.email,
                     userId: response.userId,
+                    token: response.token // אם הטוקן הגיע כאן בתגובה
                 };
-                console.log(userObj)
+                console.log(userObj);
                 localStorage.setItem('user_data', JSON.stringify(userObj));
+                
+                // שמור גם ב-AuthService
+                this.authService.login(userObj.email, userObj.userId, userObj.token);
+                
                 this.userNotFount = false; 
                 this.formLogIn.reset();
                 this.onClose(); 
                 this.router.navigate(['welcome/Home_Page']);
             } else {
-                this.userNotFount = true; // במקרה שהמשתמש לא נמצא
+                this.userNotFount = true;
             }
         },
         error => {
-            // console.error('Error:', error);
-            this.userNotFount = true; // אם הייתה שגיאה בבקשה
+            this.userNotFount = true;
         }
     );
 }
-
 
   changeInput(){
     this.userNotFount = false 

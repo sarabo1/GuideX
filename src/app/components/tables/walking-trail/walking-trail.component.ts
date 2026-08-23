@@ -17,7 +17,7 @@ import { MatSortHeader, MatSortModule } from '@angular/material/sort';
 @Component({
   selector: 'app-walking-trail',
   standalone: true,
-  templateUrl: './walking-trail.component.html',
+  templateUrl:'./walking-trail.component.html',
   styleUrls: ['./walking-trail.component.scss'],
   imports: [
     MatPaginatorModule,
