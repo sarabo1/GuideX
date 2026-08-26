@@ -19,7 +19,7 @@ import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { AuthService } from '../../../Services/auth-service.service';
 import { AttractionTypeNamePipe } from "../../../Pipes/attractionTypeName";
 import { regionNamePipe } from "../../../Pipes/regionName";
-import { MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-attractions',
@@ -37,7 +37,7 @@ import { MatSortHeader, MatSortModule } from '@angular/material/sort';
     MatSortModule,
     MatSortHeader,
     CommonModule,
-],
+  ],
   templateUrl: './attractions.component.html',
   styleUrls: ['./attractions.component.scss'],
 })
@@ -59,16 +59,14 @@ export class AttractionsComponent implements AfterViewInit {
   areasofexpertisealData: int_Attractions[] = [];
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   userDetails: any;
-
   RegionsArrayData: any;
   AttractionsArrayData: any;
   showSearch: Boolean = false;
-
   selectedRegion: number = 0;
   selectedAttractionType: number = 0;
-
   // 🔥 FIX: key-based liked state (לא לפי ID בלבד)
   isLiked: { [key: string]: boolean } = {};
 
@@ -79,6 +77,7 @@ export class AttractionsComponent implements AfterViewInit {
     public dialog: MatDialog,
     public srv_favorite: srv_Favorite,
     public authService: AuthService,
+
   ) {
     paginatorIntl.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginatorIntl.nextPageLabel = 'העמוד הבא';
@@ -101,6 +100,7 @@ export class AttractionsComponent implements AfterViewInit {
     this.loadData();
     this.initLikedState();
   }
+
 
   //  יצירת KEY ייחודי
   getKey(type: string, id: number): string {
@@ -129,19 +129,12 @@ export class AttractionsComponent implements AfterViewInit {
   }
   loadData() {
     this.isLoading = true;
-
     this.Attractions.GetAttractions().subscribe({
       next: (rawData: int_Attractions[]) => {
         this.areasofexpertisealData = rawData;
-
         this.dataSource.data = rawData;
-
-       
-      
-
         this.isLoading = false;
       },
-
       error: (err) => {
         console.log(err);
         this.isLoading = false;
@@ -149,45 +142,35 @@ export class AttractionsComponent implements AfterViewInit {
     });
   }
 
-  // loadData() {
-  //   this.Attractions.GetAttractions().subscribe((rawData: int_Attractions[]) => {
-  //     this.areasofexpertisealData = rawData;
+  ngOnInit() {
+    //  this.dataSource = new MatTableDataSource(yourDataArray);
+  
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      console.log(item)
 
-  //     const ELEMENT_DATA: int_Attractions[] = rawData.map((attraction) => ({
-  //       AttractionsId: attraction.AttractionsId,
-  //       AttractionsName: attraction.AttractionsName,
-  //       RegionId: attraction.RegionId,
-  //       Address: attraction.Address,
-  //       AttractionsTypeId: attraction.AttractionsTypeId,
-  //       Description: attraction.Description,
-  //       ShomerShabat: attraction.ShomerShabat,
-  //       Phone: attraction.Phone,
-  //     }));
-
-  // this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-  // const rawData: int_Attractions[] = this.Attractions.GetAttractions();
-  // this.areasofexpertisealData = rawData;
-
-  // const ELEMENT_DATA: int_Attractions[] = rawData.map((attraction) => ({
-  //   AttractionsId: attraction.AttractionsId,
-  //   AttractionsName: attraction.AttractionsName,
-  //   RegionId: attraction.RegionId,
-  //   Address: attraction.Address,
-  //   AttractionsTypeId: attraction.AttractionsTypeId,
-  //   Description: attraction.Description,
-  //   ShomerShabat: attraction.ShomerShabat,
-  //   Phone: attraction.Phone,
-  // }));
-
-  // this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-  //   this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-  //   });
-  // }
+      switch (property) {
+        case 'AttractionsName':
+          return item.attractionsName; 
+        case 'Description': 
+          return item.description; 
+        case 'RegionId':
+          return item.reigionId; 
+        case 'AttractionsTypeId': 
+          return item.attractionTypeId; 
+        case 'ShomerShabat': 
+          return item.shomerShabat; 
+       default:
+          return (item as any)[property]; 
+      }
+    };
+  }
 
   ngAfterViewInit() {
-    if (this.paginator) {
+    if (this.paginator && this.dataSource) {
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;  // הוספת שורת קוד זו
     }
+
   }
 
   toggleFavorite(
@@ -213,21 +196,21 @@ export class AttractionsComponent implements AfterViewInit {
     });
   }
 
-  newAttraction(){
+  newAttraction() {
     const element: int_Attractions = {
-        attractionId: 0,
-        attractionsName: "",
-        reigionId: 0,
-        address: "",
-        attractionTypeId: 0,
-        description: "",
-        shomerShabat: 2,
-        phone: ""
+      attractionId: 0,
+      attractionsName: "",
+      reigionId: 0,
+      address: "",
+      attractionTypeId: 0,
+      description: "",
+      shomerShabat: 2,
+      phone: ""
     };
-  
-      this.dialog.open(ShowAttractionComponent, {
+
+    this.dialog.open(ShowAttractionComponent, {
       width: '850px',
-      data : element
+      data: element
     });
   }
 
@@ -247,78 +230,6 @@ export class AttractionsComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
-  // ngOnInit() {
-  //   this.dataSource = new MatTableDataSource(users);
-
-  //   // Define the filter predicate
-  //   this.dataSource.filterPredicate = (data: UserData, filter: string) => {
-  //     const dataStr = data.id.toString().toLowerCase() +
-  //                      data.name.toLowerCase() +
-  //                      data.progress.toString().toLowerCase() +
-  //                      data.fruit.toLowerCase();
-  //     return dataStr.indexOf(filter) !== -1; // return true if filter matches any field
-  //   };
-  // }
-
-  // filterTable() {
-  //   const anyWord = document.getElementById(
-  //     'searchControl',
-  //   ) as HTMLInputElement | null;
-  //   const AttractionTypeSelect = document.getElementById(
-  //     'AttractionTypeSelect',
-  //   ) as HTMLSelectElement | null;
-  //   const regionSelect = document.getElementById(
-  //     'regionSelect',
-  //   ) as HTMLSelectElement | null;
-
-  //   if (!regionSelect || !AttractionTypeSelect) return;
-
-  //   const AttractionTypeValue = Number(AttractionTypeSelect.value);
-  //   const searchText = anyWord?.value.trim() ?? '';
-
-  //   const regionValues = Array.from(regionSelect.selectedOptions).map(
-  //     (option) => Number(option.value),
-  //   );
-
-  //   let filteredData: int_Attractions[] = this.areasofexpertisealData;
-
-  //   if (searchText) {
-  //     filteredData = filteredData.filter((x) => {
-  //       const regionValue = this.srv_all.GetRegions(Number(x.RegionId));
-
-  //       const regionText = Array.isArray(regionValue)
-  //         ? regionValue.join(', ')
-  //         : String(regionValue);
-
-  //       return (
-  //         x.description.includes(searchText) ||
-  //         x.address.includes(searchText) ||
-  //         x.attractionName.includes(searchText) ||
-  //         this.Attractions.GetTypeByNumber(x.AttractionTypeId).includes(
-  //           searchText,
-  //         ) ||
-  //         x.Phone.includes(searchText) ||
-  //         regionText.includes(searchText)
-  //       );
-  //     });
-  //   }
-
-  //   // if (regionValues.length > 0 && !regionValues.includes(0)) {
-  //   //   filteredData = filteredData.filter((x) =>
-  //   //     regionValues.includes(x.RegionId),
-  //   //   );
-  //   // }
-
-  //   if (AttractionTypeValue !== 0) {
-  //     filteredData = filteredData.filter(
-  //       (x) => x.AttractionsTypeId === AttractionTypeValue,
-  //     );
-  //   }
-
-  //   this.dataSource.data = filteredData;
-  //   this.paginator?.firstPage();
-  // }
 
   filterTable() {
     const anyWord = document.getElementById(
@@ -374,23 +285,7 @@ export class AttractionsComponent implements AfterViewInit {
     this.paginator?.firstPage();
   }
 
-  // resetFilters() {
-  //   this.selectedRegion = 0;
-  //   this.selectedAttractionType = 0;
 
-  //   const regionSelect = document.getElementById(
-  //     'regionSelect',
-  //   ) as HTMLSelectElement;
-  //   const typeSelect = document.getElementById(
-  //     'AttractionTypeSelect',
-  //   ) as HTMLSelectElement;
-
-  //   if (regionSelect) regionSelect.value = '0';
-  //   if (typeSelect) typeSelect.value = '0';
-
-  //   this.dataSource.data = this.areasofexpertisealData;
-  //   this.paginator?.firstPage();
-  // }
 
   resetFilters() {
     this.selectedRegion = 0;
@@ -411,21 +306,5 @@ export class AttractionsComponent implements AfterViewInit {
     this.paginator?.firstPage();
   }
 
-  // getAttractionType(AttractionsTypeId: number) {
-  //   let attractionTypeName = null;
-  //   if (AttractionsTypeId !== undefined) {
-  //     this.Attractions.GetTypeByNumber(AttractionsTypeId).subscribe(
-  //       (data) => {
-  //         console.log('Attraction Type Name:', data);
-  //         attractionTypeName = data;
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching attraction type:', error);
-  //       },
-  //     );
-  //   } else {
-  //     console.error('AttractionsTypeId is undefined');
-  //   }
-  //   return attractionTypeName;
-  // }
+
 }

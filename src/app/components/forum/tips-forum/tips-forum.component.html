@@ -1,69 +1,69 @@
-
-
 <div>
   <div class="icon-background"></div>
   <div class="forumTips">
     <div class="titleOfForum">
-    <div class="forumHead">
-      @if(forumType==1){
-      <h3>
-        חזרתם ממסלול שווה? מצאתם מקום שלא כדאי לפספס? זה המקום לשתף ולהמליץ
-      </h3>
-      <h4>הגעת בזמן, יש המלצות שוות!</h4>
-      }
-      @if(forumType==2){
-      <h3>
-       פורום שאלות כלליות כאן תוכלו לקבל מידע כללי!
-      </h3>
-      <!-- <h4>הגעת בזמן, יש המלצות שוות!</h4> -->
-      }
-      @if(forumType==3){
-      <h3>
-פורום בטיחות      </h3>
-      <h4>הגעת בזמן, יש המלצות שוות!</h4>
-      }
-      <br/>
+      <div class="forumHead">
+        @if(forumType==1){
+        <h3>
+          חזרתם ממסלול שווה? מצאתם מקום שלא כדאי לפספס? זה המקום לשתף ולהמליץ
+        </h3>
+        <h4>הגעת בזמן, יש המלצות שוות!</h4>
+        }
+        @if(forumType==2){
+        <h3>
+          פורום שאלות כלליות כאן תוכלו לקבל מידע כללי!
+        </h3>
+        <!-- <h4>הגעת בזמן, יש המלצות שוות!</h4> -->
+        }
+        @if(forumType==3){
+        <h3>
+          פורום בטיחות </h3>
+        <h4>הגעת בזמן, יש המלצות שוות!</h4>
+        }
+        <br />
+      </div>
+      <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
+        כתיבת הודעה חדשה
+      </button>
     </div>
-    <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
-      כתיבת הודעה חדשה
-    </button>
-    </div>
-     <br/>
-      <br/>
+    <br />
+    <br />
     <div class="messages">
       @for (message of allTheMessage; track message) {
-        <div class="card">
-          @if (message.ParentForumId) {
-            <div class="card-header">
-              <mat-icon class="rotate-90">u_turn_right</mat-icon>
-              <i>{{ srv_forum.getTitleByForumId(message.ParentForumId) }}</i>
+      <div class="card">
+        @if (message.parentForumId) {
+        <div class="card-header">
+          <mat-icon class="rotate-90">u_turn_right</mat-icon>
+          <i>{{ forumMessageStore.getTitleByForumId(message.parentForumId) }}</i>
+        </div>
+        }
+
+        <div class="card-body">
+          <div class="titleAndHeader">
+            <h5>{{ message.title }}</h5>
+            <div class="toDateAndUserEmail">
+              <p>{{ maskEmail(srv_user.getEmailByUserId(message.userId)) }}</p>
+              <p class="marginDate">{{ message.date | hebrewDateConverter | async }}</p>
             </div>
-          }
+          </div>
 
-          <div class="card-body">
-            <div class="titleAndHeader">
-              <h5>{{ message.Title }}</h5>
-              <div class="toDateAndUserEmail">
-                <p>{{ maskEmail(srv_user.getEmailByUserId(message.UserId)) }}</p>
-                <p class="marginDate">{{ message.Date  | hebrewDateConverter | async }}</p>
-              </div>
-            </div>
-
-            <p>{{ message.Message }}</p>
-
-            <button class="btn aadMessage" (click)="openDialogAddMessage(message.ForumId, forumType)">
-              תגובה להודעה זו
-            </button>
+          <p>{{ message.message }}</p>
+          
+          <div class="newPostAndGarbage">
+          <button class="btn aadMessage" (click)="openDialogAddMessage(message.forumId, forumType)">
+            תגובה להודעה זו
+          </button>
+          <button class="garbage" (click)="DeletePost(message.forumId)">
+            <img src="garbage.png" class="garbage" /></button>
           </div>
         </div>
+      </div>
       }
     </div>
-    <div class="titleOfForum" >
-    <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
-      כתיבת הודעה חדשה
-    </button>
+    <div class="titleOfForum">
+      <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
+        כתיבת הודעה חדשה
+      </button>
     </div>
   </div>
 </div>
-
-

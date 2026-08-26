@@ -18,7 +18,7 @@ import { SrvCities } from '../../../Services/srv-cities.service';
 import { PhoneValidatorService } from '../../../Services/phone_validator';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { Srv_Guide } from '../../../Services/srv-guide.service';
-import { ServiceUsersService } from '../../../Services/service-users.service';
+import { ServiceUsersService } from '../../../Services/srv-users';
 import { MatDialogRef } from '@angular/material/dialog';
 import { regionNamePipe } from "../../../Pipes/regionName";
 

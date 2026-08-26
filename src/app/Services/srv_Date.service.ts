@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class SrvDateService {
   constructor(private http: HttpClient) {}
-
   getJewDate(yourDate: Date): Observable<any> {
+    console.log("הגעתי לפייפ של התאריך")
     const year = yourDate.getFullYear();
     const month = yourDate.getMonth();
     const day = yourDate.getDate()
@@ -28,16 +28,6 @@ export class SrvDateService {
   }
   
 
-  // GetDateHebrew(): Observable<any> {
-  //   const today = new Date();
-  //   const year = today.getFullYear();
-  //   const month = String(today.getMonth() + 1).padStart(2, '0');
-  //   const day = String(today.getDate()).padStart(2, '0');
-
-
-  //       const currentDate: string = new Date().toISOString().split('T')[0]; 
-  //   return this.httpClient.get<any>(`https://www.hebcal.com/converter?cfg=json&date=${currentDate}&g2h=1&strict=1`)
-  // }
 
 }
 

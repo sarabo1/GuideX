@@ -1,0 +1,9 @@
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.csproj.AssemblyReference.cache
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.AssemblyInfoInputs.cache
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.AssemblyInfo.cs
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.csproj.CoreCompileInputs.cache
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\הני בורודיאנסקי\Documents\henny GuideX\GuideX\GuideX\obj\Debug\net10.0\GuideX.sourcelink.json

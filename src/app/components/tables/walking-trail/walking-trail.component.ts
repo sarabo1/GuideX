@@ -12,7 +12,7 @@ import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { AuthService } from '../../../Services/auth-service.service';
 import { CommonModule } from '@angular/common';
 import { regionNamePipe } from '../../../Pipes/regionName';
-import { MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-walking-trail',
@@ -45,6 +45,7 @@ export class WalkingTrailComponent implements AfterViewInit {
   areasofexpertisealData: Int_WalkingTrail[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  @ViewChild(MatSort) sort!: MatSort;
 
   RegionsArrayData: any;
   showSearch: Boolean = false;
@@ -128,10 +129,31 @@ export class WalkingTrailComponent implements AfterViewInit {
 
     this.dataSource = new MatTableDataSource(ELEMENT_DATA);
   }
+ ngOnInit() {
+    //  this.dataSource = new MatTableDataSource(yourDataArray);
 
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'WalkingTrailName': // אזור
+          return item.WalkingTrailName; // מתאים לשם בעמודה
+        case 'Description': // שם מקום הלינה
+          return item.Description; // מתאים לשם בעמודה
+        case 'RegionId': // תיאור
+          return item.RegionId; // מתאים לשם בעמודה
+        case 'RouteDuration': // מספר מקומות
+          return item.RouteDuration; // מתאים לשם בעמודה
+        case 'Difficulty': // כשרות
+          return item.Difficulty; // מתאים לשם בעמודה
+       default:
+          return (item as any)[property]; // כל שאר המאפיינים
+      }
+    };
+  }
   ngAfterViewInit() {
     if (this.paginator && this.dataSource) {
       this.dataSource.paginator = this.paginator;
+             this.dataSource.sort = this.sort;  // הוסף זאת כאן
+
     }
   }
 

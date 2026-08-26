@@ -14,7 +14,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CdkObserveContent } from '@angular/cdk/observers';
-import { ServiceUsersService } from '../../../Services/service-users.service';
+import { ServiceUsersService } from '../../../Services/srv-users';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { CheckerGuideOrCoordinatorComponent } from '../checker-guide-or-coordinator/checker-guide-or-coordinator.component';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ServiceUsersService } from './service-users.service';
+import { ServiceUsersService } from './srv-users';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 

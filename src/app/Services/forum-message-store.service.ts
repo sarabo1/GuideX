@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { int_ForumMessage } from '../Interfaces/int_ForumMessage';
-import { SrvForumMessageService } from './srv-Forum-message.service';
+import { SrvForumMessageService } from './srv-forum-message.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,37 +10,46 @@ export class ForumMessageStoreService {
   private messagesSubject: BehaviorSubject<int_ForumMessage[]>;
 
   constructor(public srv_forum: SrvForumMessageService) {
-    const initialMessages: int_ForumMessage[] = this.srv_forum.getAllMessages();
-    this.messagesSubject = new BehaviorSubject<int_ForumMessage[]>(
-      initialMessages,
-    );
+    this.messagesSubject = new BehaviorSubject<int_ForumMessage[]>([]);
+    // Load all messages from server on init
+    this.srv_forum.getAllMessagesFromServer().subscribe({
+      next: (messages) => this.messagesSubject.next(messages),
+      error: (err) => console.error('Failed to load forum messages:', err),
+    });
   }
 
 
    addMessage(message: int_ForumMessage): void {
-    this.srv_forum.addMessage(message);
-    this.messagesSubject.next([...this.srv_forum.getAllMessages()]);
+    const current = this.messagesSubject.getValue();
+    this.messagesSubject.next([...current, message]);
   }
 
-  // פונקציה להוסיף הודעה
-  // addMessage(message: int_ForumMessage): void {
-  //   const currentMessages = this.messagesSubject.getValue();
-  //   this.messagesSubject.next([...currentMessages, message]);
-  // }
-
- 
-  // פונקציה לחכות למסרים
   getMessages(): Observable<int_ForumMessage[]> {
     return this.messagesSubject.asObservable();
   }
 
-  // פונקציה לקבל את ההודעות הנוכחיות
   getCurrentMessages(): int_ForumMessage[] {
     return this.messagesSubject.getValue();
   }
 
-  // פונקציה להגדיר הודעות חדשות (למשל, לאחר טעינה מהשרת)
   setMessages(messages: int_ForumMessage[]): void {
     this.messagesSubject.next(messages);
+  }
+
+  fetchMessagesByForumType(forumType: number): void {
+    this.srv_forum.getAllMessagesByForumType(forumType).subscribe({
+      next: (messages: int_ForumMessage[]) => {
+        this.messagesSubject.next(messages);
+      },
+
+      error: (err) => {
+        console.error('Error fetching forum messages:', err);
+        this.messagesSubject.next([]);
+      }
+    });
+  }
+
+  getTitleByForumId(forumId: number): string | undefined {
+    return this.messagesSubject.getValue().find(m => m.forumId === forumId)?.title;
   }
 }

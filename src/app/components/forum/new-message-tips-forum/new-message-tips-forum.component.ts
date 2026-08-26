@@ -11,7 +11,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { NoWhitespaceValidatorService } from '../../../Services/noWhitespace_validator';
 import { int_ForumMessage } from '../../../Interfaces/int_ForumMessage';
 import { ForumMessageStoreService } from '../../../Services/forum-message-store.service';
-import { SrvForumMessageService } from '../../../Services/srv-Forum-message.service';
+import { SrvForumMessageService } from '../../../Services/srv-forum-message.service';
 
 @Component({
   selector: 'app-new-message-tips-forum',
@@ -27,9 +27,9 @@ export class NewMessageTipsForumComponent {
   constructor(
     public dialogRef: MatDialogRef<NewMessageTipsForumComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { parent: number; typeForum: number },
-    public srv_forum: SrvForumMessageService,
     public authService: AuthService,
-    private forumMessageStore: ForumMessageStoreService,
+    private srv_forum: SrvForumMessageService,
+    public forumMessageStore: ForumMessageStoreService,
   ) {}
   ngOnInit() {
     this.userDetails = this.authService.getUserData();
@@ -59,25 +59,33 @@ export class NewMessageTipsForumComponent {
     console.log('user id: ' + userId);
     const parent = this.data.parent;
     const forumType = this.data.typeForum;
-
+console.log("התאריך: ")
     const date = new Date();
-    const forumId = this.srv_forum.GetLastForumId() + 1;
+    console.log("התאריך: ",date)
     const title = this.formNewMesagge.get('titleName')?.value?.trim() ?? '';
-    console.log(title);
     const message = this.formNewMesagge.get('message')?.value?.trim() ?? '';
     const newMessage: int_ForumMessage = {
-      ForumId: forumId,
-      UserId: userId,
-      Date: date,
-      ParentForumId: parent,
-      Title: title,
-      Message: message,
-      ForumTypeId: forumType,
+      forumId: 0,
+      userId: userId,
+      date: date,
+      parentForumId: parent,
+      title: title,
+      message: message,
+      forumTypeId: forumType,
     };
-    // this.srv_forum.addNewForumMsg(userId, parent, title, message, forumType);
 
-    this.forumMessageStore.addMessage(newMessage);
-    this.formNewMesagge.reset();
-    this.onClose();
+    this.srv_forum.postMessage(newMessage).subscribe({
+      next: (saved) => {
+        this.forumMessageStore.addMessage(saved);
+        this.formNewMesagge.reset();
+        this.onClose();
+        this.forumMessageStore.fetchMessagesByForumType(forumType);
+      },
+      error: (err) => console.error('Failed to post message:', err),
+    });
   }
 }
+function log() {
+  throw new Error('Function not implemented.');
+}
+

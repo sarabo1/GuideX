@@ -10,7 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ServiceUsersService } from '../../../Services/service-users.service';
+import { ServiceUsersService } from '../../../Services/srv-users';
 import { ServiceCoordinatorService } from '../../../Services/service-coordinator.service';
 import { SrvSchoolService } from '../../../Services/srv-school.service';
 import { IdIsraelValidator } from '../../../Services/israel_ID';

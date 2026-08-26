@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../Services/auth-service.service';
-import { ServiceUsersService } from '../../Services/service-users.service';
+import { ServiceUsersService } from '../../Services/srv-users';
 import { MatDialog } from '@angular/material/dialog';
 import { HebrewDateConverterPipe } from '../../Pipes/hebrewDateConverter ';
 import { CommonModule } from '@angular/common';

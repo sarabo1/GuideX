@@ -1,11 +1,11 @@
 export interface int_ForumMessage {
-ForumId :number,
-	UserId : number
-	Date: Date
-	ParentForumId :number
-	Title :string
-	Message :string
-	ForumTypeId :number
+forumId :number,
+	userId : number
+	date: Date
+	parentForumId :number
+	title :string
+	message :string
+	forumTypeId :number
 	// AboutGuideId int constraint FK_Forum_AboutGuideId 
 	// 					foreign key references Guides(GuideId),
 	// AboutWalkingTrailId int constraint FK_Forum_WalkingTrail 
