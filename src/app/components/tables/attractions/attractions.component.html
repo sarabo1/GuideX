@@ -27,7 +27,7 @@
                 >
                   <option disabled selected [value]="0">בחירת אזור</option>
                   @for (item of RegionsArrayData; track item) {
-                    <option [value]="item.regionId">
+                    <option [value]="item.reigionId">
                       {{ item.regionName }}
                     </option>
                   }
@@ -35,22 +35,7 @@
                   <option value="0">כל האזורים</option>
                 </select>
               </div>
-              <div class="filter-item">
-                <label for="AttractionTypeSelect">אטרקציה</label>
-                <select
-                  class="AttractionTypeSelect"
-                  id="AttractionTypeSelect"
-                  (change)="filterTable()"
-                >
-                  <option disabled selected value="0">בחירת אטרקציה</option>
-                  @for (item of AttractionsArrayData; track item.id) {
-                    <option [value]="item.id">
-                      {{ item.name }}
-                    </option>
-                  }
-                  <option value="0">כל האטרקציות</option>
-                </select>
-              </div>
+
               <div class="filter-item">
                 <div class="filter-item">
                   <label for="searchControl">חיפוש חופשי</label>
@@ -116,9 +101,9 @@
               />
             </button>
           </td>
+        </ng-container>
 
-          <!-- AttractionsName Column -->
-          <ng-container matColumnDef="AttractionsName">
+        <ng-container matColumnDef="AttractionsName">
           
             <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
               | שם האטרקציה
@@ -128,14 +113,11 @@
             </td>
           </ng-container>
 
-          <!-- Description Column -->
           <ng-container matColumnDef="Description">
             <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
               | תיאור
             </th>
             <td mat-cell *matCellDef="let element" class="contentTable">
-              <!-- {{ element.Description | slice: 0 : 30
-            }}{{ element.Description.length > 30 ? "..." : "." }} -->
               {{
                 element.description ? (element.description | slice: 0 : 30) : ""
               }}
@@ -143,31 +125,25 @@
             </td>
           </ng-container>
 
-          <!-- RegionId Column -->
-          <ng-container matColumnDef="RegionId">
+          <ng-container matColumnDef="reigionId">
             <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
               | אזור
             </th>
             <td mat-cell *matCellDef="let element" class="contentTable">
-              <!-- {{ srv_all.GetRegions(element.RegionId) }} -->
               {{ element.reigionId | regionName | async }}
             </td>
           </ng-container>
 
-          <!-- AttractionsTypeId Column -->
           <ng-container matColumnDef="AttractionsTypeId">
             <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
               | סוג אטרקציה
             </th>
             <td mat-cell *matCellDef="let element" class="contentTable">
-              <!-- {{ this.getAttractionType(element.AttractionsTypeId) }} -->
 
               {{ element.attractionTypeId | attractionTypeName | async }}
-              <!-- {{element.attractionTypeId}} -->
             </td>
           </ng-container>
 
-          <!-- ShomerShabat Column -->
           <ng-container matColumnDef="ShomerShabat">
             <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
               | שומר שבת
@@ -193,7 +169,6 @@
               </button>
             </td>
           </ng-container>
-        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -201,7 +176,7 @@
       </table>
 
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20, 30, 50]"
+        [pageSizeOptions]="[ 10, 20, 30, 50]"
         showFirstLastButtons
         aria-label="בחירת עמוד"
         class="paginator"

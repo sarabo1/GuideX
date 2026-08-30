@@ -39,7 +39,7 @@ export class HostelsComponent implements AfterViewInit {
     'like',
     'HostelsName',
     'Description',
-    'RegionId',
+    'reigionId',
     'NumberOfPlaces',
     'kashrutId',
     'DetailsButton',
@@ -91,8 +91,8 @@ export class HostelsComponent implements AfterViewInit {
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'RegionId': // אזור
-          return item.RegionId; // מתאים לשם בעמודה
+        case 'reigionId': // אזור
+          return item.reigionId; // מתאים לשם בעמודה
         case 'HostelsName': // שם מקום הלינה
           return item.HostelsName; // מתאים לשם בעמודה
         case 'Description': // תיאור
@@ -139,7 +139,7 @@ export class HostelsComponent implements AfterViewInit {
     const ELEMENT_DATA: Int_Hostels[] = rawData.map((hostel) => ({
       HostelsId: hostel.HostelsId,
       HostelsName: hostel.HostelsName,
-      RegionId: hostel.RegionId,
+      reigionId: hostel.reigionId,
       Address: hostel.Address,
       Description: hostel.Description,
       NumberOfPlaces: hostel.NumberOfPlaces,
@@ -231,13 +231,13 @@ export class HostelsComponent implements AfterViewInit {
           String(x.HostelsName).includes(searchText) ||
           String(x.NumberOfPlaces).includes(searchText) ||
           String(x.Phone).includes(searchText) ||
-          String(this.srv_all.GetRegions(x.RegionId)).includes(searchText) ||
+          String(this.srv_all.GetRegions(x.reigionId)).includes(searchText) ||
           String(this.srv_all.GetKashrutName(x.kashrutId)).includes(searchText),
       );
     }
 
     if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.RegionId === regionValue);
+      filteredData = filteredData.filter((x) => x.reigionId === regionValue);
     }
 
     if (kashrutValue !== 0) {

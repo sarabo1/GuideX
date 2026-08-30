@@ -20,6 +20,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { AttractionTypeNamePipe } from "../../../Pipes/attractionTypeName";
 import { regionNamePipe } from "../../../Pipes/regionName";
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-attractions',
@@ -46,7 +47,7 @@ export class AttractionsComponent implements AfterViewInit {
     'like',
     'AttractionsName',
     'Description',
-    'RegionId',
+    'reigionId',
     'AttractionsTypeId',
     'ShomerShabat',
     'DetailsButton',
@@ -64,6 +65,8 @@ export class AttractionsComponent implements AfterViewInit {
   userDetails: any;
   RegionsArrayData: any;
   AttractionsArrayData: any;
+  // map של סוגי אטרקציות (typeId -> שם) לשם מיון לפי טקסט
+  attractionTypesMap: { [id: number]: string } = {};
   showSearch: Boolean = false;
   selectedRegion: number = 0;
   selectedAttractionType: number = 0;
@@ -77,6 +80,8 @@ export class AttractionsComponent implements AfterViewInit {
     public dialog: MatDialog,
     public srv_favorite: srv_Favorite,
     public authService: AuthService,
+        public refreshService: RefreshService,
+
 
   ) {
     paginatorIntl.itemsPerPageLabel = 'מסלולים בעמוד:';
@@ -96,6 +101,15 @@ export class AttractionsComponent implements AfterViewInit {
       },
     );
     this.AttractionsArrayData = this.Attractions.getAttractionTypes();
+
+    // מילוי ה-map של סוגי האטרקציות לשם מיון לפי טקסט
+    this.Attractions.getAttractionTypes().subscribe((types: any) => {
+      (types || []).forEach((t: any) => {
+        const id = t.attractionTypeId ?? t.id;
+        const name = t.attractionTypeName ?? t.name;
+        if (id != null) this.attractionTypesMap[id] = name ?? String(id);
+      });
+    });
 
     this.loadData();
     this.initLikedState();
@@ -127,50 +141,74 @@ export class AttractionsComponent implements AfterViewInit {
       }
     });
   }
+
   loadData() {
     this.isLoading = true;
     this.Attractions.GetAttractions().subscribe({
       next: (rawData: int_Attractions[]) => {
+        console.log("נתוני אטרקציות גולמיים:", rawData);
         this.areasofexpertisealData = rawData;
         this.dataSource.data = rawData;
         this.isLoading = false;
+
+        // הטבלה נוצרת עכשיו (@else) — נחבר את ה-sort והפיגינציה
+        setTimeout(() => {
+          if (this.paginator) this.dataSource.paginator = this.paginator;
+          if (this.sort) this.dataSource.sort = this.sort;
+        });
       },
+
       error: (err) => {
         console.log(err);
         this.isLoading = false;
       },
     });
   }
-
-  ngOnInit() {
-    //  this.dataSource = new MatTableDataSource(yourDataArray);
   
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      console.log(item)
+  ngOnInit() {
+ //טעינה מחדש לאחר שינוי בנתוני הטבלה
+    this.refreshService.refresh$.subscribe(() => {
+      this.loadData(); // טען מחדש את הנתונים
+    });
+ 
 
+    this.dataSource.sortingDataAccessor = (item: any, property: string) => {
       switch (property) {
         case 'AttractionsName':
-          return item.attractionsName; 
-        case 'Description': 
-          return item.description; 
-        case 'RegionId':
-          return item.reigionId; 
-        case 'AttractionsTypeId': 
-          return item.attractionTypeId; 
-        case 'ShomerShabat': 
-          return item.shomerShabat; 
-       default:
-          return (item as any)[property]; 
+          return item.attractionsName;
+        case 'Description':
+          return item.description;
+        case 'reigionId':
+          // מיון לפי שם האזור (טקסט) ולא לפי ה-ID
+          return this.srv_all.GetRegions(Number(item.reigionId));
+        case 'AttractionsTypeId':
+          // מיון לפי שם סוג האטרקציה (טקסט) ולא לפי ה-ID
+          return (
+            this.attractionTypesMap[Number(item.attractionTypeId)] ??
+            String(item.attractionTypeId)
+          );
+        case 'ShomerShabat':
+          // מיון לפי הטקסט שמוצג בעמודה
+          return item.shomerShabat === 2
+            ? 'שומר שבת'
+            : item.shomerShabat === 1
+              ? 'לא ידוע'
+              : 'לא שומר שבת';
+        default:
+          return item[property];
       }
     };
+
   }
 
-  ngAfterViewInit() {
-    if (this.paginator && this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;  // הוספת שורת קוד זו
-    }
+  
 
+  ngAfterViewInit() {
+    // חיבור גיבוי של ה-sort והפיגינציה כשה-view מוכן
+    setTimeout(() => {
+      if (this.paginator) this.dataSource.paginator = this.paginator;
+      if (this.sort) this.dataSource.sort = this.sort;
+    });
   }
 
   toggleFavorite(

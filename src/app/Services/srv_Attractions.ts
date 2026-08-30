@@ -145,6 +145,8 @@ export class srv_Attractions {
           return of(); // מחזיר Observable ריק במקרה של שגיאה
         }),
       );
+
+      
   }
     AddNewAttraction(attraction: int_Attractions): Observable<void> {
     console.log(attraction);

@@ -70,41 +70,7 @@ export class SighInPageComponent {
     this.showPassword = !this.showPassword;
   }
 
-// login() {
-//     const aaa = 'https://localhost:7098/api/Login/login';
-//     const userInput = {
-//         Email: this.formLogIn.get('Email')?.value,
-//         UserPassword: this.formLogIn.get('UserPassword')?.value
-//     };
 
-//     this.http.post<any>(aaa, userInput).subscribe(
-//         response => {
-//             console.log('User found:', response);
-            
-//             // בדוק אם נמצא משתמש
-//             if (response) { // כאן אתה בודק אם response קיים
-//                 // הכנסת הנתונים ב-Local Storage
-//                 const userObj = {
-//                   // response
-//                     email: response.email,
-//                     userId: response.userId,
-//                 };
-//                 console.log(userObj)
-//                 localStorage.setItem('user_data', JSON.stringify(userObj));
-//                 this.userNotFount = false; 
-//                 this.formLogIn.reset();
-//                 this.onClose(); 
-//                 this.router.navigate(['welcome/Home_Page']);
-//             } else {
-//                 this.userNotFount = true; // במקרה שהמשתמש לא נמצא
-//             }
-//         },
-//         error => {
-//             // console.error('Error:', error);
-//             this.userNotFount = true; // אם הייתה שגיאה בבקשה
-//         }
-//     );
-// }
 login() {
     const aaa = 'https://localhost:7098/api/Login/login';
     const userInput = {
@@ -119,15 +85,15 @@ login() {
             // בדוק אם נמצא משתמש
             if (response) {
                 const userObj = {
-                    email: response.email,
-                    userId: response.userId,
+                    // email: response.email,
+                    // userId: response.userId,
                     token: response.token // אם הטוקן הגיע כאן בתגובה
                 };
-                console.log(userObj);
+                console.log("הני: ", userObj);
                 localStorage.setItem('user_data', JSON.stringify(userObj));
                 
                 // שמור גם ב-AuthService
-                this.authService.login(userObj.email, userObj.userId, userObj.token);
+                this.authService.login(userObj.token);
                 
                 this.userNotFount = false; 
                 this.formLogIn.reset();

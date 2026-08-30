@@ -34,7 +34,11 @@
         @if (message.parentForumId) {
         <div class="card-header">
           <mat-icon class="rotate-90">u_turn_right</mat-icon>
+         @if(forumMessageStore.getTitleByForumId(message.parentForumId)){
           <i>{{ forumMessageStore.getTitleByForumId(message.parentForumId) }}</i>
+         } @else{
+          ______________________________________________________________________________ 
+          }
         </div>
         }
 

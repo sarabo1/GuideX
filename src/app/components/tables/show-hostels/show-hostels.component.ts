@@ -110,8 +110,8 @@ export class ShowHostelsComponent {
     this.data.NumberOfPlaces = Number(
       (document.getElementById('NumberOfPlaces') as HTMLInputElement).value,
     );
-    this.data.RegionId = Number(
-      (document.getElementById('RegionId') as HTMLInputElement).value,
+    this.data.reigionId = Number(
+      (document.getElementById('reigionId') as HTMLInputElement).value,
     );
     this.data.kashrutId = Number(
       (document.getElementById('kashrutId') as HTMLInputElement).value,

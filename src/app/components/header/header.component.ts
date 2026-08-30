@@ -49,9 +49,8 @@ export class HeaderComponent {
     if (userD) {
       userData = JSON.parse(userD);
     }
-    // אם אין נתוני משתמש, השם יישאר כברירת מחדל
     if (userData && userData.userId) {
-      this.username = this.srv_user.getNameByUserId(userData.userId);
+      this.username = userData.firstName
     }
   }
 

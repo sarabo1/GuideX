@@ -33,36 +33,7 @@
                 
                 <!-- עFBכעה? -->
               </div>
-              <div class="filter-item">
-                <label for="lengthSelect">אורך (בק"מ) </label>
-                <select
-                  class="lengthSelect"
-                  id="lengthSelect"
-                  (change)="filterTable()"
-                >
-                  <option disabled selected value="0">בחירת אורך מסלול</option>
-                  <option value="1">עד 2 ק''מ</option>
-                  <option value="2">2-4 ק''מ</option>
-                  <option value="3">4 ק''מ ומעלה</option>
-                  <option value="0">כל האורכים</option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label for="difficultySelect">רמת קושי </label>
-                <select
-                  class="difficultySelect"
-                  id="difficultySelect"
-                  (change)="filterTable()"
-                >
-                  <option disabled selected value="0">בחירת רמת קושי</option>
-                  <option value="1">רמת קושי 1</option>
-                  <option value="2">רמת קושי 2</option>
-                  <option value="3">רמת קושי 3</option>
-                  <option value="4">רמת קושי 4</option>
-                  <option value="0">כל רמות הקושי</option>
-                </select>
-              </div>
+              
               <div class="filter-item">
                 <label for="searchControl">חיפוש חופשי</label>
                 <input
@@ -148,13 +119,13 @@
           </td>
         </ng-container>
 
-        <!-- RegionId Column -->
-        <ng-container matColumnDef="RegionId">
+        <!-- reigionId Column -->
+        <ng-container matColumnDef="reigionId">
           <th mat-header-cell *matHeaderCellDef class="HeaderOnTable" mat-sort-header>
             | אזור המסלול
           </th>
           <td mat-cell *matCellDef="let element" class="contentTable">
-            {{ element.RegionId | regionName | async }}
+            {{ element.reigionId | regionName | async }}
           </td>
         </ng-container>
 

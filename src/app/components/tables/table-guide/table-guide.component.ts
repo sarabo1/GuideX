@@ -15,7 +15,7 @@ export class TableGuideComponent {
   displayedColumns: string[] = [
     'HostelsName',
     'Description',
-    'RegionId',
+    'reigionId',
     'NumberOfPlaces',
     'kashrutId',
   ];
@@ -39,7 +39,7 @@ export class TableGuideComponent {
     // const ELEMENT_DATA: Int_Guide[] = rawData.map((Guides, index) => ({
     //   HostelsId: Guides.HostelsId,
     //   HostelsName: Guides.HostelsName,
-    //   RegionId: Guides.RegionId,
+    //   reigionId: Guides.reigionId,
     //   Address: Guides.Address,
     //   Description: Guides.Description,
     //   NumberOfPlaces: Guides.NumberOfPlaces,

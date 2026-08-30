@@ -121,8 +121,8 @@ export class ShowWalkingTrailComponent {
     this.data.Description = (
       document.getElementById('Description') as HTMLInputElement
     ).value;
-    this.data.RegionId = Number(
-      (document.getElementById('RegionId') as HTMLInputElement).value,
+    this.data.reigionId = Number(
+      (document.getElementById('reigionId') as HTMLInputElement).value,
     );
     this.data.Difficulty = Number(
       (document.getElementById('Difficulty') as HTMLInputElement).value,

@@ -1,165 +1,4 @@
-<!-- <div class="show">
-  <div class="background"></div>
-  <div class="content">
-    <div class="likeAndEdit">
-    <button
-      [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-      (click)="canEdit()"
-    >
-      <mat-icon class="close-icon">edit</mat-icon>
-    </button>
-     <button
-      class="likeButton"
-      (click)="toggleFavorite()"
-    >
 
-      <img
-        class="img_like"
-        [src]="
-          isLiked
-            ? 'heart_full_blue.png'
-            : 'heart_blue.png'
-        "
-      />
-
-    </button>
-    </div>
-
-    <h2>
-      @if (!userCanEdit) {
-        <strong>{{ data.attractionsName }}</strong>
-      } @else {
-        <input
-          class="inputToEdit"
-          id="AttractionsName"
-          type="text"
-          value="{{ data.attractionsName }}"
-        />
-      }
-    </h2>
-    @if (!userCanEdit) {
-      <h5>
-        <strong>{{ data.description }}</strong>
-      </h5>
-    } @else {
-      <h6>
-        <textarea
-          cols="{{ data.description.length / 2 }}"
-          id="Description"
-          class="inputToEdit"
-          type="text"
-          value="{{ data.description }}"
-        >
-        </textarea>
-      </h6>
-    }
-    <p>
-      <strong>אזור:</strong>
-      @if (!userCanEdit) {
-        <!-- {{ srv_all.GetRegions(data.RegionId) }} -->
-<!-- {{data.reigionId}} -->
-<!-- } @else {
-        <select class="inputToEdit" id="RegionId">
-          @for (item of RegionsArrayData; track item.id) {
-            @if (data.RegionId == item.id) {
-              <option [value]="item.id" selected>
-                {{ item.name }}
-              </option>
-            } @else {
-              <option [value]="item.id">
-                {{ item.name }}
-              </option>
-            }
-          }
-        </select>
-      }
-    </p>
-    <p>
-      <strong>סוג אטרקציה:</strong>
-      @if (!userCanEdit) {
-        {{ Attractions.GetTypeByNumber(data.AttractionsTypeId) }}
-      } @else {
-        <select class="inputToEdit" id="AttractionsTypeId">
-          @for (item of AttractionsArrayData; track item.id) {
-            @if (data.AttractionsTypeId == item.id) {
-              <option [value]="item.id" selected>
-                {{ item.name }}
-              </option>
-            } @else {
-              <option [value]="item.id">
-                {{ item.name }}
-              </option>
-            }
-          }
-        </select>
-      } -->
-<!-- </p>
-    @if (userCanEdit) {
-      <p><strong>שמירת השבת: </strong></p>
-
-      <select (change)="changeShomerShabat()" class="inputToEdit" id="ShomerShabat">
-        
-          <option [value]="0" [selected]="data.ShomerShabat == 0">אינו שומר שבת</option>
-          <option [value]="1" [selected]="data.ShomerShabat == 1">לא ידוע</option>
-          <option [value]="2" [selected]="data.ShomerShabat == 2">שומר שבת</option>
-        
-   
-      </select>
-    }
-
-    @if (data.ShomerShabat == 0) {
-        @if(!userCanEdit){
-      <h3>המקום אינו שומר שבת</h3>}
-    } @else {
-      @if (data.ShomerShabat == 1) {
-        @if(!userCanEdit){
-        <h5><strong>יש לברר בנוגע לשמירת השבת של המקום</strong></h5>}
-      }
-
-      <P
-        ><strong>כתובת:</strong>
-        @if (!userCanEdit) {
-          {{ data.Address }}
-        } @else {
-          <input
-            class="inputToEdit"
-            id="Address"
-            type="text"
-            value="{{ data.Address }}"
-          />
-        }
-      </P>
-      <P -->
-<!-- ><strong>טלפון:</strong>
-        @if (!userCanEdit) {
-          {{ data.Phone }}
-        } @else {
-          <input
-            class="inputToEdit"
-            id="Phone"
-            type="text"
-            value="{{ data.Phone }}"
-          /> -->
-<!-- }
-      </P>
-    }
- <img [src]="imageUrl" alt="תיאור התמונה" /> -->
-<!-- <br />
-    @if (userCanEdit) {
-      <button (click)="saveEdit()" class="close-btn">
-        <mat-icon class="close-icon">task_alt</mat-icon>
-      </button>
-    }
-
-    <button (click)="onClose()" class="close-btn">
-      <mat-icon class="close-icon">close</mat-icon>
-    </button>
-
-     -->
-<!-- </div>
-  <div class="card flex justify-center gap-2">
-  </div>
-</div> -->
 <div class="show">
   <div class="background"></div>
 
@@ -210,7 +49,7 @@
           class="inputToEdit"
           id="AttractionsName"
           type="text"
-          [value]="data.attractionsName"
+          [(ngModel)]="data.attractionsName"
           [placeholder]="isAddNew ? 'שם האטרקציה' : ''"
         />
       }
@@ -225,9 +64,9 @@
       <textarea
         id="Description"
         class="inputToEdit"
+        [(ngModel)]="data.description"
         [placeholder]="isAddNew ? 'תאור האטרקציה' : ''"
-        >{{ data.description }}</textarea
-      >
+      ></textarea>
     }
 
     <!-- אזור -->
@@ -240,14 +79,11 @@
           {{ data.reigionId | regionName | async }}
         }
       } @else {
-        <select class="inputToEdit" id="RegionId">
-          <option disabled [selected]="data.reigionId == 0">בחירת אזור</option>
-          @for (item of RegionsArrayData; track item.regionId) {
-            <option
-              [value]="item.regionId"
-              [selected]="item.regionId == data.reigionId"
-            >
-              <!-- {{ item | json}} -->
+        <select class="inputToEdit" id="reigionId" [(ngModel)]="data.reigionId">
+          <option [ngValue]="0">בחירת אזור</option>
+          @for (item of RegionsArrayData; track item.reigionId) {
+            <!-- ngValue שומר על סוג המספר כדי שאזור לא יימחק/יהפוך ל-0 -->
+            <option [ngValue]="item.reigionId">
               {{ item.regionName }}
             </option>
           }
@@ -264,16 +100,16 @@
           {{ data.attractionTypeId | attractionTypeName | async }}
         }
       } @else {
-        <select class="inputToEdit" id="AttractionsTypeId">
-          <option disabled [selected]="data.attractionTypeId == 0">
-            בחירת סוג אטרקציה
-          </option>
+        <select
+          class="inputToEdit"
+          id="AttractionsTypeId"
+          [(ngModel)]="data.attractionTypeId"
+        >
+          <option [ngValue]="0">בחירת סוג אטרקציה</option>
 
           @for (item of AttractionsArrayData; track item) {
-            <option
-              [value]="item.attractionTypeId"
-              [selected]="item.attractionTypeId == data.attractionTypeId"
-            >
+            <!-- ngValue שומר על סוג המספר כדי שסוג האטרקציה לא יימחק/יהפוך ל-0 -->
+            <option [ngValue]="item.attractionTypeId">
               <!-- {{ item | json}} -->
               {{ item.attractionTypeName }}
             </option>
@@ -291,17 +127,14 @@
       <select
         id="ShomerShabat"
         class="inputToEdit"
-        (change)="changeShomerShabat()"
+        [(ngModel)]="data.shomerShabat"
+        (ngModelChange)="changeShomerShabat()"
       >
-        <option [value]="0" [selected]="data.shomerShabat == 0">
-          אינו שומר שבת
-        </option>
+        <option [ngValue]="0">אינו שומר שבת</option>
 
-        <option [value]="1" [selected]="data.shomerShabat == 1">לא ידוע</option>
+        <option [ngValue]="1">לא ידוע</option>
 
-        <option [value]="2" [selected]="data.shomerShabat == 2">
-          שומר שבת
-        </option>
+        <option [ngValue]="2">שומר שבת</option>
       </select>
     }
 
@@ -329,7 +162,7 @@
             class="inputToEdit"
             id="Address"
             type="text"
-            [value]="data.address"
+            [(ngModel)]="data.address"
           />
         }
       </p>
@@ -345,7 +178,7 @@
             class="inputToEdit"
             id="Phone"
             type="text"
-            [value]="data.phone"
+            [(ngModel)]="data.phone"
           />
         }
       </p>

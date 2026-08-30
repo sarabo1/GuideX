@@ -5,6 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
@@ -14,10 +15,11 @@ import { srv_Attractions } from '../../../Services/srv_Attractions';
 import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { AttractionTypeNamePipe } from '../../../Pipes/attractionTypeName';
 import { regionNamePipe } from '../../../Pipes/regionName';
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-show-attraction',
-  imports: [CommonModule, MatIcon, AttractionTypeNamePipe, regionNamePipe],
+  imports: [CommonModule, MatIcon, AttractionTypeNamePipe, regionNamePipe, FormsModule],
   templateUrl: './show-attraction.component.html',
   styleUrl: './show-attraction.component.scss',
   standalone: true,
@@ -43,9 +45,14 @@ export class ShowAttractionComponent {
     public srv_all: ServiceAllService,
     public Attractions: srv_Attractions,
     public srv_favorite: srv_Favorite,
+        public refreshService: RefreshService,
+
   ) {
-    // this.imageUrl = data.ImageUrl; // הכנס את הנתיב לתמונה שלך
-    this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
+    // האיברים מאותחלים כמערכים כדי שה-@for בטמפלייט יפעל בצורה בטוחה
+    this.RegionsArrayData = [];
+    this.AttractionsArrayData = [];
+
+    this.srv_all.getRegionsArray().subscribe(
       (data) => {
         this.RegionsArrayData = data;
       },
@@ -53,7 +60,7 @@ export class ShowAttractionComponent {
         console.error('בעיה בהבאת האזורים', error);
       },
     );
-    this.AttractionsArrayData = this.Attractions.getAttractionTypes().subscribe(
+    this.Attractions.getAttractionTypes().subscribe(
       (data) => {
         this.AttractionsArrayData = data;
       },
@@ -126,7 +133,8 @@ export class ShowAttractionComponent {
         next: () => {
           console.log('מחיקת מסלול');
           this.onClose();
-                this.openDialogRegistrations('האטרקציה נמחקה בהצלחה');
+          this.openDialogRegistrations('האטרקציה נמחקה בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
 
         },
         error: (err) => {
@@ -134,6 +142,7 @@ export class ShowAttractionComponent {
           // כאן תוכל להציג הודעה למשתמש על השגיאה
         },
       });
+
   }
 
   onClose(): void {
@@ -144,68 +153,21 @@ export class ShowAttractionComponent {
   }
 
   changeShomerShabat() {
-    this.data.shomerShabat = Number(
-      (document.getElementById('ShomerShabat') as HTMLInputElement).value,
-    );
+    // הערך מתעדכן אוטומטית מה-[(ngModel)] של ה-select; נרמול למספר בלבד
+    this.data.shomerShabat = Number(this.data.shomerShabat);
   }
-  // saveEdit() {
-  //   this.data.AttractionsName = (
-  //     document.getElementById('AttractionsName') as HTMLInputElement
-  //   ).value;
-  //   this.data.Description = (
-  //     document.getElementById('Description') as HTMLInputElement
-  //   ).value;
-  //   this.data.Address = (
-  //     document.getElementById('Address') as HTMLInputElement
-  //   ).value;
-  //   this.data.Phone = (
-  //     document.getElementById('Phone') as HTMLInputElement
-  //   ).value;
-  //   this.data.AttractionsTypeId = Number(
-  //     (document.getElementById('AttractionsTypeId') as HTMLInputElement).value,
-  //   );
-  //   this.data.RegionId =
-  //     (document.getElementById('RegionId') as HTMLInputElement).value,
 
-  //   // this.data.ImageUrl =
-  //   //   (document.getElementById('ImageUrl') as HTMLInputElement).value,
-
-  //   this.Attractions.UpdateAttraction(this.data);
-
-  //   console.log('נתונים נשמרו', this.data);
-
-  //   this.userCanEdit = false;
-  //   this.openDialogRegistrations('האטרקציה');
-  // }
   saveEdit() {
-    this.data.attractionId = this.data.attractionId;
-    this.data.attractionsName = (
-      document.getElementById('AttractionsName') as HTMLInputElement
-    ).value;
-
-    this.data.description = (
-      document.getElementById('Description') as HTMLInputElement
-    ).value;
-
-    this.data.address = (
-      document.getElementById('Address') as HTMLInputElement
-    ).value;
-
-    this.data.phone = (
-      document.getElementById('Phone') as HTMLInputElement
-    ).value;
-
-    this.data.attractionTypeId = Number(
-      (document.getElementById('AttractionsTypeId') as HTMLInputElement).value,
-    );
-
-    this.data.reigionId = Number(
-      (document.getElementById('RegionId') as HTMLInputElement).value,
-    );
-
-    this.data.shomerShabat = Number(
-      (document.getElementById('ShomerShabat') as HTMLInputElement).value,
-    );
+    // הערכים נקראים ישירות מ- this.data דרך [(ngModel)] בטמפלייט,
+    // כך שכל דיאלוג עובד עם אובייקט הנתונים שלו ולא עם getElementById גלובלי.
+    // נרמול לשם ערכים בטוחים:
+    this.data.attractionsName = (this.data.attractionsName ?? '').trim();
+    this.data.description = (this.data.description ?? '').trim();
+    this.data.address = (this.data.address ?? '').trim();
+    this.data.phone = (this.data.phone ?? '').trim();
+    this.data.attractionTypeId = Number(this.data.attractionTypeId) || 0;
+    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.shomerShabat = Number(this.data.shomerShabat);
 
     console.log('data: ', this.data);
 
@@ -221,34 +183,33 @@ export class ShowAttractionComponent {
         next: () => {
           console.log('הוספת מסלול');
           this.onClose();
-                this.openDialogRegistrations('האטרקציה נוספה בהצלחה');
+          this.openDialogRegistrations('האטרקציה נוספה בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
 
         },
         error: (err) => {
           console.error('שגיאה בהוספת האטרקציה:', err);
-          // כאן תוכל להציג הודעה למשתמש על השגיאה
         },
       });
     } else {
       console.log(this.isAddNew, 'עדכון');
 
-      // this.Attractions.UpdateAttraction(this.data);
       this.Attractions.UpdateAttraction(this.data).subscribe({
         next: () => {
           console.log('עודכן בהצלחה');
           this.userCanEdit = false;
           this.openDialogRegistrations('האטרקציה עודכנה בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהעדכון הסתיים
+
         },
         error: (err) => {
           console.error('שגיאה בעדכון:', err);
-          // כאן תוכל להציג הודעה למשתמש על השגיאה
         },
       });
-      // console.log('נתונים נשמרו', this.data);
 
       this.userCanEdit = false;
     }
-    
+
   }
   openDialogRegistrations(element: string) {
     const dialogRef = this.dialog.open(SucceededAlertComponent, {

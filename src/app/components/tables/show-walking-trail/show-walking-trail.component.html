@@ -47,13 +47,13 @@
     <p>
       <strong>אזור:</strong>
       @if (!userCanEdit) {
-        {{ data.RegionId | regionName |async }}
+        {{ data.reigionId | regionName |async }}
       } @else {
-        <select class="inputToEdit" id="RegionId">
+        <select class="inputToEdit" id="reigionId">
           @for (item of RegionsArrayData; track item) {
             <option
-              [value]="item.regionId"
-              [selected]="item.regionId == data.RegionId"
+              [value]="item.reigionId"
+              [selected]="item.reigionId == data.reigionId"
             >
               <!-- {{ item | json}} -->
               {{ item.regionName }}

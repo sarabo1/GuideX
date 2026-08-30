@@ -1,7 +1,7 @@
 export interface int_Attractions {
   // AttractionsId: number;
   // AttractionsName: string;
-  // RegionId: string;
+  // reigionId: string;
   // Address: string;
   // AttractionsTypeId: number;
   // Description: string;

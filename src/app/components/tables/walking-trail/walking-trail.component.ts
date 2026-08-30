@@ -35,7 +35,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     'like',
     'WalkingTrailName',
     'Description',
-    'RegionId',
+    'reigionId',
     'RouteDuration',
     'Difficulty',
     'DetailsButton',
@@ -113,7 +113,7 @@ export class WalkingTrailComponent implements AfterViewInit {
       WalkingTrailId: trail.WalkingTrailId,
       WalkingTrailName: trail.WalkingTrailName,
       Description: trail.Description,
-      RegionId: trail.RegionId,
+      reigionId: trail.reigionId,
       Directions: trail.Directions,
       LengthInKm: trail.LengthInKm,
       RouteDuration: trail.RouteDuration,
@@ -138,8 +138,8 @@ export class WalkingTrailComponent implements AfterViewInit {
           return item.WalkingTrailName; // מתאים לשם בעמודה
         case 'Description': // שם מקום הלינה
           return item.Description; // מתאים לשם בעמודה
-        case 'RegionId': // תיאור
-          return item.RegionId; // מתאים לשם בעמודה
+        case 'reigionId': // תיאור
+          return item.reigionId; // מתאים לשם בעמודה
         case 'RouteDuration': // מספר מקומות
           return item.RouteDuration; // מתאים לשם בעמודה
         case 'Difficulty': // כשרות
@@ -216,12 +216,12 @@ export class WalkingTrailComponent implements AfterViewInit {
           String(x.LengthInKm).includes(searchText) ||
           String(x.RouteDuration).includes(searchText) ||
           String(x.WalkingTrailName).includes(searchText) ||
-          String(this.srv_all.GetRegions(x.RegionId)).includes(searchText),
+          String(this.srv_all.GetRegions(x.reigionId)).includes(searchText),
       );
     }
 
     if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.RegionId === regionValue);
+      filteredData = filteredData.filter((x) => x.reigionId === regionValue);
     }
 
     if (lengthValue !== 0) {

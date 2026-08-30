@@ -1,26 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { ServiceAllService } from '../Services/service-all.service';
 
 @Pipe({
   name: 'regionName',
 })
 export class regionNamePipe implements PipeTransform {
+  constructor(private srv_all: ServiceAllService) {}
 
-  constructor(private http: HttpClient) {}
-
-  transform(regionId: number): Observable<string> {
-      const url = `https://localhost:7098/region_${regionId}`;
-      return this.http.get<string>(url).pipe(
-        map(response => {
-          console.log('Received response:', response); 
-          return response;
-        }),
-        catchError(() => {
-          console.log('Error fetching attraction type for ID:', regionId);
-          return of('האטרקציה לא נמצאה'); 
-        })
-      );
+  transform(reigionId: number): Observable<string> {
+    // המרה סינכרונית אמינה – ללא קריאת HTTP, כך שהאזור לעולם לא "נמחק"
+    // או מוצג כלא ידוע גם אחרי עריכה/שמירה.
+    return of(this.srv_all.GetRegions(Number(reigionId)));
   }
 }

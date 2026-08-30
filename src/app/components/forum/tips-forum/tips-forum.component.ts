@@ -76,8 +76,12 @@ this.forumMessageStore.getMessages().subscribe((messages) => {
   }
 
   DeletePost(forumId: number ){
-    this.Srv_Forum.deletePost(forumId)
-    this.forumMessageStore.fetchMessagesByForumType(this.forumType);
-
-  }
+     if (confirm("האם הנכם בטוחים במחיקה?")) {
+        this.Srv_Forum.deletePost(forumId);
+        this.forumMessageStore.fetchMessagesByForumType(this.forumType);
+    } else {
+        console.log("מחיקה בוטלה");
+      return;
+    }
+ }
 }

@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+
+export interface UserData {
+  email: string;
+  userId: string;
+  firstName: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -7,40 +14,49 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private router: Router) {}
 
-     // שמירה ב-localStorage
-  login(email: string, userId: string, token: string) {
-    const userObj = { email: email, userId: userId, token: token }; // הוספת הטוקן לאובייקט
+  login(token: string) {
+    const decoded: any = jwtDecode(token);
+ console.log("decoded: ", decoded)
+    const userObj: UserData = {
+      email: decoded.Email,          // שים לב למפתחות בפועל!
+      userId: decoded.UserId,        // תיקנתי מ-UserId ל-userId
+      firstName: decoded.FirstName,  // תיקנתי מ-FirstName ל-firstName
+    };
+     console.log("userObj: ", userObj)
 
+
+    localStorage.setItem('token', token);        // שמירת הטוקן לשימוש עתידי
     localStorage.setItem('user_data', JSON.stringify(userObj));
-    console.log(JSON.stringify(userObj));
   }
 
-  // בדיקה האם יש משתמש מחובר
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  isTokenExpired(token: string): boolean {
+    const decoded: any = jwtDecode(token);
+    if (!decoded.exp) return false;              // אם אין תאריך תפוגה - מניח שתקין
+    return Date.now() >= decoded.exp * 1000;     // exp בשניות
+  }
+
   isLoggedIn(): boolean {
-    return this.getUserData() !== null;
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
-  // מחיקת המייל (התנתקות)
-  logout() {
 
+  logout() {
     localStorage.removeItem('user_data');
+    localStorage.removeItem('token');
     this.router.navigate(['']);
   }
 
- 
- // שליפת הנתונים מה-localStorage
-getUserData() {
-  try {
-  const savedData = localStorage.getItem('user_data');
-    if (savedData) {
-      const user = JSON.parse(savedData);
-      return user;
+  getUserData(): UserData | null {
+    try {
+      const savedData = localStorage.getItem('user_data');
+      return savedData ? JSON.parse(savedData) as UserData : null;
+    } catch (error) {
+      console.error('שגיאה בהמרת המשתמש מה-LOCALSTORAGE:', error);
+      return null;
     }
-  } catch (error) {
-    
-    console.error('שגיאה בהמרת המשתמש מהLOCALSTORAGE:', error);
   }
-  return null; // במקרה של שגיאה או אם אין נתונים
 }
-
-}
-
