@@ -13,6 +13,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { CommonModule } from '@angular/common';
 import { regionNamePipe } from '../../../Pipes/regionName';
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-walking-trail',
@@ -41,7 +42,10 @@ export class WalkingTrailComponent implements AfterViewInit {
     'DetailsButton',
   ];
 
-  dataSource!: MatTableDataSource<Int_WalkingTrail>;
+  isLoading = true;
+
+  // dataSource!: MatTableDataSource<Int_WalkingTrail>;
+  dataSource = new MatTableDataSource<Int_WalkingTrail>([]);
   areasofexpertisealData: Int_WalkingTrail[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
@@ -65,6 +69,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     public dialog: MatDialog,
     public srv_favorite: srv_Favorite,
     public authService: AuthService,
+    public refreshService: RefreshService,
   ) {
     paginatorIntl.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginatorIntl.nextPageLabel = 'העמוד הבא';
@@ -105,31 +110,54 @@ export class WalkingTrailComponent implements AfterViewInit {
   }
 
   loadData() {
-    const rawData: Int_WalkingTrail[] = this.walkingTrail.GetWalkingTrails();
+    this.isLoading = true;
+    this.walkingTrail.GetWalkingTrails().subscribe({
+      next: (rawData: Int_WalkingTrail[]) => {
+        console.log('נתוני מסלולים גולמיים:', rawData);
+        this.areasofexpertisealData = rawData;
 
-    this.areasofexpertisealData = rawData;
+        const ELEMENT_DATA: Int_WalkingTrail[] = rawData.map((trail) => ({
+          WalkingTrailId: trail.WalkingTrailId,
+          WalkingTrailName: trail.WalkingTrailName,
+          Description: trail.Description,
+          reigionId: trail.reigionId,
+          Directions: trail.Directions,
+          LengthInKm: trail.LengthInKm,
+          RouteDuration: trail.RouteDuration,
+          Difficulty: trail.Difficulty,
+          MinAge: trail.MinAge,
+          MaxAge: trail.MaxAge,
+          IsWet: trail.IsWet,
+          SeasonSummer: trail.SeasonSummer,
+          SeasonWinter: trail.SeasonWinter,
+          SeasonSpring: trail.SeasonSpring,
+          SeasonAutumn: trail.SeasonAutumn,
+        }));
 
-    const ELEMENT_DATA: Int_WalkingTrail[] = rawData.map((trail) => ({
-      WalkingTrailId: trail.WalkingTrailId,
-      WalkingTrailName: trail.WalkingTrailName,
-      Description: trail.Description,
-      reigionId: trail.reigionId,
-      Directions: trail.Directions,
-      LengthInKm: trail.LengthInKm,
-      RouteDuration: trail.RouteDuration,
-      Difficulty: trail.Difficulty,
-      MinAge: trail.MinAge,
-      MaxAge: trail.MaxAge,
-      IsWet: trail.IsWet,
-      SeasonSummer: trail.SeasonSummer,
-      SeasonWinter: trail.SeasonWinter,
-      SeasonSpring: trail.SeasonSpring,
-      SeasonAutumn: trail.SeasonAutumn,
-    }));
+        // שימוש חוזר ב-dataSource הקיים (ולא יצירה חדשה) — כך נשמרים
+        // ה-sortingDataAccessor שמוגדר ב-ngOnInit וחיבורי ה-sort/הפיגינציה,
+        // מה שגורם למיון של Angular Material לעבוד כראוי.
+        this.dataSource.data = ELEMENT_DATA;
+        this.isLoading = false;
 
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+        // הטבלה נוצרה (@else) — נחבר את ה-sort והפיגינציה
+        setTimeout(() => {
+          if (this.paginator) this.dataSource.paginator = this.paginator;
+          if (this.sort) this.dataSource.sort = this.sort;
+        });
+      },
+      error: (err) => {
+        console.error('שגיאה בהבאת המסלולים:', err);
+        this.isLoading = false;
+      },
+    });
   }
  ngOnInit() {
+    // טעינה מחדש אחרי שינוי בנתוני הטבלה (הוספה/עריכה/מחיקה)
+    this.refreshService.refresh$.subscribe(() => {
+      this.loadData();
+    });
+
     //  this.dataSource = new MatTableDataSource(yourDataArray);
 
     this.dataSource.sortingDataAccessor = (item, property) => {
@@ -150,11 +178,11 @@ export class WalkingTrailComponent implements AfterViewInit {
     };
   }
   ngAfterViewInit() {
-    if (this.paginator && this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-             this.dataSource.sort = this.sort;  // הוסף זאת כאן
-
-    }
+    // חיבור גיבוי של ה-sort והפיגינציה כשה-view מוכן
+    setTimeout(() => {
+      if (this.paginator) this.dataSource.paginator = this.paginator;
+      if (this.sort) this.dataSource.sort = this.sort;
+    });
   }
 
   toggleFavorite(
@@ -174,6 +202,31 @@ export class WalkingTrailComponent implements AfterViewInit {
   }
 
   openDialogRegistrations(element: Int_WalkingTrail) {
+    this.dialog.open(ShowWalkingTrailComponent, {
+      width: '850px',
+      data: element,
+    });
+  }
+
+  newWalkingTrail() {
+    const element: Int_WalkingTrail = {
+      WalkingTrailId: 0,
+      WalkingTrailName: '',
+      Description: '',
+      reigionId: 0,
+      Directions: '',
+      LengthInKm: 0,
+      RouteDuration: 0,
+      Difficulty: 0,
+      MinAge: 0,
+      MaxAge: 0,
+      IsWet: false,
+      SeasonSummer: false,
+      SeasonWinter: false,
+      SeasonSpring: false,
+      SeasonAutumn: false,
+    };
+
     this.dialog.open(ShowWalkingTrailComponent, {
       width: '850px',
       data: element,

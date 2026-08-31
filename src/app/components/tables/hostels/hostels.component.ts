@@ -18,6 +18,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { AttractionTypeNamePipe } from "../../../Pipes/attractionTypeName";
 import { CommonModule } from '@angular/common';
 import { regionNamePipe } from "../../../Pipes/regionName";
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-hostels',
@@ -48,7 +49,8 @@ export class HostelsComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  dataSource!: MatTableDataSource<Int_Hostels>;
+  // dataSource!: MatTableDataSource<Int_Hostels>;
+  dataSource = new MatTableDataSource<Int_Hostels>([]);
   areasofexpertisealData: Int_Hostels[] = [];
 
   showSearch: Boolean = false;
@@ -70,6 +72,7 @@ export class HostelsComponent implements AfterViewInit {
     public dialog: MatDialog,
     public srv_favorite: srv_Favorite,
     public authService: AuthService,
+    public refreshService: RefreshService,
   ) {
     paginatorIntl.itemsPerPageLabel = 'מסלולים בעמוד:';
     paginatorIntl.nextPageLabel = 'העמוד הבא';
@@ -88,6 +91,11 @@ export class HostelsComponent implements AfterViewInit {
 
   ngOnInit() {
     //  this.dataSource = new MatTableDataSource(yourDataArray);
+
+    // טעינה מחדש אחרי שינוי בנתוני הטבלה (הוספה/עריכה/מחיקה)
+    this.refreshService.refresh$.subscribe(() => {
+      this.loadData();
+    });
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
@@ -133,21 +141,34 @@ export class HostelsComponent implements AfterViewInit {
   }
 
   loadData() {
-    const rawData: Int_Hostels[] = this.Hostels.GetHostels();
-    this.areasofexpertisealData = rawData;
+    this.Hostels.GetHostels().subscribe({
+      next: (rawData: Int_Hostels[]) => {
+        console.log('נתוני מקומות לינה גולמיים:', rawData);
+        this.areasofexpertisealData = rawData;
 
-    const ELEMENT_DATA: Int_Hostels[] = rawData.map((hostel) => ({
-      HostelsId: hostel.HostelsId,
-      HostelsName: hostel.HostelsName,
-      reigionId: hostel.reigionId,
-      Address: hostel.Address,
-      Description: hostel.Description,
-      NumberOfPlaces: hostel.NumberOfPlaces,
-      kashrutId: hostel.kashrutId,
-      Phone: hostel.Phone,
-    }));
+        const ELEMENT_DATA: Int_Hostels[] = rawData.map((hostel) => ({
+          HostelsId: hostel.HostelsId,
+          HostelsName: hostel.HostelsName,
+          reigionId: hostel.reigionId,
+          Address: hostel.Address,
+          Description: hostel.Description,
+          NumberOfPlaces: hostel.NumberOfPlaces,
+          kashrutId: hostel.kashrutId,
+          Phone: hostel.Phone,
+        }));
 
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+        this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+
+        // חיבור ה-sort והפיגינציה אחרי שהנתונים הגיעו
+        setTimeout(() => {
+          if (this.paginator) this.dataSource.paginator = this.paginator;
+          if (this.sort) this.dataSource.sort = this.sort;
+        });
+      },
+      error: (err) => {
+        console.error('שגיאה בהבאת מקומות הלינה:', err);
+      },
+    });
   }
 
   ngAfterViewInit() {
@@ -178,6 +199,24 @@ export class HostelsComponent implements AfterViewInit {
   }
 
   openDialogRegistrations(element: Int_Hostels) {
+    this.dialog.open(ShowHostelsComponent, {
+      width: '850px',
+      data: element,
+    });
+  }
+
+  newHostel() {
+    const element: Int_Hostels = {
+      HostelsId: 0,
+      HostelsName: '',
+      reigionId: 0,
+      Address: '',
+      Description: '',
+      NumberOfPlaces: 0,
+      kashrutId: 0,
+      Phone: '',
+    };
+
     this.dialog.open(ShowHostelsComponent, {
       width: '850px',
       data: element,

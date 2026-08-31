@@ -1,29 +1,39 @@
 <div class="show">
   <div class="background"></div>
   <div class="content">
-    <div class="likeAndEdit">
-    <button
-      [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-      (click)="canEdit()"
-    >
-      <mat-icon class="close-icon">edit</mat-icon>
-    </button>
-     <button
-      class="likeButton"
-      (click)="toggleFavorite()"
-    >
+    @if (!isAddNew) {
+      <div class="likeAndEdit">
+        <div>
+          <button
+            [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+            (click)="deleteHostel()"
+          >
+            <mat-icon class="close-icon">delete</mat-icon>
+          </button>
 
-      <img
-        class="img_like"
-        [src]="
-          isLiked
-            ? 'heart_full_blue.png'
-            : 'heart_blue.png'
-        "
-      />
+          <button
+            [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+            (click)="canEdit()"
+          >
+            <mat-icon class="close-icon">edit</mat-icon>
+          </button>
+        </div>
 
-    </button>
-    </div>
+        <button class="likeButton" (click)="toggleFavorite()">
+          <img
+            class="img_like"
+            [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
+          />
+        </button>
+      </div>
+    } @else {
+      <br />
+      <h3>
+        <strong>הוספת מקום לינה</strong>
+      </h3>
+      <br />
+    }
+
     <h2>
       @if (!userCanEdit) {
         <strong>{{ data.HostelsName }}</strong>
@@ -32,7 +42,8 @@
           class="inputToEdit"
           id="HostelsName"
           type="text"
-          value="{{ data.HostelsName }}"
+          [(ngModel)]="data.HostelsName"
+          [placeholder]="isAddNew ? 'שם מקום הלינה' : ''"
         />
       }
     </h2>
@@ -42,54 +53,61 @@
         <strong>{{ data.Description }}</strong>
       </h5>
     } @else {
-      <h6>
-        <textarea
-          cols="{{ data.Description.length / 2 }}"
-          id="Description"
-          class="inputToEdit"
-          type="text"
-          value="{{ data.Description }}"
-        >
-        </textarea>
-      </h6>
+      <textarea
+        cols="45"
+        id="Description"
+        class="inputToEdit"
+        [(ngModel)]="data.Description"
+        [placeholder]="isAddNew ? 'תיאור מקום הלינה' : ''"
+      >
+      </textarea>
     }
 
     <p>
       <strong>אזור: </strong>
       @if (!userCanEdit) {
-        {{ data.reigionId | regionName | async  }}
+        @if (data.reigionId) {
+          {{ data.reigionId | regionName | async }}
+        }
       } @else {
-        <select class="inputToEdit" id="reigionId">
-          @for (item of RegionsArrayData; track item) {
-            <option
-              [value]="item.reigionId"
-              [selected]="item.reigionId == data.reigionId"
-            >
-              <!-- {{ item | json}} -->
-              {{ item.regionName }}
+        <select class="inputToEdit" id="reigionId" [(ngModel)]="data.reigionId">
+          <option [ngValue]="0">בחירת אזור</option>
+          @for (item of RegionsArrayData; track item.id) {
+            <option [ngValue]="item.id">
+              {{ item.name }}
             </option>
           }
         </select>
       }
     </p>
-    <P
-      ><strong>כתובת:</strong>
+    <p>
+      <strong>כתובת:</strong>
       @if (!userCanEdit) {
         {{ data.Address }}
       } @else {
-        <input class="inputToEdit" id="Address" type="text" value="{{ data.Address }}" />
+        <input
+          class="inputToEdit"
+          id="Address"
+          type="text"
+          [(ngModel)]="data.Address"
+        />
       }
-    </P>
-    <P
-      ><strong>טלפון:</strong>
+    </p>
+    <p>
+      <strong>טלפון:</strong>
       @if (!userCanEdit) {
         {{ data.Phone }}
       } @else {
-        <input class="inputToEdit" id="Phone" type="text" value="{{ data.Phone }}" />
+        <input
+          class="inputToEdit"
+          id="Phone"
+          type="text"
+          [(ngModel)]="data.Phone"
+        />
       }
-    </P>
-    <P
-      ><strong>מספר מיטות: </strong>
+    </p>
+    <p>
+      <strong>מספר מיטות: </strong>
       @if (!userCanEdit) {
         {{ data.NumberOfPlaces }}
       } @else {
@@ -97,30 +115,25 @@
           class="inputToEdit"
           type="number"
           id="NumberOfPlaces"
-          value="{{ data.NumberOfPlaces }}"
+          [(ngModel)]="data.NumberOfPlaces"
         />
       }
-    </P>
-    <P
-      ><strong>כשרות המקום: </strong>
+    </p>
+    <p>
+      <strong>כשרות המקום: </strong>
       @if (!userCanEdit) {
         {{ srv_all.GetKashrutName(data.kashrutId) }}
       } @else {
-        <select class="inputToEdit" id="kashrutId">
+        <select class="inputToEdit" id="kashrutId" [(ngModel)]="data.kashrutId">
+          <option [ngValue]="0">בחירת כשרות</option>
           @for (item of KashrutArrayData; track item.id) {
-            @if (data.kashrutId == item.id) {
-              <option [value]="item.id" selected>
-                {{ item.name }}
-              </option>
-            } @else {
-              <option [value]="item.id">
-                {{ item.name }}
-              </option>
-            }
+            <option [ngValue]="item.id">
+              {{ item.name }}
+            </option>
           }
         </select>
       }
-    </P>
+    </p>
 
     <br />
     @if (userCanEdit) {

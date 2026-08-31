@@ -1,4 +1,7 @@
 <div class="reka">
+  <div class="button-container">
+    <button class="filterToFind_not_showSearch" (click)="newWalkingTrail()">הוספת מסלול</button>
+  </div>
   <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
     <!-- <div class="filterToFind"> -->
     <div [class]="showSearch ? 'filterToFind' : 'filterToFind_not_showSearch'">
@@ -57,7 +60,9 @@
       </div>
     </div>
   </div>
-  @if (dataSource.data.length == 0 || dataSource.data == null) {
+  @if (isLoading) {
+    <h3>טוען נתונים...</h3>
+  } @else if (dataSource.data.length == 0 || dataSource.data == null) {
     <h3 class="notFoundInFilter">לא נמצאו מסלולים המתאימים לחיפוש</h3>
     <div class="Reset_feeder">
       <button mat-button class="reset btn" (click)="resetFilters()">
@@ -177,7 +182,7 @@
       </table>
 
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20, 30, 50]"
+        [pageSizeOptions]="[10, 20, 30, 50]"
         showFirstLastButtons
         aria-label="בחירת עמוד"
         class="paginator"

@@ -1,4 +1,5 @@
 <div class="reka">
+  <button class="filterToFind_not_showSearch" (click)="newHostel()">הוספת מקום לינה</button>
   <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
     <!-- <div class="filterToFind"> -->
     <div [class]="showSearch ? 'filterToFind' : 'filterToFind_not_showSearch'">
@@ -159,7 +160,7 @@
       </table>
 
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20, 30, 50]"
+        [pageSizeOptions]="[10, 20, 30, 50]"
         showFirstLastButtons
         aria-label="בחירת עמוד"
         class="paginator"

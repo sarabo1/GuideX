@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Int_Hostels } from '../Interfaces/Int_Hostels';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class srv_Hostels {
+  constructor(public http: HttpClient) {}
   mock_Hostels: Int_Hostels[] = [
     {
       HostelsId: 1,
@@ -536,30 +539,66 @@ export class srv_Hostels {
     },
   ];
 
+  private baseUrl = 'https://localhost:7098/Hostels';
+
   GetHostels() {
-    return this.mock_Hostels;
+    return this.http.get<Int_Hostels[]>(this.baseUrl).pipe(
+      // מיפוי מנתוני השרת לאובייקט Int_Hostels — השרת (.NET) מחזיר בדרך כלל
+      // שמות שדות בקמאל-קייס (hostelsId, hostelsName...), ולכן אנחנו מתרגמים
+      // אותם לשמות הפסקל-קייס שהטמפלייט והקוד מצפים להם.
+      map((hostels: any[]) =>
+        (hostels || []).map((h: any) => ({
+          HostelsId: h.HostelsId ?? h.hostelsId,
+          HostelsName: h.HostelsName ?? h.hostelsName ?? '',
+          reigionId: h.reigionId ?? h.regionId ?? 0,
+          Address: h.Address ?? h.address ?? '',
+          Description: h.Description ?? h.description ?? '',
+          NumberOfPlaces: h.NumberOfPlaces ?? h.numberOfPlaces ?? 0,
+          kashrutId: h.kashrutId ?? h.kashrutID ?? 0,
+          Phone: h.Phone ?? h.phone ?? '',
+        })),
+      ),
+    );
   }
 
-  UpdateHostel(hostel: Int_Hostels) {
-    var findHostel = this.mock_Hostels.find(
-      (h) => h.HostelsId == hostel.HostelsId,
-    );
-    if (findHostel) {
-      findHostel.Address = hostel.Address;
-      findHostel.Description = hostel.Description;
-      findHostel.HostelsName = hostel.HostelsName;
-      findHostel.NumberOfPlaces = hostel.NumberOfPlaces;
-      findHostel.Phone = hostel.Phone;
-      findHostel.reigionId = hostel.reigionId;
-      findHostel.kashrutId = hostel.kashrutId;
-    
-    }
+  UpdateHostel(hostel: Int_Hostels): Observable<void> {
+    console.log(hostel);
+    return this.http
+      .put<void>(`${this.baseUrl}/${hostel.HostelsId}`, hostel)
+      .pipe(
+        catchError((error) => {
+          console.error('Error updating hostel:', error);
+          return of();
+        }),
+      );
+  }
+
+  AddNewHostel(hostel: Int_Hostels): Observable<void> {
+    console.log(hostel);
+    return this.http
+      .post<void>(`${this.baseUrl}/new`, hostel)
+      .pipe(
+        catchError((error) => {
+          console.error('Error adding hostel:', error);
+          return of();
+        }),
+      );
+  }
+
+  deleteHostel(hostelId: number) {
+    return this.http
+      .delete<void>(`${this.baseUrl}/${hostelId}`)
+      .pipe(
+        catchError((error) => {
+          console.error('בעיה במחיקת מקום לינה:', error);
+          return of();
+        }),
+      );
   }
 
   getHostelById(hostelId: number) {
-   
-    var a =  this.mock_Hostels.find((h) => h.HostelsId == hostelId);
-    console.log(a)
-    return a
+    var a = this.mock_Hostels.find((h) => h.HostelsId == hostelId);
+    console.log(a);
+    return a;
   }
 }

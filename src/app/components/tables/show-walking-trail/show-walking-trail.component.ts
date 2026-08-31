@@ -12,10 +12,12 @@ import { SrvWalkingTrailService } from '../../../Services/srv-WalkingTrail.servi
 import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { regionNamePipe } from "../../../Pipes/regionName";
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-show-walking-trail',
-  imports: [MatIcon, regionNamePipe, CommonModule],
+  imports: [MatIcon, regionNamePipe, CommonModule, FormsModule],
   templateUrl: './show-walking-trail.component.html',
   styleUrl: './show-walking-trail.component.scss',
 })
@@ -23,6 +25,7 @@ export class ShowWalkingTrailComponent {
   userCanEdit = false;
   RegionsArrayData: any
   isLiked: boolean = false;
+  isAddNew = false;
   userDetails: any = JSON.parse(localStorage.getItem('user_data') || '{}');
   constructor(
     public dialog: MatDialog,
@@ -31,6 +34,7 @@ export class ShowWalkingTrailComponent {
     public srv_all: ServiceAllService,
     public walkingTrails: SrvWalkingTrailService,
     public srv_favorite: srv_Favorite,
+    public refreshService: RefreshService,
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {
@@ -40,6 +44,27 @@ export class ShowWalkingTrailComponent {
         console.error('בעיה בהבאת האזורים', error);
       },
     );
+    this.checkIfAddNew();
+  }
+
+  checkIfAddNew() {
+    if (
+      this.data &&
+      this.data.WalkingTrailId == 0 &&
+      this.data.WalkingTrailName == '' &&
+      this.data.Description == '' &&
+      this.data.Directions == '' &&
+      this.data.reigionId == 0 &&
+      this.data.LengthInKm == 0 &&
+      this.data.RouteDuration == 0 &&
+      this.data.Difficulty == 0 &&
+      this.data.MinAge == 0 &&
+      this.data.MaxAge == 0
+    ) {
+      this.isAddNew = true;
+      this.userCanEdit = true;
+      console.log('this.isAddNew', this.isAddNew);
+    }
   }
 
   ngOnInit() {
@@ -98,14 +123,14 @@ export class ShowWalkingTrailComponent {
     document.getElementById('Spring') as HTMLInputElement,
     document.getElementById('Autumn') as HTMLInputElement
   ];
-  
+
   const isAtLeastOneChecked = seasons.some(season => season.checked);
-  
+
   if (!isAtLeastOneChecked) {
     alert("אנא בחר לפחות עונה אחת.");
     return;
   }
-  
+
   const trailData = this.data as any;
   trailData.Seasons = {
     Summer: seasons[0].checked,
@@ -145,18 +170,65 @@ export class ShowWalkingTrailComponent {
     this.data.IsWet = (
       document.getElementById('IsWet') as HTMLInputElement
     ).checked;
-    // this.data.Seasons.Autumn = (document.getElementById('Autumn') as HTMLInputElement).checked;
-    //     this.data.Seasons.Spring = (document.getElementById('Spring') as HTMLInputElement).checked;
-    //         this.data.Seasons.Summer = (document.getElementById('Summer') as HTMLInputElement).checked;
-    // this.data.Seasons.Winter= (document.getElementById('Autumn') as HTMLInputElement).checked;
 
-    this.walkingTrails.UpdateTrail(this.data);
+    // נרמול לערכים בטוחים
+    this.data.WalkingTrailName = (this.data.WalkingTrailName ?? '').trim();
+    this.data.Description = (this.data.Description ?? '').trim();
+    this.data.Directions = (this.data.Directions ?? '').trim();
+    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.Difficulty = Number(this.data.Difficulty) || 0;
+    this.data.MinAge = Number(this.data.MinAge) || 0;
+    this.data.MaxAge = Number(this.data.MaxAge) || 0;
+    this.data.LengthInKm = Number(this.data.LengthInKm) || 0;
+    this.data.RouteDuration = Number(this.data.RouteDuration) || 0;
 
+    console.log('data: ', this.data);
 
-    console.log('נתונים נשמרו', this.data);
+    if (this.isAddNew) {
+      if (
+        this.data.WalkingTrailName.trim() == '' ||
+        this.data.reigionId == 0
+      ) {
+        return;
+      }
+      this.walkingTrails.AddNewTrail(this.data).subscribe({
+        next: () => {
+          console.log('הוספת מסלול הליכה');
+          this.onClose();
+          this.openDialogRegistrations('מסלול ההליכה נוסף בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
+        },
+        error: (err) => {
+          console.error('שגיאה בהוספת מסלול ההליכה:', err);
+        },
+      });
+    } else {
+      this.walkingTrails.UpdateTrail(this.data).subscribe({
+        next: () => {
+          console.log('נתונים נשמרו', this.data);
+          this.userCanEdit = false;
+          this.openDialogRegistrations('מסלול ההליכה עודכן בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהעדכון הסתיים
+        },
+        error: (err) => {
+          console.error('שגיאה בעדכון מסלול ההליכה:', err);
+        },
+      });
+    }
+  }
 
-    this.userCanEdit = false;
-    this.openDialogRegistrations('מסלול ההליכה עודכן בהצלחה');
+  deleteTrail() {
+    this.walkingTrails.deleteTrail(this.data.WalkingTrailId).subscribe({
+      next: () => {
+        console.log('מחיקת מסלול הליכה');
+        this.onClose();
+        this.openDialogRegistrations('מסלול ההליכה נמחק בהצלחה');
+        this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
+      },
+      error: (err) => {
+        console.error('שגיאה במחיקת מסלול ההליכה:', err);
+      },
+    });
   }
 
   openDialogRegistrations(element: string) {

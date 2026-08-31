@@ -2,20 +2,34 @@
   <div class="background"></div>
 
   <div class="content">
-    <div class="likeAndEdit">
-      <button
-        [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-        (click)="canEdit()"
-      >
-        <mat-icon class="close-icon">edit</mat-icon>
-      </button>
-      <button class="likeButton" (click)="toggleFavorite()">
-        <img
-          class="img_like"
-          [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
-        />
-      </button>
-    </div>
+    @if (!isAddNew) {
+      <div class="likeAndEdit">
+        <button
+          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+          (click)="deleteTrail()"
+        >
+          <mat-icon class="close-icon">delete</mat-icon>
+        </button>
+        <button
+          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
+          (click)="canEdit()"
+        >
+          <mat-icon class="close-icon">edit</mat-icon>
+        </button>
+        <button class="likeButton" (click)="toggleFavorite()">
+          <img
+            class="img_like"
+            [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
+          />
+        </button>
+      </div>
+    } @else {
+      <br />
+      <h3>
+        <strong>הוספת מסלול הליכה</strong>
+      </h3>
+      <br />
+    }
     <h2>
       @if (!userCanEdit) {
         <strong>{{ data.WalkingTrailName }}</strong>
@@ -24,7 +38,8 @@
           class="inputToEdit"
           id="WalkingTrailName"
           type="text"
-          value="{{ data.WalkingTrailName }}"
+          [(ngModel)]="data.WalkingTrailName"
+          [placeholder]="isAddNew ? 'שם המסלול' : ''"
         />
       }
     </h2>
@@ -39,7 +54,8 @@
           id="Description"
           class="inputToEdit"
           type="text"
-          value="{{ data.Description }}"
+          [(ngModel)]="data.Description"
+          [placeholder]="isAddNew ? 'תיאור המסלול' : ''"
         >
         </textarea>
       </h6>
@@ -72,7 +88,8 @@
           class="inputToEdit"
           id="RouteDuration"
           type="number"
-          value="{{ data.RouteDuration }}"
+          [(ngModel)]="data.RouteDuration"
+          [placeholder]="isAddNew ? 'לדוגמה 90' : ''"
         />
       }
     </p>
@@ -86,7 +103,8 @@
           class="inputToEdit"
           id="LengthInKm"
           type="text"
-          value="{{ data.LengthInKm }}"
+          [(ngModel)]="data.LengthInKm"
+          [placeholder]="isAddNew ? 'לדוגמה 3.5' : ''"
         />
       }
     </p>
@@ -114,14 +132,16 @@
           class="inputToEdit"
           id="MinAge"
           type="number"
-          value="{{ data.MinAge }}"
+          [(ngModel)]="data.MinAge"
+          [placeholder]="isAddNew ? 'לדוגמה 5' : ''"
         />
         <P><strong>עד גיל: </strong></P>
         <input
           class="inputToEdit"
           id="MaxAge"
           type="number"
-          value="{{ data.MaxAge }}"
+          [(ngModel)]="data.MaxAge"
+          [placeholder]="isAddNew ? 'לדוגמה 80' : ''"
         />
       }
     </p>
@@ -156,7 +176,8 @@
             id="Directions"
             class="inputToEdit"
             type="text"
-            value="{{ data.Directions }}"
+            [(ngModel)]="data.Directions"
+            [placeholder]="isAddNew ? 'הוראות הגעה למסלול' : ''"
           >
           </textarea>
         </h6>

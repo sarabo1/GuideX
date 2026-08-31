@@ -12,10 +12,12 @@ import { srv_Hostels } from '../../../Services/srv_Hostels';
 import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { regionNamePipe } from "../../../Pipes/regionName";
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
   selector: 'app-show-hostels',
-  imports: [MatIcon, regionNamePipe, CommonModule],
+  imports: [MatIcon, regionNamePipe, CommonModule, FormsModule],
   templateUrl: './show-hostels.component.html',
   styleUrl: './show-hostels.component.scss',
 })
@@ -24,6 +26,7 @@ export class ShowHostelsComponent {
   RegionsArrayData: any;
   KashrutArrayData: any;
   isLiked: boolean = false;
+  isAddNew = false;
   userDetails: any = JSON.parse(localStorage.getItem('user_data') || '{}');
 
   constructor(
@@ -33,6 +36,7 @@ export class ShowHostelsComponent {
     public srv_all: ServiceAllService,
     public hostels: srv_Hostels,
     public srv_favorite: srv_Favorite,
+    public refreshService: RefreshService,
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {
@@ -43,6 +47,25 @@ export class ShowHostelsComponent {
       },
     );
     this.KashrutArrayData = this.srv_all.getKashrutArray();
+    this.checkIfAddNew();
+  }
+
+  checkIfAddNew() {
+    if (
+      this.data &&
+      this.data.HostelsId == 0 &&
+      this.data.HostelsName == '' &&
+      this.data.Description == '' &&
+      this.data.Address == '' &&
+      this.data.Phone == '' &&
+      this.data.NumberOfPlaces == 0 &&
+      this.data.reigionId == 0 &&
+      this.data.kashrutId == 0
+    ) {
+      this.isAddNew = true;
+      this.userCanEdit = true;
+      console.log('this.isAddNew', this.isAddNew);
+    }
   }
 
   ngOnInit() {
@@ -94,34 +117,65 @@ export class ShowHostelsComponent {
     this.userCanEdit = true;
   }
   saveEdit() {
-    // שמירה של הערכים מה-inputים אל האובייקט data
-    this.data.HostelsName = (
-      document.getElementById('HostelsName') as HTMLInputElement
-    ).value;
-    this.data.Description = (
-      document.getElementById('Description') as HTMLInputElement
-    ).value;
-    this.data.Address = (
-      document.getElementById('Address') as HTMLInputElement
-    ).value;
-    this.data.Phone = (
-      document.getElementById('Phone') as HTMLInputElement
-    ).value;
-    this.data.NumberOfPlaces = Number(
-      (document.getElementById('NumberOfPlaces') as HTMLInputElement).value,
-    );
-    this.data.reigionId = Number(
-      (document.getElementById('reigionId') as HTMLInputElement).value,
-    );
-    this.data.kashrutId = Number(
-      (document.getElementById('kashrutId') as HTMLInputElement).value,
-    );
-    this.hostels.UpdateHostel(this.data);
+    // הערכים נקראים ישירות מ- this.data דרך [(ngModel)] בטמפלייט,
+    // כך שכל דיאלוג עובד עם אובייקט הנתונים שלו.
+    this.data.HostelsName = (this.data.HostelsName ?? '').trim();
+    this.data.Description = (this.data.Description ?? '').trim();
+    this.data.Address = (this.data.Address ?? '').trim();
+    this.data.Phone = (this.data.Phone ?? '').trim();
+    this.data.NumberOfPlaces = Number(this.data.NumberOfPlaces) || 0;
+    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.kashrutId = Number(this.data.kashrutId) || 0;
 
-    console.log('נתונים נשמרו', this.data);
+    console.log('data: ', this.data);
 
-    this.userCanEdit = false;
-    this.openDialogRegistrations('נתוני האכסניה עודכנו בהצלחה');
+    if (this.isAddNew) {
+      if (
+        this.data.Description.trim() == '' ||
+        this.data.HostelsName.trim() == '' ||
+        this.data.reigionId == 0 ||
+        this.data.kashrutId == 0
+      ) {
+        return;
+      }
+      this.hostels.AddNewHostel(this.data).subscribe({
+        next: () => {
+          console.log('הוספת מקום לינה');
+          this.onClose();
+          this.openDialogRegistrations('מקום הלינה נוסף בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
+        },
+        error: (err) => {
+          console.error('שגיאה בהוספת מקום הלינה:', err);
+        },
+      });
+    } else {
+      this.hostels.UpdateHostel(this.data).subscribe({
+        next: () => {
+          console.log('נתונים נשמרו', this.data);
+          this.userCanEdit = false;
+          this.openDialogRegistrations('נתוני האכסניה עודכנו בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהעדכון הסתיים
+        },
+        error: (err) => {
+          console.error('שגיאה בעדכון האכסניה:', err);
+        },
+      });
+    }
+  }
+
+  deleteHostel() {
+    this.hostels.deleteHostel(this.data.HostelsId).subscribe({
+      next: () => {
+        console.log('מחיקת מקום לינה');
+        this.onClose();
+        this.openDialogRegistrations('מקום הלינה נמחק בהצלחה');
+        this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
+      },
+      error: (err) => {
+        console.error('שגיאה במחיקת מקום הלינה:', err);
+      },
+    });
   }
 
 
