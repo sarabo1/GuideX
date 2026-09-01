@@ -76,7 +76,7 @@
 
       @if (!userCanEdit) {
         @if (data.reigionId) {
-          {{ data.reigionId | regionName | async }}
+          {{ data.reigionId | regionName }}
         }
       } @else {
         <select class="inputToEdit" id="reigionId" [(ngModel)]="data.reigionId">

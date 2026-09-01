@@ -82,7 +82,16 @@ export class HostelsComponent implements AfterViewInit {
 
     this.userDetails = this.authService.getUserData();
 
-    this.RegionsArrayData = this.srv_all.getRegionsArray();
+    this.RegionsArrayData = [];
+    this.srv_all.getRegionsArray().subscribe({
+      next: (data: any) => {
+        this.RegionsArrayData = data ?? [];
+      },
+      error: (err) => {
+        console.error('בעיה בהבאת האזורים', err);
+        this.RegionsArrayData = [];
+      },
+    });
     this.KashrutArrayData = this.srv_all.getKashrutArray();
 
     this.loadData();
@@ -95,6 +104,7 @@ export class HostelsComponent implements AfterViewInit {
     // טעינה מחדש אחרי שינוי בנתוני הטבלה (הוספה/עריכה/מחיקה)
     this.refreshService.refresh$.subscribe(() => {
       this.loadData();
+      
     });
 
     this.dataSource.sortingDataAccessor = (item, property) => {
@@ -113,6 +123,7 @@ export class HostelsComponent implements AfterViewInit {
           return (item as any)[property]; // כל שאר המאפיינים
       }
     };
+    
   }
 
   // 🔥 KEY ייחודי
@@ -177,10 +188,7 @@ export class HostelsComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
     }
   }
-  //  ngAfterViewInit() {
-  //   this.dataSource.paginator = this.paginator;
-
-  // }
+  
 
   toggleFavorite(
     userId: number,
@@ -250,28 +258,25 @@ export class HostelsComponent implements AfterViewInit {
     const regionSelect = document.getElementById(
       'regionSelect',
     ) as HTMLSelectElement | null;
-    const KashrutSelect = document.getElementById(
-      'KashrutSelect',
-    ) as HTMLSelectElement | null;
 
-    if (!regionSelect || !KashrutSelect) return;
-
-    const regionValue = Number(regionSelect.value);
-    const kashrutValue = Number(KashrutSelect.value);
-    const searchText = anyWordElement?.value.trim() ?? '';
+    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
+    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
+    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
+    const regionValue = regionSelect ? Number(regionSelect.value) : 0;
+    const searchText = anyWordElement?.value.trim().toLowerCase() ?? '';
 
     let filteredData: Int_Hostels[] = this.areasofexpertisealData;
 
     if (searchText) {
       filteredData = filteredData.filter(
         (x) =>
-          String(x.Description).includes(searchText) ||
-          String(x.Address).includes(searchText) ||
-          String(x.HostelsName).includes(searchText) ||
-          String(x.NumberOfPlaces).includes(searchText) ||
-          String(x.Phone).includes(searchText) ||
-          String(this.srv_all.GetRegions(x.reigionId)).includes(searchText) ||
-          String(this.srv_all.GetKashrutName(x.kashrutId)).includes(searchText),
+          String(x.Description).toLowerCase().includes(searchText) ||
+          String(x.Address).toLowerCase().includes(searchText) ||
+          String(x.HostelsName).toLowerCase().includes(searchText) ||
+          String(x.NumberOfPlaces).toLowerCase().includes(searchText) ||
+          String(x.Phone).toLowerCase().includes(searchText) ||
+          String(this.srv_all.GetRegions(x.reigionId)).toLowerCase().includes(searchText) ||
+          String(this.srv_all.GetKashrutName(x.kashrutId)).toLowerCase().includes(searchText),
       );
     }
 
@@ -279,9 +284,8 @@ export class HostelsComponent implements AfterViewInit {
       filteredData = filteredData.filter((x) => x.reigionId === regionValue);
     }
 
-    if (kashrutValue !== 0) {
-      filteredData = filteredData.filter((x) => x.kashrutId === kashrutValue);
-    }
+      console.log('filteredData:', filteredData);
+
 
     this.dataSource.data = filteredData;
     this.paginator?.firstPage();

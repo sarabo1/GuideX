@@ -63,7 +63,7 @@
     <p>
       <strong>אזור:</strong>
       @if (!userCanEdit) {
-        {{ data.reigionId | regionName |async }}
+        {{ data.reigionId | regionName }}
       } @else {
         <select class="inputToEdit" id="reigionId">
           @for (item of RegionsArrayData; track item) {

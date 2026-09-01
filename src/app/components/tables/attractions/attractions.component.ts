@@ -22,6 +22,7 @@ import { regionNamePipe } from "../../../Pipes/regionName";
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { RefreshService } from '../../../Services/RefreshService';
 
+
 @Component({
   selector: 'app-attractions',
   standalone: true,
@@ -198,18 +199,30 @@ export class AttractionsComponent implements AfterViewInit {
           return item[property];
       }
     };
-
   }
 
   
 
-  ngAfterViewInit() {
-    // חיבור גיבוי של ה-sort והפיגינציה כשה-view מוכן
-    setTimeout(() => {
-      if (this.paginator) this.dataSource.paginator = this.paginator;
-      if (this.sort) this.dataSource.sort = this.sort;
-    });
-  }
+  // ngAfterViewInit() {
+  //   // חיבור גיבוי של ה-sort והפיגינציה כשה-view מוכן
+  //   setTimeout(() => {
+  //     if (this.paginator) this.dataSource.paginator = this.paginator;
+  //     if (this.sort) this.dataSource.sort = this.sort;
+  //   });
+  // }
+ngAfterViewInit() {
+  console.log('aaa')
+  // חיבור ה-paginator וה-sort
+  setTimeout(() => {
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort; // חיבור ה-sort
+    }
+  });
+}
+
 
   toggleFavorite(
     userId: number,
@@ -274,17 +287,15 @@ export class AttractionsComponent implements AfterViewInit {
       'searchControl',
     ) as HTMLInputElement | null;
 
-    const attractionTypeSelect = document.getElementById(
-      'AttractionTypeSelect',
-    ) as HTMLSelectElement | null;
-
     const regionSelect = document.getElementById(
       'regionSelect',
     ) as HTMLSelectElement | null;
 
-    if (!regionSelect || !attractionTypeSelect) return;
+    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
+    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
+    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
+    const selectedRegionValue = regionSelect ? Number(regionSelect.value) : 0;
 
-    const attractionTypeValue = Number(attractionTypeSelect.value);
     const searchText = anyWord?.value.trim().toLowerCase() ?? '';
 
     let filteredData: int_Attractions[] = [...this.areasofexpertisealData];
@@ -299,22 +310,15 @@ export class AttractionsComponent implements AfterViewInit {
           (x.description ?? '').toLowerCase().includes(searchText) ||
           (x.address ?? '').toLowerCase().includes(searchText) ||
           (x.attractionsName ?? '').toLowerCase().includes(searchText) ||
-          // this.Attractions
-          //   .GetTypeByNumber(Number(x.attractionTypeId))
-          //   .toLowerCase()
-          //   .includes(searchText)
-
-          // ||
-
           (x.phone ?? '').toLowerCase().includes(searchText) ||
           regionText.includes(searchText)
         );
       });
     }
 
-    if (attractionTypeValue !== 0) {
+    if (selectedRegionValue !== 0) {
       filteredData = filteredData.filter(
-        (x) => Number(x.attractionTypeId) === attractionTypeValue,
+        (x) => Number(x.reigionId) === selectedRegionValue,
       );
     }
 
@@ -326,6 +330,7 @@ export class AttractionsComponent implements AfterViewInit {
 
 
   resetFilters() {
+    console.log('aaa')
     this.selectedRegion = 0;
     this.selectedAttractionType = 0;
 

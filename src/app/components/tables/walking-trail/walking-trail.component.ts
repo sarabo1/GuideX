@@ -18,7 +18,7 @@ import { RefreshService } from '../../../Services/RefreshService';
 @Component({
   selector: 'app-walking-trail',
   standalone: true,
-  templateUrl:'./walking-trail.component.html',
+  templateUrl: './walking-trail.component.html',
   styleUrls: ['./walking-trail.component.scss'],
   imports: [
     MatPaginatorModule,
@@ -152,7 +152,7 @@ export class WalkingTrailComponent implements AfterViewInit {
       },
     });
   }
- ngOnInit() {
+  ngOnInit() {
     // טעינה מחדש אחרי שינוי בנתוני הטבלה (הוספה/עריכה/מחיקה)
     this.refreshService.refresh$.subscribe(() => {
       this.loadData();
@@ -172,7 +172,7 @@ export class WalkingTrailComponent implements AfterViewInit {
           return item.RouteDuration; // מתאים לשם בעמודה
         case 'Difficulty': // כשרות
           return item.Difficulty; // מתאים לשם בעמודה
-       default:
+        default:
           return (item as any)[property]; // כל שאר המאפיינים
       }
     };
@@ -238,25 +238,14 @@ export class WalkingTrailComponent implements AfterViewInit {
   }
 
   filterTable() {
-    const anyWordElement = document.getElementById(
-      'searchControl',
-    ) as HTMLInputElement | null;
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement | null;
-    const lengthSelect = document.getElementById(
-      'lengthSelect',
-    ) as HTMLSelectElement | null;
-    const difficultySelect = document.getElementById(
-      'difficultySelect',
-    ) as HTMLSelectElement | null;
+    const anyWordElement = document.getElementById('searchControl',) as HTMLInputElement | null;
+    const regionSelect = document.getElementById('regionSelect',) as HTMLSelectElement | null;
 
-    if (!regionSelect || !lengthSelect || !difficultySelect) return;
-
-    const regionValue = Number(regionSelect.value);
-    const lengthValue = Number(lengthSelect.value);
-    const difficultyValue = Number(difficultySelect.value);
-    const searchText = anyWordElement?.value.trim() ?? '';
+    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
+    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
+    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
+    const regionValue = regionSelect ? Number(regionSelect.value) : 0;
+    const searchText = anyWordElement?.value.trim().toLowerCase() ?? '';
 
     let filteredData: Int_WalkingTrail[] = this.areasofexpertisealData;
 
@@ -277,18 +266,6 @@ export class WalkingTrailComponent implements AfterViewInit {
       filteredData = filteredData.filter((x) => x.reigionId === regionValue);
     }
 
-    if (lengthValue !== 0) {
-      filteredData = filteredData.filter(
-        (x) =>
-          this.walkingTrail.GetLengthToFilter(x.LengthInKm) === lengthValue,
-      );
-    }
-
-    if (difficultyValue !== 0) {
-      filteredData = filteredData.filter(
-        (x) => x.Difficulty === difficultyValue,
-      );
-    }
 
     this.dataSource.data = filteredData;
     this.paginator?.firstPage();

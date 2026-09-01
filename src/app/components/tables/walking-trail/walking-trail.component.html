@@ -34,10 +34,33 @@
                   <option value="0">כל האזורים</option>
                 </select>
                 
-                <!-- עFBכעה? -->
               </div>
               
-              <div class="filter-item">
+              <!-- <div class="filter-item">
+                <label for="searchControl">חיפוש חופשי</label>
+                <input
+                  type="text"
+                  (input)="filterTable()"
+                  id="searchControl"
+                  placeholder="חיפוש חופשי..."
+                />
+              </div> -->
+            </div>
+          </div>
+          <!-- <div class="Reset_feeder">
+            <button mat-button class="reset btn" (click)="resetFilters()">
+              <span>איפוס המסננים</span>
+              <span>
+                <mat-icon class="mat-icon-btn">filter_alt_off</mat-icon>
+              </span>
+            </button>
+          </div> -->
+        }
+      </div>
+    </div>
+  </div>
+  
+    <div class="filter-item">
                 <label for="searchControl">חיפוש חופשי</label>
                 <input
                   type="text"
@@ -46,9 +69,7 @@
                   placeholder="חיפוש חופשי..."
                 />
               </div>
-            </div>
-          </div>
-          <div class="Reset_feeder">
+              <div class="Reset_feeder">
             <button mat-button class="reset btn" (click)="resetFilters()">
               <span>איפוס המסננים</span>
               <span>
@@ -56,10 +77,6 @@
               </span>
             </button>
           </div>
-        }
-      </div>
-    </div>
-  </div>
   @if (isLoading) {
     <h3>טוען נתונים...</h3>
   } @else if (dataSource.data.length == 0 || dataSource.data == null) {
@@ -130,7 +147,7 @@
             | אזור המסלול
           </th>
           <td mat-cell *matCellDef="let element" class="contentTable">
-            {{ element.reigionId | regionName | async }}
+          {{element.reigionId | regionName}}
           </td>
         </ng-container>
 
