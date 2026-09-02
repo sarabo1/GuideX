@@ -63,13 +63,13 @@
     <p>
       <strong>אזור:</strong>
       @if (!userCanEdit) {
-        {{ data.reigionId | regionName }}
+        {{ data.regionId | regionName }}
       } @else {
-        <select class="inputToEdit" id="reigionId">
-          @for (item of RegionsArrayData; track item) {
+        <select class="inputToEdit" id="regionId">
+          @for (item of RegionsArrayData; track item.regionId) {
             <option
-              [value]="item.reigionId"
-              [selected]="item.reigionId == data.reigionId"
+              [value]="item.regionId"
+              [selected]="item.regionId == data.regionId"
             >
               <!-- {{ item | json}} -->
               {{ item.regionName }}

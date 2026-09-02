@@ -75,15 +75,15 @@
       <strong>אזור:</strong>
 
       @if (!userCanEdit) {
-        @if (data.reigionId) {
-          {{ data.reigionId | regionName }}
+        @if (data.regionId) {
+          {{ data.regionId | regionName }}
         }
       } @else {
-        <select class="inputToEdit" id="reigionId" [(ngModel)]="data.reigionId">
+        <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
           <option [ngValue]="0">בחירת אזור</option>
-          @for (item of RegionsArrayData; track item.reigionId) {
+          @for (item of RegionsArrayData; track item.regionId) {
             <!-- ngValue שומר על סוג המספר כדי שאזור לא יימחק/יהפוך ל-0 -->
-            <option [ngValue]="item.reigionId">
+            <option [ngValue]="item.regionId">
               {{ item.regionName }}
             </option>
           }

@@ -78,8 +78,8 @@ export class ServiceAllService {
         return 'אחר';
     }
   }
-  GetRegions(reigionId: number): string {
-    switch (reigionId) {
+  GetRegions(regionId: number): string {
+    switch (regionId) {
       case 1:
         return 'גליל עליון';
       case 2:

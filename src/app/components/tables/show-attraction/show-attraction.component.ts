@@ -79,7 +79,7 @@ export class ShowAttractionComponent {
       this.data.attractionsName == '' &&
       this.data.description == '' &&
       this.data.phone == '' &&
-      this.data.reigionId == 0 &&
+      this.data.regionId == 0 &&
       this.data.shomerShabat == 2
     ) {
       this.isAddNew = true;
@@ -166,16 +166,16 @@ export class ShowAttractionComponent {
     this.data.address = (this.data.address ?? '').trim();
     this.data.phone = (this.data.phone ?? '').trim();
     this.data.attractionTypeId = Number(this.data.attractionTypeId) || 0;
-    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.regionId = Number(this.data.regionId) || 0;
     this.data.shomerShabat = Number(this.data.shomerShabat);
 
-    console.log('data: ', this.data);
+    console.log('data: 😊😊😊😊 ', this.data);
 
     if (this.isAddNew) {
       if (
         this.data.description.trim() == '' ||
         this.data.attractionTypeId == 0 ||
-        this.data.reigionId == 0
+        this.data.regionId == 0
       ){
         return
       }

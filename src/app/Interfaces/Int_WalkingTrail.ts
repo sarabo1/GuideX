@@ -5,7 +5,7 @@ export interface Int_WalkingTrail {
    WalkingTrailId : number;
    WalkingTrailName : string;
    Description : string;
-   reigionId : number;
+   regionId : number;
    Directions : string;
    LengthInKm : number;
    RouteDuration : number;

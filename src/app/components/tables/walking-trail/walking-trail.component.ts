@@ -36,7 +36,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     'like',
     'WalkingTrailName',
     'Description',
-    'reigionId',
+    'regionId',
     'RouteDuration',
     'Difficulty',
     'DetailsButton',
@@ -120,7 +120,7 @@ export class WalkingTrailComponent implements AfterViewInit {
           WalkingTrailId: trail.WalkingTrailId,
           WalkingTrailName: trail.WalkingTrailName,
           Description: trail.Description,
-          reigionId: trail.reigionId,
+          regionId: trail.regionId,
           Directions: trail.Directions,
           LengthInKm: trail.LengthInKm,
           RouteDuration: trail.RouteDuration,
@@ -166,8 +166,8 @@ export class WalkingTrailComponent implements AfterViewInit {
           return item.WalkingTrailName; // מתאים לשם בעמודה
         case 'Description': // שם מקום הלינה
           return item.Description; // מתאים לשם בעמודה
-        case 'reigionId': // תיאור
-          return item.reigionId; // מתאים לשם בעמודה
+        case 'regionId': // תיאור
+          return item.regionId; // מתאים לשם בעמודה
         case 'RouteDuration': // מספר מקומות
           return item.RouteDuration; // מתאים לשם בעמודה
         case 'Difficulty': // כשרות
@@ -213,7 +213,7 @@ export class WalkingTrailComponent implements AfterViewInit {
       WalkingTrailId: 0,
       WalkingTrailName: '',
       Description: '',
-      reigionId: 0,
+      regionId: 0,
       Directions: '',
       LengthInKm: 0,
       RouteDuration: 0,
@@ -258,12 +258,12 @@ export class WalkingTrailComponent implements AfterViewInit {
           String(x.LengthInKm).includes(searchText) ||
           String(x.RouteDuration).includes(searchText) ||
           String(x.WalkingTrailName).includes(searchText) ||
-          String(this.srv_all.GetRegions(x.reigionId)).includes(searchText),
+          String(this.srv_all.GetRegions(x.regionId)).includes(searchText),
       );
     }
 
     if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.reigionId === regionValue);
+      filteredData = filteredData.filter((x) => x.regionId === regionValue);
     }
 
 

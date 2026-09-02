@@ -85,8 +85,6 @@ login() {
             // בדוק אם נמצא משתמש
             if (response) {
                 const userObj = {
-                    // email: response.email,
-                    // userId: response.userId,
                     token: response.token // אם הטוקן הגיע כאן בתגובה
                 };
                 console.log("הני: ", userObj);

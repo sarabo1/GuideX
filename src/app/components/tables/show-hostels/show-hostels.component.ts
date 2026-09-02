@@ -127,7 +127,7 @@ export class ShowHostelsComponent {
     this.data.regionId = Number(this.data.regionId) || 0;
     this.data.kashrutId = Number(this.data.kashrutId) || 0;
 
-    console.log('data: ', this.data);
+    console.log('data:  henny: ', this.data);
 
     if (this.isAddNew) {
       if (

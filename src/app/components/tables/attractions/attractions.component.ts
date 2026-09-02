@@ -48,7 +48,7 @@ export class AttractionsComponent implements AfterViewInit {
     'like',
     'AttractionsName',
     'Description',
-    'reigionId',
+    'regionId',
     'AttractionsTypeId',
     'ShomerShabat',
     'DetailsButton',
@@ -179,9 +179,9 @@ export class AttractionsComponent implements AfterViewInit {
           return item.attractionsName;
         case 'Description':
           return item.description;
-        case 'reigionId':
+        case 'regionId':
           // מיון לפי שם האזור (טקסט) ולא לפי ה-ID
-          return this.srv_all.GetRegions(Number(item.reigionId));
+          return this.srv_all.GetRegions(Number(item.regionId));
         case 'AttractionsTypeId':
           // מיון לפי שם סוג האטרקציה (טקסט) ולא לפי ה-ID
           return (
@@ -251,7 +251,7 @@ ngAfterViewInit() {
     const element: int_Attractions = {
       attractionId: 0,
       attractionsName: "",
-      reigionId: 0,
+      regionId: 0,
       address: "",
       attractionTypeId: 0,
       description: "",
@@ -302,7 +302,7 @@ ngAfterViewInit() {
 
     if (searchText) {
       filteredData = filteredData.filter((x) => {
-        const regionValue = this.srv_all.GetRegions(Number(x.reigionId));
+        const regionValue = this.srv_all.GetRegions(Number(x.regionId));
 
         const regionText = String(regionValue).toLowerCase();
 
@@ -318,7 +318,7 @@ ngAfterViewInit() {
 
     if (selectedRegionValue !== 0) {
       filteredData = filteredData.filter(
-        (x) => Number(x.reigionId) === selectedRegionValue,
+        (x) => Number(x.regionId) === selectedRegionValue,
       );
     }
 

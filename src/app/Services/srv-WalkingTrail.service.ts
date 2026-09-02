@@ -18,7 +18,7 @@ export class SrvWalkingTrailService {
       WalkingTrailId: 1,
       WalkingTrailName: 'נחל חרמון (בניאס)',
       Description: 'מסלול מים בגליל העליון עם מפלים ונחלים זורמים.',
-      reigionId: 1,
+      regionId: 1,
       Directions: 'שמורת הבניאס',
       LengthInKm: 3.5,
       RouteDuration: 100,
@@ -47,7 +47,7 @@ export class SrvWalkingTrailService {
           WalkingTrailName:
             t.WalkingTrailName ?? t.walkingTrailName ?? '',
           Description: t.Description ?? t.description ?? '',
-          reigionId: t.reigionId ?? t.regionId ?? 0,
+          regionId: t.regionId ?? t.regionId ?? 0,
           Directions: t.Directions ?? t.directions ?? '',
           LengthInKm: t.LengthInKm ?? t.lengthInKm ?? 0,
           RouteDuration: t.RouteDuration ?? t.routeDuration ?? 0,
@@ -83,18 +83,18 @@ export class SrvWalkingTrailService {
       );
   }
 
-  AddNewTrail(route: Int_WalkingTrail): Observable<void> {
-    console.log(route);
+AddNewTrail(route: Int_WalkingTrail): Observable<{ message: string, attractionId: number }> {
+    console.log('Sending new trail data:', route);
     return this.http
-      .post<void>(`${this.baseUrl}/new`, route)
-      .pipe(
-        catchError((error) => {
-          console.error('Error adding walking trail:', error);
-          // פה תוכל להראות שגיאה למשתמש או לעשות משהו אחר
-          return of(); // מחזיר Observable ריק במקרה של שגיאה
-        }),
-      );
-  }
+        .post<{ message: string, attractionId: number }>(`${this.baseUrl}/new`, route)
+        .pipe(
+            catchError((error) => {
+                console.error('Error adding walking trail:', error);
+                // מחזיר Observable ריק במקרה של שגיאה
+                return of({ message: 'שגיאה בהוספת מסלול הליכה', attractionId: null } as any); 
+            })
+        );
+}
 
   deleteTrail(trailId: number) {
     return this.http

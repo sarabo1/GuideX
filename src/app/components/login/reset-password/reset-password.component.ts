@@ -7,11 +7,13 @@ import {
 } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { IdIsraelValidator } from '../../../Services/israel_ID';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ServiceUsersService } from '../../../Services/srv-users';
 import { PhoneValidatorService } from '../../../Services/phone_validator';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { SighInPageComponent } from '../sigh-in-page/sigh-in-page.component';
 
 @Component({
   selector: 'app-reset-password',
@@ -33,6 +35,9 @@ export class ResetPasswordComponent {
     public dialogRef: MatDialogRef<ResetPasswordComponent>,
     public srv_users: ServiceUsersService,
     public router: Router,
+    public http : HttpClient,
+        public dialog: MatDialog,
+
   ) {}
 
   private PasswordvalidatorSrv = inject(PasswordvalidatorService);
@@ -83,24 +88,7 @@ export class ResetPasswordComponent {
       PhoneNumber: phoneNumber,
       idNumber: idNumber,
     };
-    console.log("הגעתי לפה!!! עודמעט אני אבצע קריאת שרת")
-    
-    // this.findUser = this.srv_users.getUserByEmailIdNumberPhone(EmPhId)
-    //   // .GetUsers()
-    //   // .find(
-    //   //   (u) =>
-    //   //     u.Email == email &&
-    //   //     u.IdNumber == idNumber &&
-    //   //     u.PhoneNumber == phoneNumber,
-    //   // );
-    // console.log(this.findUser);
-    // if (this.findUser) {
-    //   this.findUserInList = true;
-    // } else {
-    //   this.notExistsUser = true;
-    //   this.findUser = null;
-    // }
-
+    console.log("הגעתי לפה!!! עוד מעט אני אבצע קריאת שרת")
       const request: any = this.srv_users.getUserByEmailIdNumberPhone(EmPhId);
 
       if (request?.subscribe) {
@@ -142,28 +130,61 @@ export class ResetPasswordComponent {
     return userPassword === userRepeatPassword;
   }
 
-  resetUserPassword() {
+resetUserPassword() {
     if (this.findUser) {
-       const userEmail = this.findUser.email;
-       const userId = this.findUser.userId;
-      this.findUser.UserPassword =
-        this.ResetPassword.get('UserPassword')?.value;
+        const userEmail = this.findUser.email;
+        const userId = this.findUser.userId;
+        const userPassword = this.ResetPassword.get('UserPassword')?.value; 
 
-      //הכנסת הנתונים בLOCAL SToreNGE
-      const userObj = {
-        email: userEmail,
-        userId: userId,
-      };
-      localStorage.setItem('user_data', JSON.stringify(userObj));
-      this.findUser = null;
-      this.ResetPassword.reset();
-      this.dialogRef.close(); // סגור את הדיאלוג
-      this.router.navigate(['welcome/Home_Page']);
+        const userDetailsToReset = {
+            Email: userEmail,
+            PhoneNumber: this.ResetPassword.get('PhoneNumber')?.value,
+            idNumber: this.ResetPassword.get('IdNumber')?.value,
+            UserPassword: userPassword,
+        };
+
+        console.log('Data to reset password: ', userDetailsToReset);
+        
+        this.http.post<any>('https://localhost:7098/api/Login/resetPassword', userDetailsToReset).subscribe(
+            response => {
+                // טיפול בתגובה מהשרת
+                if (response && response.message) {
+                    console.log(response.message); // או להצגת הודעה למשתמש
+                } else {
+                    console.log('Unknown response from server');
+                }
+            },
+            error => {
+                // טיפול בשגיאה
+                if (error.status === 404) {
+                    console.error('User does not exist');
+                    this.notExistsUser = true; // מייצר הודעה למשתמש
+                } else {ם
+                    console.error('An error occurred during password reset', error);
+                    // אפשר להציג הודעת שגיאה כללית למשתמש
+                }
+            }
+        );
+
+        // ניקוי טופס ופתיחת דיאלוגים
+        this.findUser = null;
+        this.ResetPassword.reset();
+        this.dialogRef.close(); // סגור את הדיאלוג
+        this.openDialogLogin();
+        this.router.navigate(['welcome/Home_Page']);
     } else {
-      this.notExistsUser = true;
+        this.notExistsUser = true; // מייצר הודעה שמשתמש לא נמצא
     }
-  }
+}
+  
   userNotExists() {
     this.notExistsUser = false;
   }
+
+    openDialogLogin() {
+      const dialogRef = this.dialog.open(SighInPageComponent, {
+        width: '950px',
+        data: {},
+      });
+    }
 }

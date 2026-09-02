@@ -54,7 +54,7 @@ export class ShowWalkingTrailComponent {
       this.data.WalkingTrailName == '' &&
       this.data.Description == '' &&
       this.data.Directions == '' &&
-      this.data.reigionId == 0 &&
+      this.data.regionId == 0 &&
       this.data.LengthInKm == 0 &&
       this.data.RouteDuration == 0 &&
       this.data.Difficulty == 0 &&
@@ -131,14 +131,10 @@ export class ShowWalkingTrailComponent {
     return;
   }
 
-  const trailData = this.data as any;
-  trailData.Seasons = {
-    Summer: seasons[0].checked,
-    Winter: seasons[1].checked,
-    Spring: seasons[2].checked,
-    Autumn: seasons[3].checked,
-  };
-
+   this.data.SeasonSummer = seasons[0].checked;
+    this.data.SeasonWinter = seasons[1].checked;
+    this.data.SeasonSpring = seasons[2].checked;
+    this.data.SeasonAutumn = seasons[3].checked;
     // שמירה של הערכים מה-inputים אל האובייקט data
     this.data.WalkingTrailName = (
       document.getElementById('WalkingTrailName') as HTMLInputElement
@@ -146,8 +142,8 @@ export class ShowWalkingTrailComponent {
     this.data.Description = (
       document.getElementById('Description') as HTMLInputElement
     ).value;
-    this.data.reigionId = Number(
-      (document.getElementById('reigionId') as HTMLInputElement).value,
+    this.data.regionId = Number(
+      (document.getElementById('regionId') as HTMLInputElement).value,
     );
     this.data.Difficulty = Number(
       (document.getElementById('Difficulty') as HTMLInputElement).value,
@@ -175,33 +171,38 @@ export class ShowWalkingTrailComponent {
     this.data.WalkingTrailName = (this.data.WalkingTrailName ?? '').trim();
     this.data.Description = (this.data.Description ?? '').trim();
     this.data.Directions = (this.data.Directions ?? '').trim();
-    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.regionId = Number(this.data.regionId) || 0;
     this.data.Difficulty = Number(this.data.Difficulty) || 0;
     this.data.MinAge = Number(this.data.MinAge) || 0;
     this.data.MaxAge = Number(this.data.MaxAge) || 0;
     this.data.LengthInKm = Number(this.data.LengthInKm) || 0;
     this.data.RouteDuration = Number(this.data.RouteDuration) || 0;
+    // this.data.SeasonAutumn = this
+    //     this.data.SeasonSpring = this.data.SeasonSpring;
+    // this.data.SeasonSummer = this.data.SeasonSummer;
+    // this.data.SeasonWinter = this.data.SeasonWinter;
 
-    console.log('data: ', this.data);
+
+    console.log('data walking trail: ', this.data);
 
     if (this.isAddNew) {
       if (
         this.data.WalkingTrailName.trim() == '' ||
-        this.data.reigionId == 0
+        this.data.regionId == 0
       ) {
         return;
       }
-      this.walkingTrails.AddNewTrail(this.data).subscribe({
-        next: () => {
-          console.log('הוספת מסלול הליכה');
-          this.onClose();
-          this.openDialogRegistrations('מסלול ההליכה נוסף בהצלחה');
-          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
-        },
-        error: (err) => {
-          console.error('שגיאה בהוספת מסלול ההליכה:', err);
-        },
-      });
+this.walkingTrails.AddNewTrail(this.data).subscribe({
+    next: (response) => {
+        console.log('הוספת הליכה', response.message);
+        this.onClose();
+        this.openDialogRegistrations(response.message);
+        this.refreshService.triggerRefresh();
+    },
+    error: (err) => {
+        console.error('שגיאה בהוספת מסלול 4444ההליכה:', err.error || err.message || 'שגיאה לא ידועה');
+    },
+});
     } else {
       this.walkingTrails.UpdateTrail(this.data).subscribe({
         next: () => {
