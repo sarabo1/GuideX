@@ -40,7 +40,7 @@ export class HostelsComponent implements AfterViewInit {
     'like',
     'HostelsName',
     'Description',
-    'reigionId',
+    'regionId',
     'NumberOfPlaces',
     'kashrutId',
     'DetailsButton',
@@ -104,13 +104,20 @@ export class HostelsComponent implements AfterViewInit {
     // טעינה מחדש אחרי שינוי בנתוני הטבלה (הוספה/עריכה/מחיקה)
     this.refreshService.refresh$.subscribe(() => {
       this.loadData();
-      
+
     });
 
+    // הגדרת ה-sortingDataAccessor נעשית בפונקציה נפרדת,
+    // כך שהיא נשמרת גם אחרי החלפת instance של dataSource ב-loadData
+    this.configureSortingDataAccessor();
+  }
+
+  // 🗂️ ה-accessor של המיון — קובע לפי איזה ערך למיין כל עמודה
+  configureSortingDataAccessor() {
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'reigionId': // אזור
-          return item.reigionId; // מתאים לשם בעמודה
+        case 'regionId': // אזור — מיון לפי שם האזור
+          return this.srv_all.GetRegions(item.regionId);
         case 'HostelsName': // שם מקום הלינה
           return item.HostelsName; // מתאים לשם בעמודה
         case 'Description': // תיאור
@@ -160,7 +167,7 @@ export class HostelsComponent implements AfterViewInit {
         const ELEMENT_DATA: Int_Hostels[] = rawData.map((hostel) => ({
           HostelsId: hostel.HostelsId,
           HostelsName: hostel.HostelsName,
-          reigionId: hostel.reigionId,
+          regionId: hostel.regionId,
           Address: hostel.Address,
           Description: hostel.Description,
           NumberOfPlaces: hostel.NumberOfPlaces,
@@ -169,6 +176,9 @@ export class HostelsComponent implements AfterViewInit {
         }));
 
         this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+
+        // החלפת ה-instance איפסה את ה-sortingDataAccessor — מגדירים אותו מחדש
+        this.configureSortingDataAccessor();
 
         // חיבור ה-sort והפיגינציה אחרי שהנתונים הגיעו
         setTimeout(() => {
@@ -217,7 +227,7 @@ export class HostelsComponent implements AfterViewInit {
     const element: Int_Hostels = {
       HostelsId: 0,
       HostelsName: '',
-      reigionId: 0,
+      regionId: 0,
       Address: '',
       Description: '',
       NumberOfPlaces: 0,
@@ -275,13 +285,13 @@ export class HostelsComponent implements AfterViewInit {
           String(x.HostelsName).toLowerCase().includes(searchText) ||
           String(x.NumberOfPlaces).toLowerCase().includes(searchText) ||
           String(x.Phone).toLowerCase().includes(searchText) ||
-          String(this.srv_all.GetRegions(x.reigionId)).toLowerCase().includes(searchText) ||
+          String(this.srv_all.GetRegions(x.regionId)).toLowerCase().includes(searchText) ||
           String(this.srv_all.GetKashrutName(x.kashrutId)).toLowerCase().includes(searchText),
       );
     }
-
+console.log("אני כאןןןןןןןןןןן")
     if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.reigionId === regionValue);
+      filteredData = filteredData.filter((x) => x.regionId === regionValue);
     }
 
       console.log('filteredData:', filteredData);

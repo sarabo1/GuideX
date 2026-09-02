@@ -103,14 +103,25 @@ export class ServiceAllService {
     }
   }
 
-    getRegionsArray() {
-      const baseUrl ='https://localhost:7098/All_Regions'
-      return this.http.get<any>(baseUrl).pipe(
-         tap((data: any) => console.log('Attraction types:', data)) // לוג של המידע המוחזר
-       );
+    // getRegionsArray() {
+    //   const baseUrl ='https://localhost:7098/All_Regions'
+    //   const sss =  this.http.get<any>(baseUrl).pipe(
+    //      tap((data: any) => console.log('Attraction types:', data)) // לוג של המידע המוחזר
+    //    );
+    //    console.log("sss: ",sss)
+    //    return sss
         
-    }
+    // }
 
+  getRegionsArray() {
+    const baseUrl = 'https://localhost:7098/All_Regions';
+    return this.http.get<any>(baseUrl).pipe(
+      tap((data: any) => console.log('regions types aaa:', data)), // לוג של המידע המוחזר
+    );
+  }
+
+
+ 
   GetKashrutName(kashrutId: number): string {
     switch (kashrutId) {
       case 1:

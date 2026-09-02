@@ -12,7 +12,7 @@ export class srv_Hostels {
     {
       HostelsId: 1,
       HostelsName: 'מלון ציפורי בכנרת',
-      reigionId: 2,
+      regionId: 2,
       Address: 'הירקון 1, טבריה',
       Description:
         'מלון אירוח מוביל לציבור שומר מצוות, ארוחות ברמה גבוהה ובית כנסת במתחם.',
@@ -23,7 +23,7 @@ export class srv_Hostels {
     {
       HostelsId: 2,
       HostelsName: 'אחוזת נוף צפת',
-      reigionId: 1,
+      regionId: 1,
       Address: 'חזון איש 4, צפת',
       Description:
         'מתחם וילות וצימרים מרווח למשפחות וקבוצות, קרוב לבתי כנסת ומקואות.',
@@ -34,7 +34,7 @@ export class srv_Hostels {
     {
       HostelsId: 3,
       HostelsName: "מלון ויז'ניץ ציפורי קלאס",
-      reigionId: 5,
+      regionId: 5,
       Address: 'גבעת פנחס, בני ברק',
       Description:
         'מלון אירוח חסידי מפואר, מתאים במיוחד לשבתות חתן ואירועים משפחתיים.',
@@ -45,7 +45,7 @@ export class srv_Hostels {
     {
       HostelsId: 4,
       HostelsName: 'בית הארחה הרובע היהודי',
-      reigionId: 7,
+      regionId: 7,
       Address: 'הרובע היהודי, ירושלים',
       Description:
         'אירוח קבוצתי ומשפחתי בלב העיר העתיקה, מרחק הליכה קצר מהכותל המערבי.',
@@ -56,7 +56,7 @@ export class srv_Hostels {
     {
       HostelsId: 5,
       HostelsName: 'קמפוס קוממיות',
-      reigionId: 6,
+      regionId: 6,
       Address: 'מושב קוממיות',
       Description:
         'מתחם אירוח כפרי שקט באווירה תורנית, מתאים לסמינריונים ושבתות גיבוש.',
@@ -67,7 +67,7 @@ export class srv_Hostels {
     {
       HostelsId: 6,
       HostelsName: 'מלון גלי צאנז',
-      reigionId: 5,
+      regionId: 5,
       Address: 'חוף צאנז, נתניה',
       Description:
         'מלון מפואר על קו המים סמוך לקריה החסידית, גישה ישירה לחוף הנפרד.',
@@ -78,7 +78,7 @@ export class srv_Hostels {
     {
       HostelsId: 7,
       HostelsName: 'אחוזת מרנס צפת',
-      reigionId: 1,
+      regionId: 1,
       Address: 'הרובע היהודי, צפת',
       Description:
         'סוויטות מפוארות בסגנון עתיק, מתאים לזוגות ומשפחות המחפשות שקט.',
@@ -89,7 +89,7 @@ export class srv_Hostels {
     {
       HostelsId: 8,
       HostelsName: 'מלון בית טוב ירושלים',
-      reigionId: 7,
+      regionId: 7,
       Address: 'מלכי ישראל 24, ירושלים',
       Description: 'מלון נעים בלב שכונת גאולה, חוויית אירוח ירושלמית אותנטית.',
       NumberOfPlaces: 45,
@@ -99,7 +99,7 @@ export class srv_Hostels {
     {
       HostelsId: 9,
       HostelsName: 'צימר הבית באור הגנוז',
-      reigionId: 1,
+      regionId: 1,
       Address: 'יישוב אור הגנוז',
       Description: 'צימרים מרווחים למשפחות ביישוב דתי-קהילתי למרגלות המירון.',
       NumberOfPlaces: 30,
@@ -109,7 +109,7 @@ export class srv_Hostels {
     {
       HostelsId: 10,
       HostelsName: 'פנינת השומרון',
-      reigionId: 6,
+      regionId: 6,
       Address: 'אלון מורה',
       Description:
         'יחידות אירוח משפחתיות עם נוף פנורמי להרי השומרון, שקט ומבודד.',
@@ -120,7 +120,7 @@ export class srv_Hostels {
     {
       HostelsId: 11,
       HostelsName: 'בית הארחה חפץ חיים',
-      reigionId: 6,
+      regionId: 6,
       Address: 'קיבוץ חפץ חיים',
       Description: 'אירוח כפרי מהדרין ברמה גבוהה, מדשאות רחבות ומתקנים לילדים.',
       NumberOfPlaces: 250,
@@ -130,7 +130,7 @@ export class srv_Hostels {
     {
       HostelsId: 12,
       HostelsName: 'מלון ארמונות המלך',
-      reigionId: 7,
+      regionId: 7,
       Address: 'ירמיהו 12, ירושלים',
       Description: 'מלון דירות יוקרתי קרוב למרכזי החסידות והתורה בירושלים.',
       NumberOfPlaces: 70,
@@ -140,7 +140,7 @@ export class srv_Hostels {
     {
       HostelsId: 13,
       HostelsName: 'מתחם הנופש תושיה',
-      reigionId: 9,
+      regionId: 9,
       Address: 'תושיה',
       Description:
         'צימרים כפריים בדרום הארץ, אווירה רגועה ומתאימה לשומרי מצוות.',
@@ -151,7 +151,7 @@ export class srv_Hostels {
     {
       HostelsId: 14,
       HostelsName: 'מלון לב בני ברק',
-      reigionId: 5,
+      regionId: 5,
       Address: 'רבי עקיבא 50, בני ברק',
       Description:
         'אירוח עסקי ומשפחתי בלב העיר, גישה נוחה לתחבורה ציבורית וחנויות.',
@@ -162,7 +162,7 @@ export class srv_Hostels {
     {
       HostelsId: 15,
       HostelsName: 'אחוזת הנופש מירון',
-      reigionId: 1,
+      regionId: 1,
       Address: 'מושב מירון',
       Description:
         'דירות אירוח גדולות במרחק הליכה קצר מציון הרשב"י, מתאים לשבתות.',
@@ -173,7 +173,7 @@ export class srv_Hostels {
     {
       HostelsId: 16,
       HostelsName: 'קמפוס ישיבת נתיבות',
-      reigionId: 9,
+      regionId: 9,
       Address: 'נתיבות',
       Description:
         'מתחם חדרים לקבוצות וסמינריונים, אולמות לימוד וחדר אוכל גדול.',
@@ -184,7 +184,7 @@ export class srv_Hostels {
     {
       HostelsId: 17,
       HostelsName: 'מלון דירות נופי כנרת',
-      reigionId: 2,
+      regionId: 2,
       Address: 'קריית שמואל, טבריה',
       Description: 'דירות נופש מאובזרות עם נוף ישיר לכנרת, בלב השכונה הדתית.',
       NumberOfPlaces: 40,
@@ -194,7 +194,7 @@ export class srv_Hostels {
     {
       HostelsId: 18,
       HostelsName: 'אכסניית קדומים',
-      reigionId: 6,
+      regionId: 6,
       Address: 'קדומים',
       Description: 'אירוח קבוצתי ומשפחתי בשומרון, נוף הררי ואווירה קהילתית.',
       NumberOfPlaces: 90,
@@ -204,7 +204,7 @@ export class srv_Hostels {
     {
       HostelsId: 19,
       HostelsName: 'סוויטות רובין בצפת',
-      reigionId: 1,
+      regionId: 1,
       Address: 'רחוב האר"י, צפת',
       Description: 'מתחם אירוח יוקרתי ושקט ברובע היהודי, נוף גלילי קסום.',
       NumberOfPlaces: 16,
@@ -214,7 +214,7 @@ export class srv_Hostels {
     {
       HostelsId: 20,
       HostelsName: 'סאטמר נופש ואירוח',
-      reigionId: 7,
+      regionId: 7,
       Address: 'עזרת תורה, ירושלים',
       Description: 'דירות אירוח רחבות ידיים לשבתות חתן ושמחות משפחתיות.',
       NumberOfPlaces: 75,
@@ -224,7 +224,7 @@ export class srv_Hostels {
     {
       HostelsId: 21,
       HostelsName: 'מלון נווה אילן מהדרין',
-      reigionId: 6,
+      regionId: 6,
       Address: 'נווה אילן',
       Description:
         'מלון אירוח בהרי יהודה, שטחים ירוקים פתוחים והתאמה מלאה למשפחות.',
@@ -235,7 +235,7 @@ export class srv_Hostels {
     {
       HostelsId: 22,
       HostelsName: 'וילת השלום בחצור',
-      reigionId: 1,
+      regionId: 1,
       Address: 'חצור הגלילית',
       Description:
         'מתחם וילה יוקרתי עם בריכה מוצנעת ושעות נפרדות, קרוב לקבר חוני המעגל.',
@@ -246,7 +246,7 @@ export class srv_Hostels {
     {
       HostelsId: 23,
       HostelsName: 'בית הארחה עטרת התורה',
-      reigionId: 5,
+      regionId: 5,
       Address: 'רחוב חזון איש, בני ברק',
       Description:
         'חדרי אירוח נקיים ומסודרים במרכז בני ברק, מיועד בעיקר לזוגות.',
@@ -257,7 +257,7 @@ export class srv_Hostels {
     {
       HostelsId: 24,
       HostelsName: 'אכסניית מעלה עמוס',
-      reigionId: 6,
+      regionId: 6,
       Address: 'יישוב מעלה עמוס',
       Description: 'מתחם אירוח מבודד ושקט המתאים לקבוצות ישיבות וסמינרים.',
       NumberOfPlaces: 140,
@@ -267,7 +267,7 @@ export class srv_Hostels {
     {
       HostelsId: 25,
       HostelsName: 'צימרים מנחת חינוך',
-      reigionId: 2,
+      regionId: 2,
       Address: 'מושב תפוח',
       Description: 'צימרים כפריים עם דגש על פרטיות מלאה ואווירה רגועה.',
       NumberOfPlaces: 15,
@@ -277,7 +277,7 @@ export class srv_Hostels {
     {
       HostelsId: 26,
       HostelsName: 'מלון קראון מהדרין ירושלים',
-      reigionId: 7,
+      regionId: 7,
       Address: 'רחוב הנביאים, ירושלים',
       Description:
         'מלון בוטיק יוקרתי המציע אירוח מוקפד לשומרי מצוות עם אוכל גורמה.',
@@ -288,7 +288,7 @@ export class srv_Hostels {
     {
       HostelsId: 27,
       HostelsName: 'קמפוס נווה הרצוג',
-      reigionId: 5,
+      regionId: 5,
       Address: 'ניר גלים',
       Description: 'מתחם אירוח רחב ידיים עם מגרשי ספורט מוצנעים ואולמות כנסים.',
       NumberOfPlaces: 300,
@@ -298,7 +298,7 @@ export class srv_Hostels {
     {
       HostelsId: 28,
       HostelsName: 'סוויטות נוף המירון',
-      reigionId: 1,
+      regionId: 1,
       Address: 'יישוב בר יוחאי',
       Description: 'צימרים מפוארים ומאובזרים למשפחות בלב הגליל העליון.',
       NumberOfPlaces: 28,
@@ -308,7 +308,7 @@ export class srv_Hostels {
     {
       HostelsId: 29,
       HostelsName: 'בית הארחה בית וגן',
-      reigionId: 7,
+      regionId: 7,
       Address: 'פסגת זאב, ירושלים',
       Description: 'מתחם הארחה שקט לקבוצות ומשפחות, מחירים נוחים ושירות אדיב.',
       NumberOfPlaces: 100,
@@ -318,7 +318,7 @@ export class srv_Hostels {
     {
       HostelsId: 30,
       HostelsName: 'וילות חסדי השם בקוממיות',
-      reigionId: 6,
+      regionId: 6,
       Address: 'מושב קוממיות',
       Description: 'מתחם וילות יוקרתיות המותאמות במיוחד למשפחות ברוכות ילדים.',
       NumberOfPlaces: 45,
@@ -328,7 +328,7 @@ export class srv_Hostels {
     {
       HostelsId: 31,
       HostelsName: 'מלון אשכולות נתניה',
-      reigionId: 5,
+      regionId: 5,
       Address: 'קריית צאנז, נתניה',
       Description: 'מלון נופש משפחתי קרוב לים, בית כנסת וארוחות מהדרין בשפע.',
       NumberOfPlaces: 95,
@@ -338,7 +338,7 @@ export class srv_Hostels {
     {
       HostelsId: 32,
       HostelsName: 'דירות הנופש רמת הגולן',
-      reigionId: 2,
+      regionId: 2,
       Address: 'קצרין',
       Description:
         'דירות אירוח מרווחות למטיילים בצפון, קרוב למרכזי קניות כשרים.',
@@ -349,7 +349,7 @@ export class srv_Hostels {
     {
       HostelsId: 33,
       HostelsName: 'בית הארחה עין צורים',
-      reigionId: 6,
+      regionId: 6,
       Address: 'קיבוץ עין צורים',
       Description:
         'אירוח כפרי פסטורלי בשפלת יהודה, מתאים לשבתות גיבוש וסמינרים.',
@@ -360,7 +360,7 @@ export class srv_Hostels {
     {
       HostelsId: 34,
       HostelsName: 'מלון פאר רמדה ירושלים',
-      reigionId: 7,
+      regionId: 7,
       Address: 'שדרות הרצל, ירושלים',
       Description:
         'מלון מפואר המציע קומות מהדרין מיוחדות, אולמות שמחה ובריכה נפרדת.',
@@ -371,7 +371,7 @@ export class srv_Hostels {
     {
       HostelsId: 35,
       HostelsName: 'אחוזת נווה גליל',
-      reigionId: 1,
+      regionId: 1,
       Address: 'יישוב תפרח',
       Description: 'מתחם דירות וחדרים מותאם לקהל תורני, אווירה רגועה ומזמינה.',
       NumberOfPlaces: 50,
@@ -381,7 +381,7 @@ export class srv_Hostels {
     {
       HostelsId: 36,
       HostelsName: 'מלון בוטיק רוטשילד בני ברק',
-      reigionId: 5,
+      regionId: 5,
       Address: 'רחוב רוטשילד, בני ברק',
       Description: 'מלון בוטיק שקט המיועד לאנשי עסקים ומבקרים שומרי מצוות.',
       NumberOfPlaces: 24,
@@ -391,7 +391,7 @@ export class srv_Hostels {
     {
       HostelsId: 37,
       HostelsName: 'פנינת עין כרם',
-      reigionId: 7,
+      regionId: 7,
       Address: 'עין כרם, ירושלים',
       Description: 'מתחם צימרים ציוריים ומבודדים באווירה כפרית בלב ירושלים.',
       NumberOfPlaces: 14,
@@ -401,7 +401,7 @@ export class srv_Hostels {
     {
       HostelsId: 38,
       HostelsName: 'קמפוס ישיבת נתיבות יוסף',
-      reigionId: 6,
+      regionId: 6,
       Address: 'מצפה יריחו',
       Description:
         'מתחם חדרים רחב הצופה לנוף מדבר יהודה, מתאים לשבתות קבוצתיות.',
@@ -412,7 +412,7 @@ export class srv_Hostels {
     {
       HostelsId: 39,
       HostelsName: 'צימר המעיין בכפר חסידים',
-      reigionId: 4,
+      regionId: 4,
       Address: 'כפר חסידים',
       Description: 'נופש כפרי שקט ברמת מנשה, קרוב לקהילה הדתית המקומית.',
       NumberOfPlaces: 18,
@@ -422,7 +422,7 @@ export class srv_Hostels {
     {
       HostelsId: 40,
       HostelsName: 'מלון המלך שלמה טבריה',
-      reigionId: 2,
+      regionId: 2,
       Address: 'השילוח, טבריה',
       Description:
         'מלון ותיק ומוכר עם נוף פנורמי לכנרת, התאמה מלאה לציבור החרדי.',
@@ -433,7 +433,7 @@ export class srv_Hostels {
     {
       HostelsId: 41,
       HostelsName: 'סוויטות יוקרה בבר יוחאי',
-      reigionId: 1,
+      regionId: 1,
       Address: 'יישוב בר יוחאי',
       Description: 'מתחם אירוח אקסקלוסיבי למשפחות עם חצר ענקית ופרטיות מוחלטת.',
       NumberOfPlaces: 32,
@@ -443,7 +443,7 @@ export class srv_Hostels {
     {
       HostelsId: 42,
       HostelsName: 'אכסניית הר חברון',
-      reigionId: 6,
+      regionId: 6,
       Address: 'קריית ארבע',
       Description:
         'מתחם חדרים נקיים קרוב למערת המכפלה, מתאים למשפחות ומטיילים.',
@@ -454,7 +454,7 @@ export class srv_Hostels {
     {
       HostelsId: 43,
       HostelsName: 'מלון לב ירושלים',
-      reigionId: 7,
+      regionId: 7,
       Address: "המלך ג'ורג' 18, ירושלים",
       Description: 'מלון סוויטות במרכז העיר, מטבחון מאובזר בכל חדר ושירות חם.',
       NumberOfPlaces: 100,
@@ -464,7 +464,7 @@ export class srv_Hostels {
     {
       HostelsId: 44,
       HostelsName: 'מתחם האירוח שדות מיכה',
-      reigionId: 6,
+      regionId: 6,
       Address: 'מושב שדות מיכה',
       Description:
         'וילות נופש גדולות בשפלת יהודה עם מרחבים ירוקים ומתקני משחקים.',
@@ -475,7 +475,7 @@ export class srv_Hostels {
     {
       HostelsId: 45,
       HostelsName: 'צימרים קול תורה',
-      reigionId: 1,
+      regionId: 1,
       Address: 'רחוב האר"י, צפת',
       Description: 'חדרי אירוח באווירה צפתית עתיקה ומיוחדת, בלב סמטאות העיר.',
       NumberOfPlaces: 12,
@@ -485,7 +485,7 @@ export class srv_Hostels {
     {
       HostelsId: 46,
       HostelsName: 'מלון פלאזה אשדוד מהדרין',
-      reigionId: 5,
+      regionId: 5,
       Address: 'שדרות משה דיין, אשדוד',
       Description:
         'מלון חופים חדיש, קרוב לחוף הנפרד, מציע קומות אירוח לשומרי מצוות.',
@@ -496,7 +496,7 @@ export class srv_Hostels {
     {
       HostelsId: 47,
       HostelsName: 'בית הארחה אלון מורה',
-      reigionId: 6,
+      regionId: 6,
       Address: 'יישוב אלון מורה',
       Description:
         'אירוח קבוצתי חווייתי המשקיף לנופי התנ"ך, כולל סיורים באזור.',
@@ -507,7 +507,7 @@ export class srv_Hostels {
     {
       HostelsId: 48,
       HostelsName: 'אחוזת נופש דרומית',
-      reigionId: 9,
+      regionId: 9,
       Address: 'נתיבות',
       Description:
         'מתחם דירות אירוח מפוארות וחדשות המתאימות לשבתות חתן משפחתיות.',
@@ -518,7 +518,7 @@ export class srv_Hostels {
     {
       HostelsId: 49,
       HostelsName: 'מלון פרימה פאלאס ירושלים',
-      reigionId: 7,
+      regionId: 7,
       Address: 'פינס 2, ירושלים',
       Description:
         'מלון המעניק חוויית אירוח יהודית אותנטית, קרוב לשכונות גאולה ומאה שערים.',
@@ -529,7 +529,7 @@ export class srv_Hostels {
     {
       HostelsId: 50,
       HostelsName: 'קמפוס גבעת וושינגטון',
-      reigionId: 5,
+      regionId: 5,
       Address: 'גבעת וושינגטון',
       Description:
         'מתחם חדרים ענק, אולמות אירועים, מדשאות ומתקני נופש לקבוצות גדולות.',
@@ -550,7 +550,7 @@ export class srv_Hostels {
         (hostels || []).map((h: any) => ({
           HostelsId: h.HostelsId ?? h.hostelsId,
           HostelsName: h.HostelsName ?? h.hostelsName ?? '',
-          reigionId: h.reigionId ?? h.regionId ?? 0,
+          regionId: h.regionId ?? h.regionId ?? 0,
           Address: h.Address ?? h.address ?? '',
           Description: h.Description ?? h.description ?? '',
           NumberOfPlaces: h.NumberOfPlaces ?? h.numberOfPlaces ?? 0,

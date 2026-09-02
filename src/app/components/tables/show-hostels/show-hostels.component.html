@@ -66,15 +66,15 @@
     <p>
       <strong>אזור: </strong>
       @if (!userCanEdit) {
-        @if (data.reigionId) {
-          {{ data.reigionId | regionName }}
+        @if (data.regionId) {
+          {{ data.regionId | regionName }}
         }
       } @else {
-        <select class="inputToEdit" id="reigionId" [(ngModel)]="data.reigionId">
+        <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
           <option [ngValue]="0">בחירת אזור</option>
-          @for (item of RegionsArrayData; track item.id) {
-            <option [ngValue]="item.id">
-              {{ item.name }}
+          @for (item of RegionsArrayData; track item.regionId) {
+            <option [ngValue]="item.regionId">
+              {{ item.regionName }}
             </option>
           }
         </select>

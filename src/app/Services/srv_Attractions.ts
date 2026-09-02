@@ -97,39 +97,16 @@ export class srv_Attractions {
     return this.http.get<int_Attractions[]>(baseUrl);
   }
 
-  // GetTypeByNumber(AttractionsTypeId: number): string {
-  //   const baseUrl = `https://localhost:7098/Attractions/${AttractionsTypeId}`;
-  //   return this.http.get<string>(baseUrl);
-
-  // }
-
-  //  GetTypeByNumber(AttractionsTypeId: number): Observable<string> {
-  //       const baseUrl = `https://localhost:7098/Attractions/${AttractionsTypeId}`;
-  //       return this.http.get<string>(baseUrl);
-  //   }
+ 
 
   getAttractionTypes() {
     const baseUrl = 'https://localhost:7098/Attractions/types';
     return this.http.get<any>(baseUrl).pipe(
-      tap((data: any) => console.log('Attraction types:', data)), // לוג של המידע המוחזר
+      tap((data: any) => console.log('Attraction types aaa:', data)), // לוג של המידע המוחזר
     );
   }
 
-  // UpdateAttraction(Attraction: int_Attractions) {
-  //   var atrc = this.mock_Attractions.find(
-  //     a => a.attractionId == Attraction.attractionId,
-  //   );
-  //   if (atrc) {
-  //     atrc.address = Attraction.address;
-  //     atrc.description = Attraction.description;
-  //     atrc.attractionsName = Attraction.attractionsName;
-  //     atrc.attractionTypeId = Attraction.attractionTypeId;
-  //     // atrc.ImageUrl = Attraction.ImageUrl;
-  //     atrc.phone = Attraction.phone;
-  //     atrc.reigionId = Attraction.reigionId;
-  //     atrc.shomerShabat = Attraction.shomerShabat;
-  //   }
-  // }
+
 
   UpdateAttraction(attraction: int_Attractions): Observable<void> {
     console.log(attraction);

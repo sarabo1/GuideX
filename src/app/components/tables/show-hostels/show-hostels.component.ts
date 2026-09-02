@@ -40,7 +40,7 @@ export class ShowHostelsComponent {
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {
-        this.RegionsArrayData = data;
+        this.RegionsArrayData = data; // שמירת הנתונים במשתנה
       },
       (error) => {
         console.error('בעיה בהבאת האזורים', error);
@@ -59,7 +59,7 @@ export class ShowHostelsComponent {
       this.data.Address == '' &&
       this.data.Phone == '' &&
       this.data.NumberOfPlaces == 0 &&
-      this.data.reigionId == 0 &&
+      this.data.regionId == 0 &&
       this.data.kashrutId == 0
     ) {
       this.isAddNew = true;
@@ -124,7 +124,7 @@ export class ShowHostelsComponent {
     this.data.Address = (this.data.Address ?? '').trim();
     this.data.Phone = (this.data.Phone ?? '').trim();
     this.data.NumberOfPlaces = Number(this.data.NumberOfPlaces) || 0;
-    this.data.reigionId = Number(this.data.reigionId) || 0;
+    this.data.regionId = Number(this.data.regionId) || 0;
     this.data.kashrutId = Number(this.data.kashrutId) || 0;
 
     console.log('data: ', this.data);
@@ -133,7 +133,7 @@ export class ShowHostelsComponent {
       if (
         this.data.Description.trim() == '' ||
         this.data.HostelsName.trim() == '' ||
-        this.data.reigionId == 0 ||
+        this.data.regionId == 0 ||
         this.data.kashrutId == 0
       ) {
         return;
