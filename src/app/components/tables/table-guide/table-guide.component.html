@@ -1,56 +1,93 @@
-<div class="mat-elevation-z8 table-walking-trail">
-  <table mat-table [dataSource]="dataSource" class="table">
-    <!-- HostelsName Column -->
-    <ng-container matColumnDef="HostelsName">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
-        שם מקום הלינה
-      </th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        {{ element.HostelsName }}
-      </td>
-    </ng-container>
-    <!-- Description Column -->
-    <ng-container matColumnDef="Description">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">תיאור</th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        {{ element.Description }}
-      </td>
-    </ng-container>
+<div class="reka">
+  @if (isLoading) {
+    <h3>טוען נתונים...</h3>
+  } @else if (dataSource?.data?.length === 0) {
+    <h3 class="notFoundInFilter">לא נמצאו מדריכות</h3>
+  } @else {
+    <div class="mat-elevation-z8 table-walking-trail">
+      <table mat-table [dataSource]="dataSource" class="table">
+        <!-- FullName Column -->
+        <ng-container matColumnDef="FullName">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | שם
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ getFullName(element) }}
+          </td>
+        </ng-container>
 
-    <!-- regionId Column -->
-    <ng-container matColumnDef="regionId">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">אזור</th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        {{ srv_all.GetRegions(element.regionId) }}
-      </td>
-    </ng-container>
+        <!-- IdNumber Column -->
+        <ng-container matColumnDef="IdNumber">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | מס' זהות
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ element.IdNumber }}
+          </td>
+        </ng-container>
 
-    <!-- NumberOfPlaces Column -->
-    <ng-container matColumnDef="NumberOfPlaces">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
-        מספר מקומות
-      </th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        {{ element.NumberOfPlaces }}
-      </td>
-    </ng-container>
+        <!-- City Column -->
+        <ng-container matColumnDef="City">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | עיר
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ element.City }}
+          </td>
+        </ng-container>
 
-    <!-- kashrutId Column -->
-    <ng-container matColumnDef="kashrutId">
-      <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">כשרות</th>
-      <td mat-cell *matCellDef="let element" class="contentTable">
-        {{ srv_all.GetKashrutName(element.kashrutId) }}
-      </td>
-    </ng-container>
+        <!-- PhoneNumber Column -->
+        <ng-container matColumnDef="PhoneNumber">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | טלפון
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ element.PhoneNumber }}
+          </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-  <mat-paginator
-    [pageSizeOptions]="[5, 10, 20, 30, 50]"
-    showFirstLastButtons
-    aria-label="בחירת עמוד"
-    class="paginator"
-  >
-  </mat-paginator>
+        <!-- Email Column -->
+        <ng-container matColumnDef="Email">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | מייל
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ element.Email }}
+          </td>
+        </ng-container>
+
+        <!-- ReligiousId Column -->
+        <ng-container matColumnDef="ReligiousId">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | עדה
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ getReligiousName(element.ReligiousId) }}
+          </td>
+        </ng-container>
+
+        <!-- RegionId Column -->
+        <ng-container matColumnDef="RegionId">
+          <th mat-header-cell *matHeaderCellDef class="HeaderOnTable">
+            | אזורי התמחות
+          </th>
+          <td mat-cell *matCellDef="let element" class="contentTable">
+            {{ getRegionsNames(element.RegionId) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20, 30, 50]"
+        showFirstLastButtons
+        aria-label="בחירת עמוד"
+        class="paginator"
+        [length]="dataSource?.data?.length"
+      >
+      </mat-paginator>
+    </div>
+  }
 </div>

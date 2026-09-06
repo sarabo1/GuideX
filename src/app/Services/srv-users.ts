@@ -4,7 +4,7 @@ import { InterfaceUsers } from '../Interfaces/interface-users';
 import { Srv_Guide } from './srv-guide.service';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -117,16 +117,15 @@ export class ServiceUsersService {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user : '';
   }
-  searchByIdNumber(idNumber: string) {
-    var findByIdNumber =
+  /** מחזיר (Observable) את המדריך שנמצא לפי מספר זהות — דרך השרת.
+   *  מחפש את ה-UserId לפי ה-IdNumber ב-mock המשתמשים, ואז שולף את המדריך מהשרת. */
+  searchByIdNumber(idNumber: string): Observable<any> {
+    const findByIdNumber =
       this.mock_Users.find((u) => u.IdNumber === idNumber) || null;
-    if (findByIdNumber) {
-      if (this.srv_guide.searchByUserId(findByIdNumber.UserId)) {
-        return this.srv_guide.searchByUserId(findByIdNumber.UserId)
-      }
-      return null
+    if (!findByIdNumber) {
+      return of(null);
     }
-    return null;
+    return this.srv_guide.searchByUserId(findByIdNumber.UserId);
   }
 
 getUserByEmailIdNumberPhone(EmPhId: JSON) {

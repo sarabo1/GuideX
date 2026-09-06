@@ -1,29 +1,46 @@
-.table-walking-trail{
-    width: 96%;
-    margin: 20px auto;    
-}
-.HeaderOnTable{
-    font-size: 16px;
-    font-weight: bold;
-    font-family: heebo, sans-serif;
-    direction: rtl;
-     text-align: right;
-}
-.contentTable{
-    font-size: 14px;
-    font-family: heebo, sans-serif;
-    direction: rtl;
-    text-align: right;
+.reka {
+  width: 100%;
+  direction: rtl;
 }
 
-
-.paginator{
-    direction: ltr;
-    display: flex;
-    justify-content: center;
-    font-size: 11px;
-    font-family: heebo, sans-serif;
+.table-walking-trail {
+  width: 96%;
+  margin: 20px auto;
 }
-table{
-    direction: rtl;
+
+.HeaderOnTable {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: heebo, sans-serif;
+  direction: rtl;
+  text-align: right;
+  background-color: #f6f6ff;
+  border-bottom-color: #5f16eb;
+}
+
+.contentTable {
+  font-size: 16px;
+  font-family: heebo, sans-serif;
+  font-weight: 300;
+  direction: rtl;
+  text-align: right;
+  border-bottom-color: #5f16eb;
+}
+
+.paginator {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  font-size: 11px;
+  font-family: heebo, sans-serif;
+}
+
+table {
+  direction: rtl;
+}
+
+.notFoundInFilter {
+  text-align: center;
+  color: #888;
+  font-family: heebo, sans-serif;
 }

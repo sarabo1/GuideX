@@ -18,7 +18,7 @@ public dialogRef: MatDialogRef<SucceededAlertComponent>,
    ngOnInit() {
     setTimeout(() => {
       this.dialogRef.close(); // סוגר את הדיאלוג
-    }, 2000); // 7000 מילישניות = 7 שניות
+    }, 1300); // 7000 מילישניות = 7 שניות
   }
 }
 

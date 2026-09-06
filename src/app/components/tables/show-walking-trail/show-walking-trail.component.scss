@@ -3,7 +3,7 @@
   overflow: hidden;
 //   overflow: visible;
 
-  border-radius: 5px;
+  border-radius: 1px;
   margin: 0px;
   direction: rtl;
   font-size: 16px;
@@ -13,7 +13,8 @@
 }
 
 .background {
-  background-image: url("/to_show_wt.png");
+  // background-image: url("/to_show_wt.png");
+  background-color: #faf9fd;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -30,7 +31,7 @@
   margin: 10px;
   position: relative;
   z-index: 2;
-  color: #655f33;
+  color: #5f16eb;
   padding: 20px;
   text-align: center;
     max-height: calc(770px - 40px); /* חישוב גובה מקסימלי תוך כדי התחשבות ב-padding */
@@ -39,9 +40,9 @@
 
 // #615e55;
 .close-btn {
-  border: 2px solid #655f33;
+  border: 1px solid #5f16eb;
   background-color: transparent;
-  color: #615e55;
+  color: #5f16eb;
   border-radius: 18px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -49,7 +50,7 @@
 }
 
 .close-btn:hover {
-  background-color: #655f33;
+  background-color: #5f16eb;
   // color: transparent;
   color: #dfddca;
 }
@@ -64,7 +65,7 @@
 
 .edit {
   text-align: end;
-  background-color: #655f33;
+  background-color: #5f16eb;
   color: #dfddca;
 }
 .inputToEdit {
@@ -80,17 +81,17 @@
 }
 
 .form-check-input:checked {
-  background-color: #655f33; /* צבע רקע כשה-checkbox מסומן */
-  border-color: #655f33; /* צבע גבול כשה-checkbox מסומן */
+  background-color: #5f16eb; /* צבע רקע כשה-checkbox מסומן */
+  border-color: #5f16eb; /* צבע גבול כשה-checkbox מסומן */
 }
 
 .form-check-input:focus {
-  border-color: #655f33; /* צבע גבול כשה-checkbox על מנת להתמקד */
+  border-color: #5f16eb; /* צבע גבול כשה-checkbox על מנת להתמקד */
 }
 
 .form-check-input {
   /* צבע גבול וסטייל עבור ה-checkbox לא מסומן */
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 4px;
 }
 .centered {

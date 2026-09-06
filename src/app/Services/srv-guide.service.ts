@@ -1,162 +1,97 @@
 import { Injectable } from '@angular/core';
-import { Int_Guide } from '../Interfaces/int-guide';
+import { GuideRegistrationPayload, Int_Guide } from '../Interfaces/int-guide';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, lastValueFrom } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Srv_Guide {
-  constructor() {}
+  // המשתנה הבא נשמר לשם תאימות של מנגנוני חיפוש שבנויים כיום סביב mock בזיכרון.
+  private mock_Guides: Int_Guide[] = [];
 
-  mock_Guides: Int_Guide[] = [
-    {
-      UserId: 5,
-      GuideId: 1,
-      AreasOfExpertise: [1, 2, 3], // הוספת מערך של מספרים
-      ReligiousId: 1,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 1'], 'certificate1.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 2'], 'certificate2.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 5'], 'resume5.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 6,
-      GuideId: 2,
-      AreasOfExpertise: [4, 5, 6], // הוספת מערך של מספרים
-      ReligiousId: 1,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 3'], 'certificate3.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 4'], 'certificate4.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 6'], 'resume6.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 7,
-      GuideId: 3,
-      AreasOfExpertise: [7, 8, 9], // הוספת מערך של מספרים
-      ReligiousId: 2,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 5'], 'certificate5.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 6'], 'certificate6.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 7'], 'resume7.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 8,
-      GuideId: 4,
-      AreasOfExpertise: [10, 1, 2], // הוספת מערך של מספרים
-      ReligiousId: 3,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 7'], 'certificate7.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 8'], 'certificate8.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 8'], 'resume8.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 9,
-      GuideId: 5,
-      AreasOfExpertise: [3, 4, 5], // הוספת מערך של מספרים
-      ReligiousId: 4,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 9'], 'certificate9.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 10'], 'certificate10.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 9'], 'resume9.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 10,
-      GuideId: 6,
-      AreasOfExpertise: [3, 4, 5], // הוספת מערך של מספרים
-      ReligiousId: 3,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 11'], 'certificate11.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 12'], 'certificate12.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 10'], 'resume10.txt', {
-        type: 'text/plain',
-      }),
-    },
-    {
-      UserId: 11,
-      GuideId: 7,
-      AreasOfExpertise: [3, 4, 5], // הוספת מערך של מספרים
-      ReligiousId: 3,
-      CertificatesFiles: [
-        new File(['תוכן של תעודה 31'], 'certificate11.pdf', {
-          type: 'application/pdf',
-        }),
-        new File(['תוכן של תעודה 52'], 'certificate12.pdf', {
-          type: 'application/pdf',
-        }),
-      ] as File[],
-      resumeFiles: new File(['תוכן של קורות חיים 11'], 'resume10.txt', {
-        type: 'text/plain',
-      }),
-    },
-  ];
-  GetGuides() {
-    return this.mock_Guides;
+  // מסלול ה-API של הבק-אנד (GuideX, פורט 7098).
+  // שים לב: ה-GuideController בשרת מוגדר עם Route("/all_[controller]") —
+  // לכן הנתיב הוא /all_guide (ולא /api/Guide).
+  private readonly baseUrl = 'https://localhost:7098/all_guide';
+
+  constructor(private http: HttpClient) {}
+
+  /** מחזיר את כל המדריכים מהשרת (GuideResponseDto). */
+  GetGuides(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl).pipe(catchError(() => of([])));
   }
 
-  GetLastGuideId(): number {
-    const guideIds = this.mock_Guides.map((guide) => guide.GuideId);
-    return Math.max(...guideIds);
+  /** מחזיר את המספר הגבוה ביותר של GuideId שנשמר + 1 (ללא קריאה כשהשרת לא זמין → 1). */
+  async GetLastGuideId(): Promise<number> {
+    try {
+      const guides: any[] = (await lastValueFrom(this.http.get<any[]>(this.baseUrl))) ?? [];
+      const ids = guides.map((g) => g.GuideId);
+      return ids.length ? Math.max(...ids) + 1 : 1;
+    } catch {
+      return 1;
+    }
   }
-  addGuide(
-    UserId: number,
-    GuideId: number,
-    AreasOfExpertise: number[],
-    ReligiousId: number,
-    CertificatesFiles: File[],
-    resumeFiles: File,
-  ) {
-    this.mock_Guides.push({
-      UserId,
-      GuideId,
-      AreasOfExpertise,
-      ReligiousId,
-      CertificatesFiles,
-      resumeFiles,
-    });
+
+  /**
+   * שומר הרשמת מדריכה (User + Guide + קבצים) דרך POST /all_guide/register.
+   * בונה FormData (multipart/form-data) לפי GuideUploadDto: פרטי משתמש +
+   * ReligiousId + RegionIds ("המקומות שהיא מדריכה בהם") + ResumeFile +
+   * CertificateFiles. מחזיר Observable של התשובה הכוללת guideId וגם regionIds.
+   */
+  addGuide(payload: GuideRegistrationPayload): Observable<any> {
+    const p = payload || ({} as GuideRegistrationPayload);
+    const formData = new FormData();
+
+    // ── פרטי משתמש (מהם השרת יוצר/מעדכן את ה-User) ──
+    if (p.FirstName) formData.append('FirstName', p.FirstName);
+    if (p.LastName) formData.append('LastName', p.LastName);
+    if (p.IdNumber) formData.append('IdNumber', p.IdNumber);
+    if (p.City) formData.append('City', p.City);
+    if (p.PhoneNumber) formData.append('PhoneNumber', p.PhoneNumber);
+    if (p.Email) formData.append('Email', p.Email);
+    if (p.UserPassword) formData.append('UserPassword', p.UserPassword);
+
+    // ── פרטי מדריך ──
+    if (p.ReligiousId) formData.append('ReligiousId', String(p.ReligiousId));
+    // "מקומות שהיא מדריכה בהם" — אזורי התמחות (ערכים מרובים)
+    (p.RegionIds || []).forEach((r) =>
+      formData.append('RegionIds', String(r)),
+    );
+
+    // ── קבצים ──
+    if (p.ResumeFile) {
+      formData.append('ResumeFile', p.ResumeFile, p.ResumeFile.name);
+    }
+    (p.CertificateFiles || []).forEach((file) =>
+      formData.append('CertificateFiles', file, file.name),
+    );
+
+    return this.http.post<any>(`${this.baseUrl}/register`, formData).pipe(
+      catchError((err) => {
+        console.error('שגיאה בשמירת המדריך', err);
+        return of(null);
+      }),
+    );
   }
+
+  /** בודק אם קיים מדריך עבור userId (תאימות לתבנית הקיימת). */
   userExist(userId: number): boolean {
     return this.mock_Guides.some((g) => g.UserId === userId);
   }
-  searchByUserId(userId: number) {
-    return this.mock_Guides.find((g) => g.UserId == userId);
+
+  /** מחזיר (Observable) את המדריך שנמצא לפי userId — דרך השרת. */
+  searchByUserId(userId: number): Observable<any | null> {
+    return this.GetGuides().pipe(
+      map((guides: any[]) => guides.find((g) => Number(g.UserId) === Number(userId)) ?? null),
+    );
+  }
+
+  /** מחזיר את קבצי המדריך מהשרת לפי GuideId (Observable). */
+  getGuideFiles(guideId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/files/${guideId}`).pipe(
+      catchError(() => of([])),
+    );
   }
 }

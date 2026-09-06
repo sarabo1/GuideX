@@ -5,6 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { WalkingTrailComponent } from '../tables/walking-trail/walking-trail.component';
 import { AttractionsComponent } from '../tables/attractions/attractions.component';
 import { HostelsComponent } from '../tables/hostels/hostels.component';
+import { TableGuideComponent } from '../tables/table-guide/table-guide.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { FevoriteComponent } from "../fevorite/fevorite.component";
 
@@ -15,6 +16,7 @@ import { FevoriteComponent } from "../fevorite/fevorite.component";
     WalkingTrailComponent,
     AttractionsComponent,
     HostelsComponent,
+    TableGuideComponent,
     ScrollTopModule,
     MatIcon,
     FevoriteComponent

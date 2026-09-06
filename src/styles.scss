@@ -207,3 +207,15 @@ option:hover {
     justify-content: space-between;
     align-items: center;
 }
+
+
+
+
+.role-dialog .mat-dialog-container {
+  /* If not needed, this could be removed */
+  /* border-radius: 5px !important; */
+}
+.mat-dialog-container {
+  border-radius: 5px !important; /* קצוות מעוגלים של 5 פיקסלים */
+  overflow: hidden; /* מוסיף כדי למנוע קצוות מעוגלים של אלמנטים בתוך הפופאפ */
+}

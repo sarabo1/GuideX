@@ -1,10 +1,44 @@
-.alert{
-    // background-color: #F3FDF7;
-    border-radius: 2px;
-direction:rtl;
-    margin: 0px;
+// .alert{
+//     // background-color: #F3FDF7;
+//     border-radius: 2px;
+// direction:rtl;
+//     margin: 0px;
     
+// }
+// p{
+//     margin: auto;
+// }
+
+
+.alert {
+  position: fixed; /* מיקום קבוע */
+  bottom: 20px; /* מרחק מהחלק התחתון של הדף */
+  right: 20px; /* מרחק מהחלק הימני של הדף */
+  background-color: #2d83e4; /* צבע הרקע (ירוק) */
+    // background-color: #030505; /* צבע הרקע (ירוק) */
+
+  color: white; /* צבע הטקסט */
+  padding: 15px; /* ריפוד סביב התוכן */
+    padding-top: 9px; /* ריפוד סביב התוכן */
+
+  border-radius: 5px; /* קצוות פחות מעוגלים (יכול לשים 0 לקצוות ישרים) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* צל קל */
+  z-index: 1000; /* לוודא שההודעה מעל תוכן אחר */
+  opacity: 0; /* להתחיל עם שקיפות */
+  animation: fadeIn 0.5s forwards; /* אנימציית הכניסה */
+  direction: rtl; /* טקסט מימין לשמאל */
 }
-p{
-    margin: auto;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
+
+p {
+  margin: 0; /* מחדד את הגבולות כדי לשפר את העיצוב */
+}
+

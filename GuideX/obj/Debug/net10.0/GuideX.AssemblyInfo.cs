@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GuideX")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+482bd5a7675fd500381cff4487a2bf2011cb7202")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc812cb9ecaa21e51060f27d09920f4c0a511534")]
 [assembly: System.Reflection.AssemblyProductAttribute("GuideX")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GuideX")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

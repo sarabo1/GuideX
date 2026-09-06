@@ -11,6 +11,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// הכתובת/פורט שהבק-אנד מאזין עליו — תואם לצד הקריאה ב-frontend (7098).
+builder.WebHost.UseUrls("https://localhost:7098");
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -35,14 +38,9 @@ builder.Services.AddDbContext<GuideXpContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Repositories
-builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<GuideRepository>();
-builder.Services.AddScoped<AttractionRepository>(); 
-builder.Services.AddScoped<AllRepository>();
 
 // Services
-builder.Services.AddScoped<TokenService>(); // <--- רישום ה-TokenService
-builder.Services.AddScoped<loginService>();
 builder.Services.AddScoped<GuideService>();
 
 //builder.Services.AddAuthentication(options =>
@@ -97,12 +95,21 @@ builder.Services.AddAuthentication(options =>
             //ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidIssuer = "GuideX",
             ValidAudience = "angular",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    builder.Configuration["JWT:Key"] ?? "DefaultSuperSecretKeyForDev"))
         };
     });
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// יצירת הטבלאות ב-DB בפעם הראשונה (כל עוד אין migrations).
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<GuideXpContext>();
+    db.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {

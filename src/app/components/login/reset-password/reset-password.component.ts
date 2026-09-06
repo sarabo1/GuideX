@@ -159,7 +159,7 @@ resetUserPassword() {
                 if (error.status === 404) {
                     console.error('User does not exist');
                     this.notExistsUser = true; // מייצר הודעה למשתמש
-                } else {ם
+                } else {
                     console.error('An error occurred during password reset', error);
                     // אפשר להציג הודעת שגיאה כללית למשתמש
                 }

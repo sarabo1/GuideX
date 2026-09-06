@@ -18,7 +18,6 @@ import { SrvCities } from '../../../Services/srv-cities.service';
 import { PhoneValidatorService } from '../../../Services/phone_validator';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { Srv_Guide } from '../../../Services/srv-guide.service';
-import { ServiceUsersService } from '../../../Services/srv-users';
 import { MatDialogRef } from '@angular/material/dialog';
 import { regionNamePipe } from "../../../Pipes/regionName";
 
@@ -45,8 +44,6 @@ export class GuideRegistrationsComponent {
   showPassword = false;
   CertificatesFiles: File[] = [];
   resumeFiles: File | null = null;
-  LastGuideId: number;
-  lastUserId: number;
   userIdExist: number = 0;
   guideIdExist: number = 0;
 
@@ -57,14 +54,11 @@ export class GuideRegistrationsComponent {
     public srv_all: ServiceAllService,
     private srvCities: SrvCities,
     public srv_guides: Srv_Guide,
-    public srv_user: ServiceUsersService,
   ) {
     //this.AreasOfExpertises = srv_all.getRegionsArray();
       this.srv_all.getRegionsArray().subscribe((areas) => {
       this.AreasOfExpertises = areas;
     });
-    this.LastGuideId = srv_guides.GetLastGuideId() + 1;
-    this.lastUserId = srv_user.GetLastUserId() + 1;
   }
   private phoneValidatorSrv = inject(PhoneValidatorService);
 
@@ -129,86 +123,49 @@ export class GuideRegistrationsComponent {
       return;
     }
 
-    let CityIdToSave;
-    if (this.srvCities.ExistsCity(selectedCity) != 0) {
-      CityIdToSave = this.srvCities.ExistsCity(selectedCity);
-    } else {
-      CityIdToSave = this.srvCities.GetLastCityId() + 1;
-      this.srvCities.AddCity(selectedCity);
+    if (this.formGuide.invalid) {
+      console.error('טופס לא תקין:', this.formGuide.errors);
+      return;
     }
 
-    if (this.formGuide.valid) {
-      let idUserId = 0;
-      if (this.userIdExist != 0) {
-        idUserId = this.userIdExist;
-      } else {
-        idUserId = this.lastUserId;
+    const v = this.formGuide.value;
+    const certificatesFiles = (v.CertificatesFiles as File[]) || [];
+    const resumeFiles = (v.resumeFiles as File) || null;
+    const regionIds = (v.selectedAreasOfExpertises as number[]) || [];
+
+    // בניית ה-payload המלא — כולל פרטי המשתמש (מהם השרת יוצר/מעדכן את ה-User)
+    // + עדה + אזורי התמחות ("המקומות שהיא מדריכה בהם") + קבצים.
+    const payload = {
+      FirstName: v.FirstName || '',
+      LastName: v.LastName || '',
+      IdNumber: v.IdNumber || '',
+      City: selectedCity,
+      PhoneNumber: v.PhoneNumber || '',
+      Email: v.Email || '',
+      UserPassword: v.UserPassword || '',
+      ReligiousId: Number(v.ReligiousId) || 0,
+      RegionIds: regionIds,
+      ResumeFile: resumeFiles,
+      CertificateFiles: certificatesFiles,
+    };
+
+    // שמירת המשתמש + המדריך + הקבצים לשרת (GuideId ו-UserId נקבעים ע"י השרת)
+    this.srv_guides.addGuide(payload).subscribe((res) => {
+      console.log('Guide Data שמור:', payload, res);
+      if (!res) {
+        alert('אירעה שגיאה בשמירת המדריכה. נא לנסות שוב.');
+        return;
       }
+      // השרת מחזיר guideId וגם regionIds ("המקומות שהיא מדריכה בהם")
+      console.log('GuideId:', res.guideId, 'RegionIds:', res.regionIds);
 
-      const userData = {
-        userId: idUserId,
-        userPassword: this.formGuide.value.UserPassword || '',
-        firstName: this.formGuide.value.FirstName || '',
-        lastName: this.formGuide.value.LastName || '',
-        idNumber: this.formGuide.value.IdNumber || '',
-        cityId: CityIdToSave,
-        phoneNumber: this.formGuide.value.PhoneNumber || '',
-        email: this.formGuide.value.Email || '',
-      };
-
-      console.log('User Data:', userData);
-      this.srv_user.InsertUser(
-        userData.userId,
-        userData.userPassword,
-        userData.firstName,
-        userData.lastName,
-        userData.idNumber,
-        userData.cityId,
-        userData.phoneNumber,
-        userData.email,
-      );
-      // const resumeFiles = this.formGuide.value.resumeFiles as File;
-      // const certificatesFiles = this.formGuide.value.CertificatesFiles as File[];
-
-      const certificatesFiles = this.formGuide.value
-        .CertificatesFiles as File[];
-      const resumeFiles = this.formGuide.value.resumeFiles as File;
-
-      let idGuideId = 0;
-      if (this.userIdExist != 0) {
-        idGuideId = this.guideIdExist;
-      } else {
-        idGuideId = this.LastGuideId;
-      }
-      const guideData = {
-        userId: idUserId,
-        guideId: idGuideId,
-        areasofexpertise: this.formGuide.value.selectedAreasOfExpertises || [],
-        religiousId: Number(this.formGuide.value.ReligiousId) || 0,
-        certificatesFiles,
-        resumeFiles,
-      };
-      console.log(guideData.resumeFiles);
-      this.srv_guides.addGuide(
-        guideData.userId,
-        guideData.guideId,
-        guideData.areasofexpertise,
-        guideData.religiousId,
-        guideData.certificatesFiles,
-        guideData.resumeFiles,
-      );
-
-      console.log('Guide Data:', guideData);
-
-      //הכנסת הנתונים בLOCAL STRONGE
-      const userObj = { email: userData.email, userId: userData.userId };
+      // הכנסת הנתונים ב-LOCAL STORAGE
+      const userObj = { email: payload.Email, userId: res.userId };
       localStorage.setItem('user_data', JSON.stringify(userObj));
       this.formGuide.reset();
       this.dialogRef.close();
       this.router.navigate(['welcome/Home_Page']);
-    } else {
-      console.error('טופס לא תקין:', this.formGuide.errors);
-    }
+    });
   }
 
   PasswordVisibility() {
@@ -337,7 +294,7 @@ export class GuideRegistrationsComponent {
       ?.setValue(String(guideDetails.ReligiousId));
     this.formGuide
       .get('selectedAreasOfExpertises')
-      ?.setValue(guideDetails.AreasOfExpertise);
+      ?.setValue(guideDetails.RegionId ?? []);
   }
 
   private getGuideDetailsByIdNumber(idNumber: string): any | null {
