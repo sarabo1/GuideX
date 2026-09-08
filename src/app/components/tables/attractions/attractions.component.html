@@ -2,61 +2,39 @@
   <div class="button-container">
     <button class="filterToFind_not_showSearch" (click)="newAttraction()">הוספת אטרקציה</button>
   </div>
-  <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
-    
-    <div [class]="showSearch ? 'filterToFind' : 'filterToFind_not_showSearch'">
-      <div>
-        <div (click)="ToShowSearch()" class="label_search">
-          <img src="search.png" class="img_search" />
-          @if (showSearch) {
-            <h2>חיפוש אטרקציה לפי נתונים</h2>
-          } @else {
-            <h6><b>חיפוש אטרקציה</b></h6>
-          }
-        </div>
-        @if (showSearch) {
-          <div class="toFilter">
-            <div class="filter">
-              <div class="filter-item">
-                <label for="regionSelect">אזור </label>
-                <select
-                  class="regionSelect"
-                  select
-                  id="regionSelect"
-                  (input)="filterTable()"
-                >
-                  <option disabled selected [value]="0">בחירת אזור</option>
-                  @for (item of RegionsArrayData; track item) {
-                    <option [value]="item.regionId">
-                      {{ item.regionName }}
-                    </option>
-                  }
 
-                  <option value="0">כל האזורים</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
-  </div>
-  <div class="filter-item">
-    <label for="searchControl">חיפוש חופשי</label>
+  <div class="filter-panel">
     <input
       type="text"
+      class="search-input"
       (input)="filterTable()"
       id="searchControl"
-      placeholder="חיפוש חופשי..."
+      #searchControl
+      placeholder="חיפוש חופשי: שם, אזור, סוג, תיאור..."
     />
-  </div>
-  <div class="Reset_feeder">
-    <button mat-button class="reset btn" (click)="resetFilters()">
-      <span>איפוס המסננים</span>
-      <span>
-        <mat-icon class="mat-icon-btn">filter_alt_off</mat-icon>
-      </span>
-    </button>
+
+    <div class="areas-filter">
+      <span class="areas-label">סינון לפי אזורים:</span>
+      @for (item of RegionsArrayData; track item.regionId) {
+        <label class="area-check">
+          <input
+            type="checkbox"
+            [checked]="selectedRegions.includes(+item.regionId)"
+            (change)="toggleRegion(+item.regionId, $any($event.target).checked)"
+          />
+          {{ item.regionName }}
+        </label>
+      }
+    </div>
+
+    <div class="Reset_feeder">
+      <button mat-button class="reset btn" (click)="resetFilters()">
+        <span>איפוס המסננים</span>
+        <span>
+          <mat-icon class="mat-icon-btn">filter_alt_off</mat-icon>
+        </span>
+      </button>
+    </div>
   </div>
   @if (isLoading) {
     <h3>טוען נתונים...</h3>
@@ -127,7 +105,7 @@
               | אזור
             </th>
             <td mat-cell *matCellDef="let element" class="contentTable">
-              {{ element.regionId | regionName }}
+              {{ element.regionId | regionName | async }}
             </td>
           </ng-container>
 

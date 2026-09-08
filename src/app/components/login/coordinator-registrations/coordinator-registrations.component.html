@@ -99,8 +99,8 @@
     <label>תפקידך במוסד:</label>
     <select formControlName="RoleId">
       <option disabled>בחרי את תפקידך במוסד</option>
-      @for (item of RoleIdData; track item.id) {
-        <option [value]="item.id">{{ item.name }}</option>
+      @for (item of RoleIdData; track item.RoleId) {
+        <option [value]="item.RoleId">{{ item.RoleName }}</option>
       }
     </select>
   </div>
@@ -207,8 +207,8 @@
     <label>סוג מוסד:</label>
     <select formControlName="TypeSchoolId">
       <option disabled>בחרי את סוג המוסד</option>
-      @for (item of religiousData; track item.id) {
-        <option [value]="item.id">{{ item.name }}</option>
+      @for (item of religiousData; track item.ReligiousId) {
+        <option [value]="item.ReligiousId">{{ item.ReligiousName }}</option>
       }
     </select>
   </div>

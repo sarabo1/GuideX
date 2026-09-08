@@ -27,7 +27,7 @@ export class Srv_Guide {
   async GetLastGuideId(): Promise<number> {
     try {
       const guides: any[] = (await lastValueFrom(this.http.get<any[]>(this.baseUrl))) ?? [];
-      const ids = guides.map((g) => g.GuideId);
+      const ids = guides.map((g) => g.guideId);
       return ids.length ? Math.max(...ids) + 1 : 1;
     } catch {
       return 1;
@@ -56,9 +56,18 @@ export class Srv_Guide {
     // ── פרטי מדריך ──
     if (p.ReligiousId) formData.append('ReligiousId', String(p.ReligiousId));
     // "מקומות שהיא מדריכה בהם" — אזורי התמחות (ערכים מרובים)
-    (p.RegionIds || []).forEach((r) =>
-      formData.append('RegionIds', String(r)),
-    );
+    // מסננים ערכים ריקים/לא-נומריים כדי לא לגרום ל-400 מצד השרת
+    // (השרת מחזיר "The value '' is invalid" כש-RegionIds לא תקין).
+    (p.RegionIds || [])
+      .map((r) => Number(r))
+      .filter((r) => Number.isInteger(r) && r > 0)
+      .forEach((r) => formData.append('RegionIds', String(r)));
+
+    // ── דיבוג: הדפסת מה שנשלח בפועל ──
+    console.log('== RegionIds שנשלחים:', JSON.stringify(p.RegionIds), '| ReligiousId:', p.ReligiousId);
+    if (p.RegionIds && p.RegionIds.some((r) => !Number.isFinite(Number(r)) && r !== null && r !== undefined)) {
+      console.warn('!! נמצא ערך לא-נומרי/ריק ב-RegionIds:', p.RegionIds);
+    }
 
     // ── קבצים ──
     if (p.ResumeFile) {
@@ -71,6 +80,12 @@ export class Srv_Guide {
     return this.http.post<any>(`${this.baseUrl}/register`, formData).pipe(
       catchError((err) => {
         console.error('שגיאה בשמירת המדריך', err);
+        // הדפסת הפרטים של שגיאת ה-400 כדי לראות מה השרת מחזיר (גוף התשובה)
+        console.error('סטטוס:', err.status);
+        console.error('גוף התשובה מהשרת:', err.error);
+        if (err.error && err.error.errors) {
+          console.error('פרטי ה-Validation:', JSON.stringify(err.error.errors));
+        }
         return of(null);
       }),
     );
@@ -78,13 +93,13 @@ export class Srv_Guide {
 
   /** בודק אם קיים מדריך עבור userId (תאימות לתבנית הקיימת). */
   userExist(userId: number): boolean {
-    return this.mock_Guides.some((g) => g.UserId === userId);
+    return this.mock_Guides.some((g) => g.userId === userId);
   }
 
   /** מחזיר (Observable) את המדריך שנמצא לפי userId — דרך השרת. */
   searchByUserId(userId: number): Observable<any | null> {
     return this.GetGuides().pipe(
-      map((guides: any[]) => guides.find((g) => Number(g.UserId) === Number(userId)) ?? null),
+      map((guides: any[]) => guides.find((g) => Number(g.userId) === Number(userId)) ?? null),
     );
   }
 

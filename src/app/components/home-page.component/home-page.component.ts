@@ -20,7 +20,7 @@ import { FevoriteComponent } from "../fevorite/fevorite.component";
     ScrollTopModule,
     MatIcon,
     FevoriteComponent
-],
+  ],
   styleUrls: ['./home-page.component.scss'],
   standalone: true,
 })
@@ -40,14 +40,14 @@ export class HomePageComponent {
   //   this.showBtnTable = !this.showBtnTable;
   //   this.scroll()
   // }
-openBtnTable() {
-  this.showBtnTable = !this.showBtnTable;
-  if(this.showBtnTable){
-  setTimeout(() => {
-    this.scroll();
-  }, 100); // עיכוב קטן כדי לוודא שהרכיבים הוצגו
-}
-}
+  openBtnTable() {
+    this.showBtnTable = !this.showBtnTable;
+    if (this.showBtnTable) {
+      setTimeout(() => {
+        this.scroll();
+      }, 100); // עיכוב קטן כדי לוודא שהרכיבים הוצגו
+    }
+  }
   openTable(tableNum: number) {
     switch (tableNum) {
       case 1:
@@ -77,9 +77,39 @@ openBtnTable() {
       queryParams: { ForumType: forumType },
     });
   }
+
+  openTrails() {
+    console.log("Trails")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/Trails'])
+  }
+ 
+  openHostelsTable() {
+    console.log("Hostels")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/Hostels'])
+  } 
+  
+  openAttractions() {
+    console.log("Attractions")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/Attractions'])
+  } 
+  
+  openGuides() {
+    console.log("Guides")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/Guides'])
+  }
+
+  openRegionSearch() {
+    console.log("RegionSearch")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/RegionSearch'])
+  }
   scroll() {
     const section = document.getElementById('search-section');
     section?.scrollIntoView({ behavior: 'smooth' });
-    
+
   }
 }

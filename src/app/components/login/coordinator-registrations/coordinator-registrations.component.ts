@@ -18,6 +18,7 @@ import { PhoneValidatorService } from '../../../Services/phone_validator';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { SrvCities } from '../../../Services/srv-cities.service';
 import { InterfaceSchool } from '../../../Interfaces/interface-school';
+import { ServiceAllService } from '../../../Services/service-all.service';
 
 @Component({
   selector: 'app-coordinator-registrations',
@@ -39,6 +40,9 @@ export class CoordinatorRegistrationsComponent {
   schools: InterfaceSchool[] = [];
   filteredSchools: InterfaceSchool[] = [];
 
+  RoleIdData: any[] = [];
+  religiousData: any[] = [];
+
   constructor(
     private srvUsers: ServiceUsersService,
     private srv_Coordinators: ServiceCoordinatorService,
@@ -46,7 +50,17 @@ export class CoordinatorRegistrationsComponent {
     private router: Router,
     private dialogRef: MatDialogRef<CoordinatorRegistrationsComponent>,
     private srvCities: SrvCities,
-  ) {}
+    public srv_all : ServiceAllService
+  ) {
+      // טעינת רשימת התפקידים ורשימת סוגי המוסד/העדות מהשרת
+      this.srv_all.getRolesArray().subscribe((roles: any[]) => {
+        this.RoleIdData = roles;
+      });
+
+      this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
+        this.religiousData = religious;
+      });
+  }
 
   private IdIsrael = inject(IdIsraelValidator);
   IsraelIdValidator = this.IdIsrael.idValidator;
@@ -74,30 +88,32 @@ export class CoordinatorRegistrationsComponent {
     this.filteredSchools = this.schools;
   }
 
-  writeData() {
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-    this.formCoordinator.get('PrincipalName')?.setValue('');
-  }
+  // writeData() {
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  //   this.formCoordinator.get('PrincipalName')?.setValue('');
+  // }
 
-  religiousData = [
-    { id: 1, name: 'חסידי' },
-    { id: 2, name: 'ספרדי' },
-    { id: 3, name: 'אשכנזי' },
-    { id: 4, name: 'אחר' },
-  ];
-  RoleIdData = [
-    { id: 1, name: 'סגנית' },
-    { id: 2, name: 'מנהלת' },
-    { id: 3, name: 'מורה' },
-    { id: 4, name: 'מזכירה' },
-    { id: 5, name: 'אחר' },
-  ];
+  // religiousData = [
+  //   { id: 1, name: 'חסידי' },
+  //   { id: 2, name: 'ספרדי' },
+  //   { id: 3, name: 'אשכנזי' },
+  //   { id: 4, name: 'אחר' },
+  // ];
+  // religiousData = this.srv_all.getReligiousName()
+  // RoleIdData = [
+  //   { id: 1, name: 'סגנית' },
+  //   { id: 2, name: 'מנהלת' },
+  //   { id: 3, name: 'מורה' },
+  //   { id: 4, name: 'מזכירה' },
+  //   { id: 5, name: 'אחר' },
+  // ];
+  // RoleIdData = this.srv_all.getRolesArray()
   AgeSchoolIdData = [
     { id: 1, name: 'יסודי' },
     { id: 2, name: 'חט"ב' },

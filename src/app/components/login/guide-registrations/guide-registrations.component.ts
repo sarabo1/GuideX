@@ -46,6 +46,7 @@ export class GuideRegistrationsComponent {
   resumeFiles: File | null = null;
   userIdExist: number = 0;
   guideIdExist: number = 0;
+  religiousData: any[] = [];
 
 
   constructor(
@@ -58,6 +59,9 @@ export class GuideRegistrationsComponent {
     //this.AreasOfExpertises = srv_all.getRegionsArray();
       this.srv_all.getRegionsArray().subscribe((areas) => {
       this.AreasOfExpertises = areas;
+      this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
+        this.religiousData = religious;
+      });
     });
   }
   private phoneValidatorSrv = inject(PhoneValidatorService);
@@ -109,12 +113,12 @@ export class GuideRegistrationsComponent {
     resumeFiles: new FormControl<File | null>(null), // קורות חיים (קובץ אחד)
   });
 
-  religiousData = [
-    { id: 1, name: 'חסידי' },
-    { id: 2, name: 'ספרדי' },
-    { id: 3, name: 'אשכנזי' },
-    { id: 4, name: 'אחר' },
-  ];
+  // religiousData = [
+  //   { id: 1, name: 'חסידי' },
+  //   { id: 2, name: 'ספרדי' },
+  //   { id: 3, name: 'אשכנזי' },
+  //   { id: 4, name: 'אחר' },
+  // ];
 
   newGuide() {
     const selectedCity = this.formGuide.get('CityId')?.value;
@@ -285,16 +289,16 @@ export class GuideRegistrationsComponent {
       return;
     }
 
-    this.guideIdExist = guideDetails.GuideId;
-    this.userIdExist = guideDetails.UserId;
+    this.guideIdExist = guideDetails.guideId;
+    this.userIdExist = guideDetails.userId;
     this.resumeFiles = guideDetails.resumeFiles;
     this.CertificatesFiles = guideDetails.CertificatesFiles;
     this.formGuide
       .get('ReligiousId')
-      ?.setValue(String(guideDetails.ReligiousId));
+      ?.setValue(String(guideDetails.religiousId));
     this.formGuide
       .get('selectedAreasOfExpertises')
-      ?.setValue(guideDetails.RegionId ?? []);
+      ?.setValue(guideDetails.regionId ?? []);
   }
 
   private getGuideDetailsByIdNumber(idNumber: string): any | null {

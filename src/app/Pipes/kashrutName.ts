@@ -3,13 +3,13 @@ import { Observable } from 'rxjs';
 import { ServiceAllService } from '../Services/service-all.service';
 
 @Pipe({
-  name: 'regionName',
+  name: 'kashrutName',
 })
-export class regionNamePipe implements PipeTransform {
+export class KashrutNamePipe implements PipeTransform {
   constructor(private srv_all: ServiceAllService) {}
 
-  transform(regionId: number): Observable<string> {
+  transform(kashrutId: number): Observable<string | undefined> {
     // החזרת Observable מטעם הקריאה לשרת; בטמפלייט משתמשים עם pipe מסוג async.
-    return this.srv_all.GetRegions(Number(regionId));
+    return this.srv_all.GetKashrutName(Number(kashrutId));
   }
 }

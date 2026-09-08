@@ -49,9 +49,9 @@ export class SighInPageComponent {
   private PasswordvalidatorSrv = inject(PasswordvalidatorService);
   passwordValidator = this.PasswordvalidatorSrv.passwordValidator;
 
-  ngOnInit(){
-    this.users_service.aaa()
-  }
+  // ngOnInit(){
+  //   this.users_service.aaa()
+  // }
 
   onClose() {
     this.dialogRef.close();

@@ -1,0 +1,27 @@
+<div class="show">
+  <div class="background"></div>
+  <div class="content">
+    <h2><strong>{{ fullName(data) }}</strong></h2>
+
+    <p>
+      <strong>עיר: </strong>{{ data.city ?? '—' }}
+    </p>
+    <p>
+      <strong>טלפון: </strong>{{ data.phoneNumber ?? '—' }}
+    </p>
+    <p>
+      <strong>אימייל: </strong>{{ data.email ?? '—' }}
+    </p>
+    <p>
+      <strong>עדה: </strong>{{ data.religiousName ?? 'בטעינה…' }}
+    </p>
+    <p>
+      <strong>אזורי התמחות: </strong>{{ getRegionsNames(data.regionId) || 'לא צוין' }}
+    </p>
+    
+
+    <button (click)="onClose()" class="close-btn">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+  </div>
+</div>

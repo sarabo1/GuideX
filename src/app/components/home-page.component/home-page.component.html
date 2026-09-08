@@ -3,134 +3,176 @@
 <div class="home-page-container">
 
 
-  <br/><br/><br/><br/>
+  <br /><br /><br /><br /><br/><br/>
   <!-- <app-fevorite></app-fevorite> -->
-  <br /><br /><br /><br />
+  
   <div class="buttenOpen">
     <div class="btnOpen">
       <div class="forumBtn">
-        <div class="buttonShow">
-          <button class="open btn btnToTable" (click)="openBtnTable()" >
+        <!-- <div class="buttonShow">
+          <button class="open btn btnToTable" (click)="openBtnTable()">
             <div>
               <span>מידע כללי</span>
               <br />
               <span><mat-icon>library_books</mat-icon></span>
             </div>
           </button>
+        </div> -->
+        <div class="buttonShow">
+          <button class="open btn" (click)="openTrails()">
+            <div>
+              <br/>
+              <span>מסלולי הליכה</span>
+              <br />
+              <span><mat-icon>hiking</mat-icon></span>
+              <br/><br/>
+            </div>
+          </button>
         </div>
-        
+        <div class="buttonShow">
+          <button class="open btn" (click)="openHostelsTable()">
+            <div><br/>
+              <span>מקומות לינה</span>
+              <br />
+              <span><mat-icon>bed</mat-icon></span>
+           <br/> <br/></div>
+          </button>
+        </div>
+        <div class="buttonShow">
+          <button class="open btn" (click)="openGuides()">
+            <div><br/>
+              <span>מדריכות</span>
+              <br />
+              <span><mat-icon>person_pin</mat-icon></span>
+           <br/> <br/></div>
+          </button>
+        </div>
+        <div class="buttonShow">
+          <button class="open btn" (click)="openAttractions()">
+            <div><br/>
+              <span>אטרקציות</span>
+              <br />
+              <span><mat-icon>attractions</mat-icon></span>
+            <br/><br/></div>
+          </button>
+        </div>
         <div class="buttonShow">
           <button class="open btn" (click)="openTipsForum(1)">
-            <div>
+            <div><br/>
               <span>פורום חוויות והמלצות</span>
               <br />
               <span><mat-icon>speaker_notes</mat-icon></span>
-            </div>
+            <br/><br/></div>
           </button>
         </div>
         <div class="buttonShow">
           <button class="open btn" (click)="openTipsForum(2)">
-            <div>
+            <div><br/>
               <span>פורום מידע כללי</span> <br />
               <span><mat-icon>live_help</mat-icon></span>
-            </div>
+           <br/> <br/></div>
           </button>
         </div>
         <div class="buttonShow">
           <button class="open btn" (click)="openTipsForum(3)">
-            <div>
+            <div><br/>
               <span>פורום בטיחות</span> <br />
               <span><mat-icon>warning</mat-icon></span>
-            </div>
+           <br/> <br/></div>
+          </button>
+        </div>
+
+        <div class="buttonShow">
+          <button class="open btn" (click)="openRegionSearch()">
+            <div><br/>
+              <span>חיפוש לפי אזור</span> <br />
+              <span><mat-icon>travel_explore</mat-icon></span>
+           <br/> <br/></div>
           </button>
         </div>
       </div>
     </div>
-     <br />
-     
+    <br />
+
   </div>
-  @if (showBtnTable) {
+  <!-- @if (showBtnTable) {
 
-    <div class="arrow">
-    <img src="arrow1.gif" ></div>
-    <div class="btnOpen" id="search-section">
-      <p class="open btn">חיפוש חופשי</p>
-    </div>
+  <div class="arrow">
+    <img src="arrow1.gif">
+  </div>
+  <div class="btnOpen" id="search-section">
+    <p class="open btn">חיפוש חופשי</p>
+  </div>
 
-    <div class="btnOpen">
-      <button class="open btn" [disabled]="openTrail" (click)="openTable(1)">
-        <div>
-          <span>מסלולים</span>
-          <span><mat-icon>map</mat-icon></span>
-        </div>
-        @if (!openTrail) {
-          <mat-icon>keyboard_double_arrow_down</mat-icon>
-        }
-      </button>
-      @if (openTrail) {
-        <app-walking-trail></app-walking-trail>
-        <button class="open btn toClose" (click)="openTable(1)">
-          <mat-icon>keyboard_double_arrow_up</mat-icon>
-        </button>
+  <div class="btnOpen">
+    <button class="open btn" [disabled]="openTrail" (click)="openTable(1)">
+      <div>
+        <span>מסלולים</span>
+        <span><mat-icon>map</mat-icon></span>
+      </div>
+      @if (!openTrail) {
+      <mat-icon>keyboard_double_arrow_down</mat-icon>
       }
-    </div>
-    <div class="btnOpen">
-      <button
-        class="open btn"
-        [disabled]="openAttraction"
-        (click)="openTable(2)"
-      >
-        <div>
-          <span>אטרקציות</span>
-          <span><mat-icon>attractions</mat-icon></span>
-        </div>
-        @if (!openAttraction) {
-          <mat-icon>keyboard_double_arrow_down</mat-icon>
-        }
-      </button>
-      @if (openAttraction) {
-        <app-attractions></app-attractions>
-        <button class="open btn toClose" (click)="openTable(2)">
-          <mat-icon>keyboard_double_arrow_up</mat-icon>
-        </button>
+    </button>
+    @if (openTrail) {
+    <app-walking-trail></app-walking-trail>
+    <button class="open btn toClose" (click)="openTable(1)">
+      <mat-icon>keyboard_double_arrow_up</mat-icon>
+    </button>
+    }
+  </div>
+  <div class="btnOpen">
+    <button class="open btn" [disabled]="openAttraction" (click)="openTable(2)">
+      <div>
+        <span>אטרקציות</span>
+        <span><mat-icon>attractions</mat-icon></span>
+      </div>
+      @if (!openAttraction) {
+      <mat-icon>keyboard_double_arrow_down</mat-icon>
       }
-    </div>
-    <div class="btnOpen">
-      <button class="open btn" [disabled]="openHostels" (click)="openTable(3)">
-        <div>
-          <span>מקומות לינה</span>
-          <span><mat-icon>bed</mat-icon></span>
-        </div>
-        @if (!openHostels) {
-          <mat-icon>keyboard_double_arrow_down</mat-icon>
-        }
-      </button>
-      @if (openHostels) {
-        <app-hostels></app-hostels>
-        <button class="open btn  toClose" (click)="openTable(3)">
-          <mat-icon>keyboard_double_arrow_up</mat-icon>
-        </button>
+    </button>
+    @if (openAttraction) {
+    <app-attractions></app-attractions>
+    <button class="open btn toClose" (click)="openTable(2)">
+      <mat-icon>keyboard_double_arrow_up</mat-icon>
+    </button>
+    }
+  </div>
+  <div class="btnOpen">
+    <button class="open btn" [disabled]="openHostels" (click)="openTable(3)">
+      <div>
+        <span>מקומות לינה</span>
+        <span><mat-icon>bed</mat-icon></span>
+      </div>
+      @if (!openHostels) {
+      <mat-icon>keyboard_double_arrow_down</mat-icon>
       }
-    </div>
+    </button>
+    @if (openHostels) {
+    <app-hostels></app-hostels>
+    <button class="open btn  toClose" (click)="openTable(3)">
+      <mat-icon>keyboard_double_arrow_up</mat-icon>
+    </button>
+    }
+  </div>
 
-    <div class="btnOpen">
-      <button class="open btn" [disabled]="openGuide" (click)="openTable(4)">
-        <div>
-          <span>מדריכות</span>
-          <span><mat-icon>person_pin</mat-icon></span>
-        </div>
-        @if (!openGuide) {
-          <mat-icon>keyboard_double_arrow_down</mat-icon>
-        }
-      </button>
-      @if (openGuide) {
-        <app-table-guide></app-table-guide>
-        <button class="open btn  toClose" (click)="openTable(4)">
-          <mat-icon>keyboard_double_arrow_up</mat-icon>
-        </button>
+  <div class="btnOpen">
+    <button class="open btn" [disabled]="openGuide" (click)="openTable(4)">
+      <div>
+        <span>מדריכות</span>
+        <span><mat-icon>person_pin</mat-icon></span>
+      </div>
+      @if (!openGuide) {
+      <mat-icon>keyboard_double_arrow_down</mat-icon>
       }
-    </div>
+    </button>
+    @if (openGuide) {
+    <app-table-guide></app-table-guide>
+    <button class="open btn  toClose" (click)="openTable(4)">
+      <mat-icon>keyboard_double_arrow_up</mat-icon>
+    </button>
+    }
+  </div>
   }
-<br/>
-  <!-- <div class="footer"> <P>Henny  0583268518</P></div> -->
+  <br /> -->
 </div>

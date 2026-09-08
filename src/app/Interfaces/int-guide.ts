@@ -1,19 +1,23 @@
 /**
- * תשובת GET /all_guide מהשרת (GuideDetailDTO) — פרטי מדריכה מלאים.
- * השדות תואמים ל-GuideDetailDTO שבצד השרת.
+ * תשובת GET /all_Guide מהשרת — פרטי מדריכה מלאים.
+ * השדות מגיעים ב-camelCase, התואמים לתשובת השרת בפועל,
+ * למשל: { guideId, userId, firstName, lastName, idNumber, city,
+ *        phoneNumber, email, religiousId, regionId }.
  */
 export interface Int_Guide {
-  GuideId: number;
-  UserId: number;
-  FirstName: string;
-  LastName: string;
-  IdNumber: string;
-  City: string;
-  PhoneNumber: string;
-  Email: string;
-  ReligiousId: number;
-  /** אזורי ההתמחות של המדריכה (RegionId). */
-  RegionId: number[];
+  guideId: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  idNumber: string;
+  city: string;
+  phoneNumber: string;
+  email: string;
+  religiousId: number;
+  /** אזורי ההתמחות של המדריכה (regionId). */
+  regionId: number[];
+  /** שם העדה — נקבע לפי religiousId (רשום בזמן טעינת הנתונים). */
+  religiousName?: string;
 }
 
 /** פריט קובץ בתשובת השרת — המטא-דאטה בלבד (שם, סוג, מזהה, גודל). */

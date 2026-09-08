@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
   MatPaginator,
@@ -18,6 +18,7 @@ import { AuthService } from '../../../Services/auth-service.service';
 import { AttractionTypeNamePipe } from "../../../Pipes/attractionTypeName";
 import { CommonModule } from '@angular/common';
 import { regionNamePipe } from "../../../Pipes/regionName";
+import { KashrutNamePipe } from "../../../Pipes/kashrutName";
 import { RefreshService } from '../../../Services/RefreshService';
 
 @Component({
@@ -30,7 +31,8 @@ import { RefreshService } from '../../../Services/RefreshService';
     MatSortModule,
     MatSortHeader,
     CommonModule,
-    regionNamePipe
+    regionNamePipe,
+    KashrutNamePipe
 ],
   templateUrl: './hostels.component.html',
   styleUrls: ['./hostels.component.scss'],
@@ -48,6 +50,7 @@ export class HostelsComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('searchControl') searchInput?: ElementRef<HTMLInputElement>;
 
   // dataSource!: MatTableDataSource<Int_Hostels>;
   dataSource = new MatTableDataSource<Int_Hostels>([]);
@@ -60,6 +63,8 @@ export class HostelsComponent implements AfterViewInit {
 
   selectedRegion: number = 0;
   selectedKashrut: number = 0;
+  /** האזורים שנבחרו לסינון (ריק = ללא סינון לפי אזורים). */
+  selectedRegions: number[] = [];
 
   userDetails: any;
 
@@ -92,7 +97,16 @@ export class HostelsComponent implements AfterViewInit {
         this.RegionsArrayData = [];
       },
     });
-    this.KashrutArrayData = this.srv_all.getKashrutArray();
+    this.KashrutArrayData = [];
+    this.srv_all.getKashrutArray().subscribe({
+      next: (data: any) => {
+        this.KashrutArrayData = data ?? [];
+      },
+      error: (err) => {
+        console.error('בעיה בהבאת סוגי הכשרויות', err);
+        this.KashrutArrayData = [];
+      },
+    });
 
     this.loadData();
     this.initLikedState(); // 🔥 חשוב מאוד
@@ -117,7 +131,7 @@ export class HostelsComponent implements AfterViewInit {
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
         case 'regionId': // אזור — מיון לפי שם האזור
-          return this.srv_all.GetRegions(item.regionId);
+          return this.getRegionLabel(item.regionId);
         case 'HostelsName': // שם מקום הלינה
           return item.HostelsName; // מתאים לשם בעמודה
         case 'Description': // תיאור
@@ -136,6 +150,14 @@ export class HostelsComponent implements AfterViewInit {
   // 🔥 KEY ייחודי
   getKey(type: string, id: number): string {
     return `${type}-${id}`;
+  }
+
+  /** שם אזור מתוך הרשימה שנטענה מהשרת (getRegionsArray) — ערך מיידי למיון/סינון. */
+  getRegionLabel(id: number): string {
+    const item = (this.RegionsArrayData ?? []).find(
+      (r: any) => Number(r.regionId) === Number(id),
+    );
+    return item?.regionName ?? '';
   }
 
   // 🔥 אתחול לייקים מה-service
@@ -262,18 +284,9 @@ export class HostelsComponent implements AfterViewInit {
   }
 
   filterTable() {
-    const anyWordElement = document.getElementById(
-      'searchControl',
-    ) as HTMLInputElement | null;
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement | null;
-
-    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
-    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
-    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
-    const regionValue = regionSelect ? Number(regionSelect.value) : 0;
-    const searchText = anyWordElement?.value.trim().toLowerCase() ?? '';
+    // קריאה מהקלט המקומי של טבלה זו (template ref), כדי לא להיתקל
+    // בקלט של טבלאות אחרות בעלות אותו id שגורם לחיפוש שגוי.
+    const searchText = this.searchInput?.nativeElement.value.trim().toLowerCase() ?? '';
 
     let filteredData: Int_Hostels[] = this.areasofexpertisealData;
 
@@ -285,35 +298,49 @@ export class HostelsComponent implements AfterViewInit {
           String(x.HostelsName).toLowerCase().includes(searchText) ||
           String(x.NumberOfPlaces).toLowerCase().includes(searchText) ||
           String(x.Phone).toLowerCase().includes(searchText) ||
-          String(this.srv_all.GetRegions(x.regionId)).toLowerCase().includes(searchText) ||
+          this.getRegionLabel(x.regionId).toLowerCase().includes(searchText) ||
           String(this.srv_all.GetKashrutName(x.kashrutId)).toLowerCase().includes(searchText),
       );
     }
-console.log("אני כאןןןןןןןןןןן")
-    if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.regionId === regionValue);
+
+    // סינון לפי אזורים — מקום לינה חייב להיות באחד מהאזורים שנבחרו.
+    if (this.selectedRegions.length > 0) {
+      filteredData = filteredData.filter((x) =>
+        this.selectedRegions.includes(Number(x.regionId)),
+      );
     }
-
-      console.log('filteredData:', filteredData);
-
 
     this.dataSource.data = filteredData;
     this.paginator?.firstPage();
   }
 
+  /** בחירה/ביטול של אזור בסינון. */
+  toggleRegion(regionId: number, checked: boolean) {
+    if (checked) {
+      if (!this.selectedRegions.includes(regionId)) {
+        this.selectedRegions.push(regionId);
+      }
+    } else {
+      this.selectedRegions = this.selectedRegions.filter(
+        (r) => r !== regionId,
+      );
+    }
+    this.filterTable();
+  }
+
   resetFilters() {
     this.selectedRegion = 0;
     this.selectedKashrut = 0;
+    this.selectedRegions = [];
 
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement;
     const kashrutSelect = document.getElementById(
       'KashrutSelect',
     ) as HTMLSelectElement;
 
-    if (regionSelect) regionSelect.value = '0';
     if (kashrutSelect) kashrutSelect.value = '0';
+
+    // ניקוי שדה החיפוש החופשי כדי שהחיפוש הבא יחל מהתחלה
+    if (this.searchInput) this.searchInput.nativeElement.value = '';
 
     this.dataSource.data = this.areasofexpertisealData;
     this.paginator?.firstPage();

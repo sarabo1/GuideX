@@ -1,69 +1,54 @@
 import { Injectable } from '@angular/core';
 import { ServiceUsersService } from './srv-users';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceAllService {
-  // getRegionsArray() {
-  //   return [
-  //     { id: 1, name: 'גליל עליון' },
-  //     { id: 2, name: 'צפון' },
-  //     { id: 3, name: 'גליל תחתון ועמקים' },
-  //     { id: 4, name: 'כרמל ורמות מנשה' },
-  //     { id: 5, name: 'מישור החוף והשרון' },
-  //     { id: 6, name: 'הרי שומרון, הרי יהודה ושפלת יהודה' },
-  //     { id: 7, name: 'ירושלים' },
-  //     { id: 8, name: 'מדבר יהודה וים המלח' },
-  //     { id: 9, name: 'הנגב' },
-  //     { id: 10, name: 'אילת והערבה' },
-  //   ];
-  // }
+  
   constructor(public Srv_Users:ServiceUsersService,
     public http : HttpClient,
   ) {}
-  getRollName(roleId: number): string | undefined {
-    switch (roleId) {
-      case 1:
-        return 'סגנית';
-      case 2:
-        return 'מנהלת';
-      case 3:
-        return 'מורה';
-      case 4:
-        return 'מזכירה';
-      case 5:
-        return 'אחר';
-      default:
-        return 'אחר';
-    }
+  getRollName(roleId: number): Observable<string> {
+    // switch (roleId) {
+    //   case 1:
+    //     return 'סגנית';
+    //   case 2:
+    //     return 'מנהלת';
+    //   case 3:
+    //     return 'מורה';
+    //   case 4:
+    //     return 'מזכירה';
+    //   case 5:
+    //     return 'אחר';
+    //   default:
+    //     return 'אחר';
+    // }
+    return this.http.get<string>(`https://localhost:7098/Roll_${roleId}`)
+        .pipe(map(response => response ? response : 'אחר'));
   }
+  
 
-  getReligiousName(religiousId: number): string | undefined {
-    switch (religiousId) {
-      case 1:
-        return 'חסידי';
-      case 2:
-        return 'ספרדי';
-      case 3:
-        return 'אשכנזי';
-      default:
-        return 'אחר';
-    }
-  }
-  getTypeSchoolName(typeSchoolId: number): string | undefined {
-    switch (typeSchoolId) {
-      case 1:
-        return 'חסידי';
-      case 2:
-        return 'ספרדי';
-      case 3:
-        return 'אשכנזי';
-      default:
-        return 'אחר';
-    }
+
+getReligiousName(religiousId: number): Observable<string | undefined> {
+    return this.http.get<string>(`https://localhost:7098/Religious_${religiousId}`)
+        .pipe(map(response => response ? response : 'אחר'));
+}
+ 
+  getTypeSchoolName(typeSchoolId: number): Observable<string | undefined> {
+    return this.getReligiousName(typeSchoolId)
+    // switch (typeSchoolId) {
+    //   case 1:
+    //     return 'חסידי';
+    //   case 2:
+    //     return 'ספרדי';
+    //   case 3:
+    //     return 'אשכנזי';
+    //   default:
+    //     return 'אחר';
+    // }
   }
 
   getAgeSchoolName(ageSchoolId: number): string | undefined {
@@ -78,40 +63,15 @@ export class ServiceAllService {
         return 'אחר';
     }
   }
-  GetRegions(regionId: number): string {
-    switch (regionId) {
-      case 1:
-        return 'גליל עליון';
-      case 2:
-        return 'צפון';
-      case 3:
-        return 'גליל תחתון ועמקים';
-      case 4:
-        return 'כרמל ורמות מנשה';
-      case 5:
-        return 'מישור החוף והשרון';
-      case 6:
-        return 'הרי שומרון, הרי יהודה ושפלת יהודה';
-      case 7:
-        return 'ירושלים';
-      case 8:
-        return 'מדבר יהודה וים המלח';
-      case 9:
-        return 'הנגב';
-      default:
-        return 'אילת והערבה';
-    }
+  GetRegions(regionId: number): Observable<string> {
+
+
+    return this.http.get<string>(`https://localhost:7098/region_${regionId}`)
+        .pipe(map(response => response ? response : 'אחר'));
+    
+
   }
 
-    // getRegionsArray() {
-    //   const baseUrl ='https://localhost:7098/All_Regions'
-    //   const sss =  this.http.get<any>(baseUrl).pipe(
-    //      tap((data: any) => console.log('Attraction types:', data)) // לוג של המידע המוחזר
-    //    );
-    //    console.log("sss: ",sss)
-    //    return sss
-        
-    // }
 
   getRegionsArray() {
     const baseUrl = 'https://localhost:7098/All_Regions';
@@ -121,50 +81,91 @@ export class ServiceAllService {
   }
 
 
- 
-  GetKashrutName(kashrutId: number): string {
-    switch (kashrutId) {
-      case 1:
-        return 'בד"ץ העדה החרדית ירושלים';
-      case 2:
-        return 'בד"ץ הרב לנדא (בני ברק)';
-      case 3:
-        return 'בד"ץ בית יוסף';
-      case 4:
-        return 'בד"ץ שארית ישראל';
-      case 5:
-        return 'בד"ץ מהדרין - הרב רובין';
-      case 6:
-        return 'בד"ץ מחזיקי הדת (בעלזא)';
-      case 7:
-        return 'הרבנות הראשית - מהדרין';
-      case 8:
-        return 'בד"ץ חתם סופר בני ברק';
-      case 9:
-        return 'בד"ץ חתם סופר פתח תקווה';
-      case 10:
-        return 'בד"ץ מהדרין - הרב גרוס';
-      case 11:
-        return 'בד"ץ אגודת ישראל';
-      default:
-        return 'יש לברר כשרות';
-    }
-  }
+  // GetKashrutName(kashrutId: number): string {
+  //   const item = this.getKashrutArray().find((k) => k.id === kashrutId);
+  //   return item ? item.name : 'יש לברר כשרות';
+  // }
+GetKashrutName(kashrutId: number): Observable<string | undefined> {
+  console.log("kashrutId: ", kashrutId)
+    return this.http.get<string>(`https://localhost:7098/Kashrut_${kashrutId}`)
+    
+        .pipe(map(response => response ? response : 'אחר'));
+}
+
+  // GetKashrutName(kashrutId: number): Observable<string> { // שיניתי את סוג החזרה ל-string בלבד, כי ה-map מטפל ב-undefined והופך אותו ל-string
+  //   console.log("GetKashrutName called with kashrutId:", kashrutId);
+
+  //   return this.http.get<string>(`https://localhost:7098/Kashrut_${kashrutId}`)
+  //     .pipe(
+  //       // הוספנו tap כדי לראות את התגובה הגולמית מה-API (לפני ה-map)
+  //       tap(response => console.log('API Raw Response (tap):', response)),
+        
+  //       // ה-map הזה לוקח את התגובה (שהיא הסטרינג שחוזר מה-API)
+  //       // ובודק אם היא קיימת. אם לא, מחזיר 'אחר'.
+  //       map(response => {
+  //         console.log('Mapping response:', response); // לוג של הערך שה-map מקבל
+  //         return response ? response : 'אחר';
+  //       }),
+        
+  //       // טיפול בשגיאות: אם הבקשה נכשלה (למשל, 404, 500, בעיית רשת)
+  //       catchError((error: HttpErrorResponse) => {
+  //         console.error('Error fetching Kashrut name for ID', kashrutId, ':', error);
+  //         // במקרה של שגיאה, נחזיר Observable שמכיל את הסטרינג 'אחר'
+  //         // חשוב להחזיר Observable מכיוון שהפונקציה מצפה ל-Observable.
+  //         return of('אחר'); 
+  //       })
+  //     );
+  // }
+  /** רשימת הכשרויות הקבועות — משמשת לפונקציות שדורשות ערך string מיידי. */
+  // getKashrutArrayLocal() {
+  //   return [
+  //     { id: 1, name: 'בד"ץ העדה החרדית ירושלים' },
+  //     { id: 2, name: 'בד"ץ הרב לנדא (בני ברק)' },
+  //     { id: 3, name: 'בד"ץ בית יוסף' },
+  //     { id: 4, name: 'בד"ץ שארית ישראל' },
+  //     { id: 5, name: 'בד"ץ מהדרין - הרב רובין' },
+  //     { id: 6, name: 'בד"ץ מחזיקי הדת (בעלזא)' },
+  //     { id: 7, name: 'הרבנות הראשית - מהדרין' },
+  //     { id: 8, name: 'בד"ץ חתם סופר בני ברק' },
+  //     { id: 9, name: 'בד"ץ חתם סופר פתח תקווה' },
+  //     { id: 10, name: 'בד"ץ מהדרין - הרב גרוס' },
+  //     { id: 11, name: 'בד"ץ אגודת ישראל' },
+  //   ];
+  // }
 
   getKashrutArray() {
-  return [
-    { id: 1, name: 'בד"ץ העדה החרדית ירושלים' },
-    { id: 2, name: 'בד"ץ הרב לנדא (בני ברק)' },
-    { id: 3, name: 'בד"ץ בית יוסף' },
-    { id: 4, name: 'בד"ץ שארית ישראל' },
-    { id: 5, name: 'בד"ץ מהדרין - הרב רובין' },
-    { id: 6, name: 'בד"ץ מחזיקי הדת (בעלזא)' },
-    { id: 7, name: 'הרבנות הראשית - מהדרין' },
-    { id: 8, name: 'בד"ץ חתם סופר בני ברק' },
-    { id: 9, name: 'בד"ץ חתם סופר פתח תקווה' },
-    { id: 10, name: 'בד"ץ מהדרין - הרב גרוס' },
-    { id: 11, name: 'בד"ץ אגודת ישראל' },
-  ];
+    const baseUrl = 'https://localhost:7098/All_Kashruts';
+    return this.http.get<any>(baseUrl).pipe(
+      tap((data: any) => console.log('סוגי הכשרויות:', data)), // לוג של המידע המוחזר
+    );
+//   return [
+//     { id: 1, name: 'בד"ץ העדה החרדית ירושלים' },
+//     { id: 2, name: 'בד"ץ הרב לנדא (בני ברק)' },
+//     { id: 3, name: 'בד"ץ בית יוסף' },
+//     { id: 4, name: 'בד"ץ שארית ישראל' },
+//     { id: 5, name: 'בד"ץ מהדרין - הרב רובין' },
+//     { id: 6, name: 'בד"ץ מחזיקי הדת (בעלזא)' },
+//     { id: 7, name: 'הרבנות הראשית - מהדרין' },
+//     { id: 8, name: 'בד"ץ חתם סופר בני ברק' },
+//     { id: 9, name: 'בד"ץ חתם סופר פתח תקווה' },
+//     { id: 10, name: 'בד"ץ מהדרין - הרב גרוס' },
+//     { id: 11, name: 'בד"ץ אגודת ישראל' },
+//   ];
+// }
+
+}
+  getreligiousArray() {
+    const baseUrl = 'https://localhost:7098/All_Religious';
+    return this.http.get<any>(baseUrl).pipe(
+      tap((data: any) => console.log('סוגי ההשתיכות הדתית:', data)), // לוג של המידע המוחזר
+    );
+}
+
+getRolesArray() {
+    const baseUrl = 'https://localhost:7098/All_Roles';
+    return this.http.get<any>(baseUrl).pipe(
+      tap((data: any) => console.log('סוגי התפקידים:', data)), // לוג של המידע המוחזר
+    );
 }
 
 }

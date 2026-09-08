@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -50,11 +50,14 @@ export class WalkingTrailComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('searchControl') searchInput?: ElementRef<HTMLInputElement>;
 
   RegionsArrayData: any;
   showSearch: Boolean = false;
 
   selectedRegion: number = 0;
+  /** האזורים שנבחרו לסינון (ריק = ללא סינון לפי אזורים). */
+  selectedRegions: number[] = [];
   selectedDifficulty: number = 0;
   selectedLength: number = 0;
 
@@ -79,7 +82,16 @@ export class WalkingTrailComponent implements AfterViewInit {
 
     this.userDetails = this.authService.getUserData();
 
-    this.RegionsArrayData = this.srv_all.getRegionsArray();
+    this.RegionsArrayData = [];
+    this.srv_all.getRegionsArray().subscribe({
+      next: (data: any) => {
+        this.RegionsArrayData = data ?? [];
+      },
+      error: (err) => {
+        console.error('בעיה בהבאת האזורים', err);
+        this.RegionsArrayData = [];
+      },
+    });
 
     this.loadData();
     this.initLikedState();
@@ -88,6 +100,14 @@ export class WalkingTrailComponent implements AfterViewInit {
   //
   getKey(type: string, id: number): string {
     return `${type}-${id}`;
+  }
+
+  /** שם אזור מתוך הרשימה שנטענה מהשרת (getRegionsArray) — ערך מיידי למיון/סינון. */
+  getRegionLabel(id: number): string {
+    const item = (this.RegionsArrayData ?? []).find(
+      (r: any) => Number(r.regionId) === Number(id),
+    );
+    return item?.regionName ?? '';
   }
 
   initLikedState() {
@@ -238,14 +258,9 @@ export class WalkingTrailComponent implements AfterViewInit {
   }
 
   filterTable() {
-    const anyWordElement = document.getElementById('searchControl',) as HTMLInputElement | null;
-    const regionSelect = document.getElementById('regionSelect',) as HTMLSelectElement | null;
-
-    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
-    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
-    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
-    const regionValue = regionSelect ? Number(regionSelect.value) : 0;
-    const searchText = anyWordElement?.value.trim().toLowerCase() ?? '';
+    // קריאה מהקלט המקומי של טבלה זו (template ref), כדי לא להיתקל
+    // בקלט של טבלאות אחרות בעלות אותו id שגורם לחיפוש שגוי.
+    const searchText = this.searchInput?.nativeElement.value.trim().toLowerCase() ?? '';
 
     let filteredData: Int_WalkingTrail[] = this.areasofexpertisealData;
 
@@ -258,27 +273,41 @@ export class WalkingTrailComponent implements AfterViewInit {
           String(x.LengthInKm).includes(searchText) ||
           String(x.RouteDuration).includes(searchText) ||
           String(x.WalkingTrailName).includes(searchText) ||
-          String(this.srv_all.GetRegions(x.regionId)).includes(searchText),
+          this.getRegionLabel(x.regionId).toLowerCase().includes(searchText),
       );
     }
 
-    if (regionValue !== 0) {
-      filteredData = filteredData.filter((x) => x.regionId === regionValue);
+    // סינון לפי אזורים — מסלול חייב להיות באחד מהאזורים שנבחרו.
+    if (this.selectedRegions.length > 0) {
+      filteredData = filteredData.filter((x) =>
+        this.selectedRegions.includes(Number(x.regionId)),
+      );
     }
-
 
     this.dataSource.data = filteredData;
     this.paginator?.firstPage();
+  }
+
+  /** בחירה/ביטול של אזור בסינון. */
+  toggleRegion(regionId: number, checked: boolean) {
+    if (checked) {
+      if (!this.selectedRegions.includes(regionId)) {
+        this.selectedRegions.push(regionId);
+      }
+    } else {
+      this.selectedRegions = this.selectedRegions.filter(
+        (r) => r !== regionId,
+      );
+    }
+    this.filterTable();
   }
 
   resetFilters() {
     this.selectedRegion = 0;
     this.selectedDifficulty = 0;
     this.selectedLength = 0;
+    this.selectedRegions = [];
 
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement;
     const lengthSelect = document.getElementById(
       'lengthSelect',
     ) as HTMLSelectElement;
@@ -286,9 +315,11 @@ export class WalkingTrailComponent implements AfterViewInit {
       'difficultySelect',
     ) as HTMLSelectElement;
 
-    if (regionSelect) regionSelect.value = '0';
     if (lengthSelect) lengthSelect.value = '0';
     if (difficultySelect) difficultySelect.value = '0';
+
+    // ניקוי שדה החיפוש החופשי כדי שהחיפוש הבא יחל מהתחלה
+    if (this.searchInput) this.searchInput.nativeElement.value = '';
 
     this.dataSource.data = this.areasofexpertisealData;
     this.paginator?.firstPage();

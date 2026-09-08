@@ -67,7 +67,7 @@
       <strong>אזור: </strong>
       @if (!userCanEdit) {
         @if (data.regionId) {
-          {{ data.regionId | regionName }}
+          {{ data.regionId | regionName | async }}
         }
       } @else {
         <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
@@ -122,13 +122,13 @@
     <p>
       <strong>כשרות המקום: </strong>
       @if (!userCanEdit) {
-        {{ srv_all.GetKashrutName(data.kashrutId) }}
+        {{ data.kashrutId | kashrutName | async }}
       } @else {
         <select class="inputToEdit" id="kashrutId" [(ngModel)]="data.kashrutId">
           <option [ngValue]="0">בחירת כשרות</option>
-          @for (item of KashrutArrayData; track item.id) {
-            <option [ngValue]="item.id">
-              {{ item.name }}
+          @for (item of KashrutArrayData; track item.KashrutId) {
+            <option [ngValue]="+item.KashrutId">
+              {{ item.kashrutName }}
             </option>
           }
         </select>

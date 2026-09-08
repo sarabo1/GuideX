@@ -14,10 +14,17 @@ import { regionNamePipe } from "../../../Pipes/regionName";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
+import { KashrutNamePipe } from "../../../Pipes/kashrutName";
 
 @Component({
   selector: 'app-show-hostels',
-  imports: [MatIcon, regionNamePipe, CommonModule, FormsModule],
+  imports: [
+    MatIcon,
+    regionNamePipe,
+    KashrutNamePipe,
+    CommonModule,
+    FormsModule,
+  ],
   templateUrl: './show-hostels.component.html',
   styleUrl: './show-hostels.component.scss',
 })
@@ -46,7 +53,14 @@ export class ShowHostelsComponent {
         console.error('בעיה בהבאת האזורים', error);
       },
     );
-    this.KashrutArrayData = this.srv_all.getKashrutArray();
+    this.srv_all.getKashrutArray().subscribe(
+      (data) => {
+        this.KashrutArrayData = data; // שמירת הנתונים במשתנה
+      },
+      (error) => {
+        console.error('בעיה בהבאת סוגי הכשרויות', error);
+      },
+    );
     this.checkIfAddNew();
   }
 
@@ -69,6 +83,11 @@ export class ShowHostelsComponent {
   }
 
   ngOnInit() {
+    // ווידוא שהערך להשוואה הוא מספר — כך ה-select יציג את הכשרות הקיימת
+    // (ה-API עשוי להחזיר מזהים כ-strings, מה שגורם ל=== להיכשל).
+    this.data.kashrutId = Number(this.data.kashrutId) || 0;
+    this.data.regionId = Number(this.data.regionId) || 0;
+
     const raw = localStorage.getItem('user_data');
     this.userDetails = raw ? JSON.parse(raw) : null;
 

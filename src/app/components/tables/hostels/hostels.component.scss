@@ -1,7 +1,89 @@
 .table-walking-trail{
     width: 96%;
-    margin: 20px auto;    
+    margin: 20px auto;
 }
+
+/* לוח הסינון: חיפוש חופשי + סינון לפי אזורים */
+.filter-panel {
+  width: 96%;
+  margin: 20px auto 0;
+  padding: 12px;
+  background-color: #f6f6ff;
+  border-radius: 8px;
+  font-family: heebo, sans-serif;
+  direction: rtl;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: heebo, sans-serif;
+  border: 1px solid #c5b8f0;
+  border-radius: 6px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #5f16eb;
+}
+
+.areas-filter {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.areas-label {
+  font-weight: bold;
+  color: #5f16eb;
+  font-family: heebo, sans-serif;
+}
+
+.area-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-family: heebo, sans-serif;
+  cursor: pointer;
+}
+
+/* כפתור איפוס המסננים — מעוצב להתאים ללוח הסינון */
+.Reset_feeder {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.reset {
+  padding: 6px 14px;
+  color: #ff5c67;
+  background-color: transparent;
+  border: 1px solid #ff5c67;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: heebo, sans-serif;
+  font-size: 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.reset:hover {
+  color: #ffffff;
+  background-color: #ff5c67;
+}
+
+.reset .mat-icon-btn {
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+}
+
 .HeaderOnTable{
     font-size: 18px;
     font-weight: bold;
@@ -73,4 +155,29 @@ mat-icon{
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
+}
+
+/* ── סינון רב־בחירה לפי אזורים (ליד החיפוש החופשי) ── */
+.regions-filter {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  direction: rtl;
+}
+
+.regions-label {
+  font-weight: bold;
+  color: #5f16eb;
+  font-family: heebo, sans-serif;
+}
+
+.region-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-family: heebo, sans-serif;
+  cursor: pointer;
 }

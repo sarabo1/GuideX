@@ -36,15 +36,15 @@ export class ServiceUsersService {
     return this.mock_Users;
     
   }
-  aaa(){
-    const base = 'https://localhost:7098/api/Login/hi'
-       this.http.get<any>(base).subscribe(    response => {
-            console.log('Response:', response);
-        },
-        error => {
-            console.error('Error:', error);
-        });
-  }
+  // aaa(){
+  //   const base = 'https://localhost:7098/api/Login/hi'
+  //      this.http.get<any>(base).subscribe(    response => {
+  //           console.log('Response:', response);
+  //       },
+  //       error => {
+  //           console.error('Error:', error);
+  //       });
+  // }
   GetLastUserId() {
     const userIds = this.mock_Users.map((user) => user.UserId);
     return Math.max(...userIds);

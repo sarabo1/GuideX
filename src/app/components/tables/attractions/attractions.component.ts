@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
@@ -62,6 +62,7 @@ export class AttractionsComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('searchControl') searchInput?: ElementRef<HTMLInputElement>;
 
   userDetails: any;
   RegionsArrayData: any;
@@ -71,6 +72,8 @@ export class AttractionsComponent implements AfterViewInit {
   showSearch: Boolean = false;
   selectedRegion: number = 0;
   selectedAttractionType: number = 0;
+  /** האזורים שנבחרו לסינון (ריק = ללא סינון לפי אזורים). */
+  selectedRegions: number[] = [];
   // 🔥 FIX: key-based liked state (לא לפי ID בלבד)
   isLiked: { [key: string]: boolean } = {};
 
@@ -120,6 +123,14 @@ export class AttractionsComponent implements AfterViewInit {
   //  יצירת KEY ייחודי
   getKey(type: string, id: number): string {
     return `${type}-${id}`;
+  }
+
+  /** שם אזור מתוך הרשימה שנטענה מהשרת (getRegionsArray) — ערך מיידי למיון/סינון. */
+  getRegionLabel(id: number): string {
+    const item = (this.RegionsArrayData ?? []).find(
+      (r: any) => Number(r.regionId) === Number(id),
+    );
+    return item?.regionName ?? '';
   }
 
   // אתחול לייקים מהשרת (mock)
@@ -181,7 +192,7 @@ export class AttractionsComponent implements AfterViewInit {
           return item.description;
         case 'regionId':
           // מיון לפי שם האזור (טקסט) ולא לפי ה-ID
-          return this.srv_all.GetRegions(Number(item.regionId));
+          return this.getRegionLabel(Number(item.regionId));
         case 'AttractionsTypeId':
           // מיון לפי שם סוג האטרקציה (טקסט) ולא לפי ה-ID
           return (
@@ -283,28 +294,17 @@ ngAfterViewInit() {
   }
 
   filterTable() {
-    const anyWord = document.getElementById(
-      'searchControl',
-    ) as HTMLInputElement | null;
-
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement | null;
-
-    // regionSelect קיים רק כשבוחר האזור פתוח (תוך showSearch).
-    // אם הוא חסר ב-DOM — מתייחסים אליו כאל "כל האזורים" (0),
-    // כדי שהחיפוש החופשי יעבוד גם כשבוחר האזור לא מוצג.
-    const selectedRegionValue = regionSelect ? Number(regionSelect.value) : 0;
-
-    const searchText = anyWord?.value.trim().toLowerCase() ?? '';
+    // קריאה מהקלט המקומי של טבלה זו (template ref), כדי לא להיתקל
+    // בקלט של טבלאות אחרות בעלות אותו id שגורם לחיפוש שגוי.
+    const searchText = this.searchInput?.nativeElement.value.trim().toLowerCase() ?? '';
 
     let filteredData: int_Attractions[] = [...this.areasofexpertisealData];
 
     if (searchText) {
       filteredData = filteredData.filter((x) => {
-        const regionValue = this.srv_all.GetRegions(Number(x.regionId));
+        const regionValue = this.getRegionLabel(Number(x.regionId));
 
-        const regionText = String(regionValue).toLowerCase();
+        const regionText = regionValue.toLowerCase();
 
         return (
           (x.description ?? '').toLowerCase().includes(searchText) ||
@@ -316,9 +316,10 @@ ngAfterViewInit() {
       });
     }
 
-    if (selectedRegionValue !== 0) {
-      filteredData = filteredData.filter(
-        (x) => Number(x.regionId) === selectedRegionValue,
+    // סינון לפי אזורים — אטרקציה חייבת להיות באחד מהאזורים שנבחרו.
+    if (this.selectedRegions.length > 0) {
+      filteredData = filteredData.filter((x) =>
+        this.selectedRegions.includes(Number(x.regionId)),
       );
     }
 
@@ -327,23 +328,34 @@ ngAfterViewInit() {
     this.paginator?.firstPage();
   }
 
-
+  /** בחירה/ביטול של אזור בסינון. */
+  toggleRegion(regionId: number, checked: boolean) {
+    if (checked) {
+      if (!this.selectedRegions.includes(regionId)) {
+        this.selectedRegions.push(regionId);
+      }
+    } else {
+      this.selectedRegions = this.selectedRegions.filter(
+        (r) => r !== regionId,
+      );
+    }
+    this.filterTable();
+  }
 
   resetFilters() {
     console.log('aaa')
     this.selectedRegion = 0;
     this.selectedAttractionType = 0;
+    this.selectedRegions = [];
 
-    const regionSelect = document.getElementById(
-      'regionSelect',
-    ) as HTMLSelectElement | null;
     const typeSelect = document.getElementById(
       'AttractionTypeSelect',
     ) as HTMLSelectElement | null;
 
-    if (regionSelect) regionSelect.value = '0';
-
     if (typeSelect) typeSelect.value = '0';
+
+    // ניקוי שדה החיפוש החופשי כדי שהחיפוש הבא יחל מהתחלה
+    if (this.searchInput) this.searchInput.nativeElement.value = '';
 
     this.dataSource.data = this.areasofexpertisealData;
     this.paginator?.firstPage();
