@@ -117,8 +117,8 @@
   <div>
     <label>השתייכות דתית:</label>
     <select formControlName="ReligiousId">
-      @for (item of religiousData; track item.id) {
-        <option [value]="item.id">{{ item.name }}</option>
+      @for (item of religiousData; track item.religiousId) {
+        <option [value]="item.religiousId">{{ item.religiousName }}</option>
       }
     </select>
   </div>
@@ -134,15 +134,15 @@
     <div class="dropdown">
       <div class="dropdown-content">
         <div class="checkbox-group">
-          @for (item of AreasOfExpertises; track item.RegionId) {
+          @for (item of AreasOfExpertises; track item.regionId) {
             <label class="checkbox-label">
               <input
                 type="checkbox"
-                [value]="item.RegionId"
+                [value]="item.regionId"
                 (change)="onCheckboxChange($event)"
-                [checked]="isChecked(item.RegionId)"
+                [checked]="isChecked(item.regionId)"
               />
-              {{ item.RegionName }}
+              {{ item.regionName }}
             </label>
           }
         </div>

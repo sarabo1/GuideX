@@ -37,28 +37,15 @@ export interface GuideFileDto {
  * את ה-User וה-Guide ב-SQL.
  */
 export interface GuideRegistrationPayload {
-  /** מזהה העדה (ReligiousId). */
   ReligiousId: number;
-
-  /**
-   * "המקומות שהיא מדריכה בהם" — אזורי ההתמחות (RegionIds), ערכים מרובים.
-   * תואם לשדה RegionIds שב-GuideUploadDto.
-   */
   RegionIds: number[];
-
-  /** ── פרטי המשתמש (מהם השרת יוצר/מעדכן את ה-User) ── */
   FirstName: string;
   LastName: string;
   IdNumber: string;
-  /** שם העיר (string) — תואם ל-User.City. */
   City: string;
   PhoneNumber: string;
   Email: string;
   UserPassword: string;
-
-  /** קורות חיים (קובץ אחד אופציונלי). */
   ResumeFile?: File | null;
-
-  /** קבצי תעודות (קובצים מרובים אופציונליים). */
   CertificateFiles?: File[];
 }

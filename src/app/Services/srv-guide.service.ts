@@ -41,39 +41,48 @@ export class Srv_Guide {
    * CertificateFiles. מחזיר Observable של התשובה הכוללת guideId וגם regionIds.
    */
   addGuide(payload: GuideRegistrationPayload): Observable<any> {
-    const p = payload || ({} as GuideRegistrationPayload);
+    const valuePayLoad = payload || ({} as GuideRegistrationPayload);
     const formData = new FormData();
 
+
+
+    /////////////
+///לבדוק מה זה עושה
+//////////
+
+
+
+
     // ── פרטי משתמש (מהם השרת יוצר/מעדכן את ה-User) ──
-    if (p.FirstName) formData.append('FirstName', p.FirstName);
-    if (p.LastName) formData.append('LastName', p.LastName);
-    if (p.IdNumber) formData.append('IdNumber', p.IdNumber);
-    if (p.City) formData.append('City', p.City);
-    if (p.PhoneNumber) formData.append('PhoneNumber', p.PhoneNumber);
-    if (p.Email) formData.append('Email', p.Email);
-    if (p.UserPassword) formData.append('UserPassword', p.UserPassword);
+    if (valuePayLoad.FirstName) formData.append('FirstName', valuePayLoad.FirstName);
+    if (valuePayLoad.LastName) formData.append('LastName', valuePayLoad.LastName);
+    if (valuePayLoad.IdNumber) formData.append('IdNumber', valuePayLoad.IdNumber);
+    if (valuePayLoad.City) formData.append('City', valuePayLoad.City);
+    if (valuePayLoad.PhoneNumber) formData.append('PhoneNumber', valuePayLoad.PhoneNumber);
+    if (valuePayLoad.Email) formData.append('Email', valuePayLoad.Email);
+    if (valuePayLoad.UserPassword) formData.append('UserPassword', valuePayLoad.UserPassword);
 
     // ── פרטי מדריך ──
-    if (p.ReligiousId) formData.append('ReligiousId', String(p.ReligiousId));
+    if (valuePayLoad.ReligiousId) formData.append('ReligiousId', String(valuePayLoad.ReligiousId));
     // "מקומות שהיא מדריכה בהם" — אזורי התמחות (ערכים מרובים)
     // מסננים ערכים ריקים/לא-נומריים כדי לא לגרום ל-400 מצד השרת
     // (השרת מחזיר "The value '' is invalid" כש-RegionIds לא תקין).
-    (p.RegionIds || [])
+    (valuePayLoad.RegionIds || [])
       .map((r) => Number(r))
       .filter((r) => Number.isInteger(r) && r > 0)
       .forEach((r) => formData.append('RegionIds', String(r)));
 
     // ── דיבוג: הדפסת מה שנשלח בפועל ──
-    console.log('== RegionIds שנשלחים:', JSON.stringify(p.RegionIds), '| ReligiousId:', p.ReligiousId);
-    if (p.RegionIds && p.RegionIds.some((r) => !Number.isFinite(Number(r)) && r !== null && r !== undefined)) {
-      console.warn('!! נמצא ערך לא-נומרי/ריק ב-RegionIds:', p.RegionIds);
+    console.log('== RegionIds שנשלחים:', JSON.stringify(valuePayLoad.RegionIds), '| ReligiousId:', valuePayLoad.ReligiousId);
+    if (valuePayLoad.RegionIds && valuePayLoad.RegionIds.some((r) => !Number.isFinite(Number(r)) && r !== null && r !== undefined)) {
+      console.warn('!! נמצא ערך לא-נומרי/ריק ב-RegionIds:', valuePayLoad.RegionIds);
     }
 
     // ── קבצים ──
-    if (p.ResumeFile) {
-      formData.append('ResumeFile', p.ResumeFile, p.ResumeFile.name);
+    if (valuePayLoad.ResumeFile) {
+      formData.append('ResumeFile', valuePayLoad.ResumeFile, valuePayLoad.ResumeFile.name);
     }
-    (p.CertificateFiles || []).forEach((file) =>
+    (valuePayLoad.CertificateFiles || []).forEach((file) =>
       formData.append('CertificateFiles', file, file.name),
     );
 

@@ -150,31 +150,31 @@ input[type='checkbox'] {
   gap: 10px;
 }
 
-/* קישור הקפיצה הצמוד לאותה כותרת (קפיצה באותו מקום) */
-.go-to {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #6f2fe0;
-  border: 1px solid #cfbaf0;
-  border-radius: 50%;
-  width: 27px;
-  height: 27px;
-  text-decoration: none;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-}
+// /* קישור הקפיצה הצמוד לאותה כותרת (קפיצה באותו מקום) */
+// .go-to {
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: #6f2fe0;
+//   border: 1px solid #cfbaf0;
+//   border-radius: 50%;
+//   width: 27px;
+//   height: 27px;
+//   text-decoration: none;
+//   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+// }
 
-.go-to:hover {
-  background-color: #6f2fe0;
-  border-color: #6f2fe0;
-  color: #fff;
-}
+// .go-to:hover {
+//   background-color: #6f2fe0;
+//   border-color: #6f2fe0;
+//   color: #fff;
+// }
 
-.go-to mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
+// .go-to mat-icon {
+//   font-size: 18px;
+//   width: 18px;
+//   height: 18px;
+// }
 
 .empty {
   color: #a99;

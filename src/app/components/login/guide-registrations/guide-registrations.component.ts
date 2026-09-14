@@ -56,7 +56,6 @@ export class GuideRegistrationsComponent {
     private srvCities: SrvCities,
     public srv_guides: Srv_Guide,
   ) {
-    //this.AreasOfExpertises = srv_all.getRegionsArray();
       this.srv_all.getRegionsArray().subscribe((areas) => {
       this.AreasOfExpertises = areas;
       this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
@@ -132,24 +131,24 @@ export class GuideRegistrationsComponent {
       return;
     }
 
-    const v = this.formGuide.value;
-    const certificatesFiles = (v.CertificatesFiles as File[]) || [];
-    const resumeFiles = (v.resumeFiles as File) || null;
-    const regionIds = (v.selectedAreasOfExpertises as number[]) || [];
+    const formValue = this.formGuide.value;
+    const certificatesFiles = (formValue.CertificatesFiles as File[]) || [];
+    const resumeFile = (formValue.resumeFiles as File) || null;
+    const regionIds = (formValue.selectedAreasOfExpertises as number[]) || [];
 
     // בניית ה-payload המלא — כולל פרטי המשתמש (מהם השרת יוצר/מעדכן את ה-User)
     // + עדה + אזורי התמחות ("המקומות שהיא מדריכה בהם") + קבצים.
     const payload = {
-      FirstName: v.FirstName || '',
-      LastName: v.LastName || '',
-      IdNumber: v.IdNumber || '',
+      FirstName: formValue.FirstName || '',
+      LastName: formValue.LastName || '',
+      IdNumber: formValue.IdNumber || '',
       City: selectedCity,
-      PhoneNumber: v.PhoneNumber || '',
-      Email: v.Email || '',
-      UserPassword: v.UserPassword || '',
-      ReligiousId: Number(v.ReligiousId) || 0,
+      PhoneNumber: formValue.PhoneNumber || '',
+      Email: formValue.Email || '',
+      UserPassword: formValue.UserPassword || '',
+      ReligiousId: Number(formValue.ReligiousId) || 0,
       RegionIds: regionIds,
-      ResumeFile: resumeFiles,
+      ResumeFile: resumeFile,
       CertificateFiles: certificatesFiles,
     };
 
@@ -176,49 +175,20 @@ export class GuideRegistrationsComponent {
     this.showPassword = !this.showPassword;
   }
 
-  // onFileSelected(event: Event) {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files) {
-  //     const filesArray = Array.from(input.files);
-  //     this.formGuide.patchValue({ CertificatesFiles: filesArray });
-  //   }
 
-  // }
-  // onFileSelected(event: Event) {
-  //   const input = event.target as HTMLInputElement;
-
-  //   if (input.files) {
-  //     this.CertificatesFiles = Array.from(input.files);
-  //   }
-  // }
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
 
     if (input.files) {
       const files = Array.from(input.files);
 
-      // 1. לטופס (ולידציה)
       this.formGuide.get('CertificatesFiles')?.setValue(files);
 
-      // 2. לתצוגה
       this.CertificatesFiles = files;
     }
   }
 
-  // onOneFileSelected(event: Event) {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files) {
-  //     const file = input.files[0]; // קובץ אחד בלבד
-  //     this.formGuide.patchValue({ resumeFiles: file });
-  //   }
-  // }
-  // onOneFileSelected(event: Event) {
-  //   const input = event.target as HTMLInputElement;
 
-  //   if (input.files && input.files.length > 0) {
-  //     this.resumeFiles = input.files[0];
-  //   }
-  // }
 
   onOneFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;

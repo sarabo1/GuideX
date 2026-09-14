@@ -32,10 +32,7 @@
               transform: translate(-50%, -50%); /* מרכז את הלוגו */
 
 }
-// .logo_dark{
 
-//     background-color: #004aad;
-// }
 .welcome-text {
   font-size: 24px;
   font-weight: bold;
@@ -49,7 +46,7 @@
 .card-container {
   display: flex; // תצוגה אופקית
   flex-wrap: wrap; // אפשר לסדר בשורות נוספות אם אין מקום
-  gap: 20px; // רווח בין הכרטיסים
+  gap: 25px; // רווח בין הכרטיסים
   padding: 20px;
   max-width: 1300px; // הגדלת רוחב מרבי לכרטיסים
   margin: auto;
@@ -95,7 +92,7 @@
   background-position: center; /* למרכז את התמונה */
   width: 100%;
 
-   height: 65vh; /* גובה מלא של המסך, תוכל לשנות לפי הצורך */
+   height: 70vh; /* גובה מלא של המסך, תוכל לשנות לפי הצורך */
 }
 
 .toPicture::before {
@@ -115,30 +112,3 @@
   z-index: 2; /* לוודא שהתוכן נמצא מעל השכבות */
 }
 
-// .tooltip-container {
-//      position: relative;
-//      display: inline-block;
-//      cursor: pointer;
-//    }
-
-//    .tooltip-text {
-//      visibility: hidden;
-//      width: 120px;
-//      background-color: black;
-//      color: #fff;
-//      text-align: center;
-//      border-radius: 5px;
-//      padding: 5px;
-//      position: absolute;
-//      z-index: 1;
-//      bottom: 125%; /* ממקם את ה-tooltip מעל */
-//      left: 50%;
-//      margin-left: -60px; /* מיקום מרכזי */
-//      opacity: 0;
-//      transition: opacity 0.3s;
-//    }
-
-//    .tooltip-container:hover .tooltip-text {
-//      visibility: visible;
-//      opacity: 1;
-//    }

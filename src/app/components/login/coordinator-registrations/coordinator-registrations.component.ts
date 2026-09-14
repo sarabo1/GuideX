@@ -81,7 +81,7 @@ export class CoordinatorRegistrationsComponent {
       this.cities = cities;
       this.filteredCities = this.cities;
     });
-    console.log(this.cities);
+    console.log("רשימת הערים: ", this.cities);
 
     this.schools = this.srvSchools.GetSchools();
 
