@@ -13,7 +13,8 @@
       <strong>אימייל: </strong>{{ data.email ?? '—' }}
     </p>
     <p>
-      <strong>עדה: </strong>{{ data.religiousName ?? 'בטעינה…' }}
+     
+      <strong>עדה: </strong>{{ getReligiousName(data.religiousId) }}
     </p>
     <p>
       <strong>אזורי התמחות: </strong>{{ getRegionsNames(data.regionId) || 'לא צוין' }}

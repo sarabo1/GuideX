@@ -18,6 +18,7 @@ import { ServiceAllService } from '../../../Services/service-all.service';
 export class ShowGuideComponent {
   /** כל אזורי ההתמחות שנטענו מהשרת — להצגת שמות האזורים של המדריכה. */
   availableAreas: { id: number; name: string }[] = [];
+  private religiousNames = new Map<number, string>();
 
   constructor(
     public dialogRef: MatDialogRef<ShowGuideComponent>,
@@ -46,6 +47,17 @@ export class ShowGuideComponent {
   /** שמות אזורי ההתמחות של המדריכה (מופרדים בפסיק). */
   getRegionsNames(ids: number[]): string {
     return (ids ?? []).map((id) => this.getRegionName(id)).join(', ');
+  }
+
+  getReligiousName(religiousId: number): string {
+    if (!this.religiousNames.has(religiousId)) {
+      this.religiousNames.set(religiousId, 'בטעינה…');
+      this.srv_all.getReligiousName(religiousId).subscribe((name) => {
+        this.religiousNames.set(religiousId, name ?? '');
+      });
+    }
+
+    return this.religiousNames.get(religiousId) ?? 'בטעינה…';
   }
 
   onClose(): void {
