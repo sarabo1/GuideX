@@ -102,7 +102,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 74, 173, 0.63); /* כחול עם שקיפות 65% */
+  // background-color: rgba(0, 74, 173, 0.63); /* כחול עם שקיפות 65% */
+    background-color: rgba(16, 100, 210, 0.541); /* כחול עם שקיפות 65% */
+
   z-index: 1; /* לוודא שזה יהיה מעל התמונה */
    height: 100%;
 }
