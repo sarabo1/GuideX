@@ -68,11 +68,141 @@
     border: 0;
     border-radius: 4px;
     margin-right: 7px;
-    outline: none; 
+    outline: none;
      width: 100%; /* או הגבלה אחרת לתצוגה */
     box-sizing: border-box;
-    color:#5f16eb;  
+    color:#5f16eb;
   background-color:rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid #5f16eb; /* קו תחתון */
+}
+
+/* ─────────── תמונות מקום לינה ─────────── */
+.attraction-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.image-upload-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border: 2px dashed #5f16eb;
+  border-radius: 10px;
+  color: #5f16eb;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  mat-icon {
+    font-size: 34px;
+    width: 34px;
+    height: 34px;
+  }
+
+  &:hover {
+    background-color: rgba(95, 22, 235, 0.1);
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}
+
+.image-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #5f16eb;
+    cursor: zoom-in;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* ─────────── תצוגת תמונה גדולה (lightbox) ─────────── */
+.image-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: zoom-out;
+}
+
+.image-preview-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: default;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.image-preview-close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.image-delete {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  background: #5f16eb;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
 }
 

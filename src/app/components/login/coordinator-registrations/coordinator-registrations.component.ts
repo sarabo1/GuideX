@@ -18,6 +18,7 @@ import { PhoneValidatorService } from '../../../Services/phone_validator';
 import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { SrvCities } from '../../../Services/srv-cities.service';
 import { InterfaceSchool } from '../../../Interfaces/interface-school';
+import { CoordinatorRegisterPayload } from '../../../Interfaces/int-coordinator';
 import { ServiceAllService } from '../../../Services/service-all.service';
 
 @Component({
@@ -170,13 +171,6 @@ export class CoordinatorRegistrationsComponent {
       alert('אנא בחר עיר מהרשימה.');
       return;
     }
-    let CityIdToSave;
-    if (this.srvCities.ExistsCity(selectedCity) != 0) {
-      CityIdToSave = this.srvCities.ExistsCity(selectedCity);
-    } else {
-      CityIdToSave = this.srvCities.GetLastCityId() + 1;
-      this.srvCities.AddCity(selectedCity);
-    }
 
     const selectedSchool = this.formCoordinator.get('SchoolName')?.value || '';
     const schoolExists = this.filteredSchools.some(
@@ -192,80 +186,54 @@ export class CoordinatorRegistrationsComponent {
     }
 
     if (this.formCoordinator.valid) {
-      const userData = {
-        userId: this.lastUserId || 0,
-        userPassword: this.formCoordinator.get('UserPassword')?.value || '',
+      // בניית נתוני הרישום — נשלחים לשרת בפעולה אחת.
+      // שם העיר נשלח כ-string (ללא טבלת City), וה-Identity של השרת מייצר את המזהים.
+      const payload: CoordinatorRegisterPayload = {
         firstName: this.formCoordinator.get('FirstName')?.value || '',
         lastName: this.formCoordinator.get('LastName')?.value || '',
         idNumber: this.formCoordinator.get('IdNumber')?.value || '',
-        cityId: CityIdToSave,
+        city: selectedCity,
         phoneNumber: this.formCoordinator.get('PhoneNumber')?.value ?? '',
         email: this.formCoordinator.get('Email')?.value || '',
-      };
-
-      // הוספת לוג כדי לראות את נתוני המשתמש
-      console.log('User Data:', userData); // שינוי
-
-      this.srvUsers.InsertUser(
-        userData.userId,
-        userData.userPassword,
-        userData.firstName,
-        userData.lastName,
-        userData.idNumber,
-        userData.cityId,
-        userData.phoneNumber,
-        userData.email,
-      );
-
-      const coordinatorData = {
-        userId: this.lastUserId || 0,
-        coordinatorId: this.lastCoordinatorId || 0,
+        userPassword: this.formCoordinator.get('UserPassword')?.value || '',
         roleId: Number(this.formCoordinator.get('RoleId')?.value),
-        schoolId: schoolIdToSave,
+        // מוסד קיים → schoolId; מוסד חדש → null (והפרטים למטה)
+        schoolId: needToAddSchool ? null : schoolIdToSave,
       };
 
-      console.log('Coordinator Data:', coordinatorData);
-
-      this.srv_Coordinators.InsertCoordinator(
-        coordinatorData.userId,
-        coordinatorData.coordinatorId,
-        coordinatorData.roleId,
-        coordinatorData.schoolId,
-      );
       if (needToAddSchool) {
-        // הגדרת אובייקט לשימוש נתוני בית הספר
-        const schoolData = {
-          schoolId: schoolIdToSave,
-          schoolName: this.formCoordinator.get('SchoolName')?.value || '',
-          isBoys: Number(this.formCoordinator.get('IsBoys')?.value),
-          cityId: CityIdToSave,
-          principalName: this.formCoordinator.get('PrincipalName')?.value || '',
-          phoneSecretary:
-            this.formCoordinator.get('PhoneSecretary')?.value || '',
-          typeSchoolId: Number(this.formCoordinator.get('TypeSchoolId')?.value),
-          ageSchoolId: Number(this.formCoordinator.get('AgeSchoolId')?.value),
-        };
-
-        // הוספת לוג כדי לראות את נתוני בית הספר
-        console.log('School Data:', schoolData); // שינוי
-
-        this.srvSchools.InsertSchool(
-          schoolData.schoolId,
-          schoolData.schoolName,
-          schoolData.isBoys,
-          schoolData.cityId,
-          schoolData.principalName,
-          schoolData.phoneSecretary,
-          schoolData.typeSchoolId,
-          schoolData.ageSchoolId,
+        payload.schoolName =
+          this.formCoordinator.get('SchoolName')?.value || '';
+        payload.isBoys = Number(this.formCoordinator.get('IsBoys')?.value) === 1;
+        payload.schoolCity = selectedCity;
+        payload.principalName =
+          this.formCoordinator.get('PrincipalName')?.value || '';
+        payload.phoneSecretary =
+          this.formCoordinator.get('PhoneSecretary')?.value || '';
+        payload.typeSchoolId = Number(
+          this.formCoordinator.get('TypeSchoolId')?.value,
+        );
+        payload.ageSchoolId = Number(
+          this.formCoordinator.get('AgeSchoolId')?.value,
         );
       }
-      //הכנסה ל LOCAL STRONGE
-      const userObj = { email: userData.email, userId: userData.userId };
-      localStorage.setItem('user_data', JSON.stringify(userObj));
-      this.formCoordinator.reset();
-      this.dialogRef.close(); // סגור את הדיאלוג
-      this.router.navigate(['welcome/Home_Page']);
+
+      console.log('Payload רישום כורדינטור:', payload);
+
+      this.srv_Coordinators
+        .registerCoordinator(payload)
+        .subscribe((res: any) => {
+          const userId = res?.userId;
+          console.log('רישום הצליח, userId:', userId);
+
+          // שמירת פרטי המשתמש ב-LOCAL STORAGE לפי ה-ID שקיבלנו מהשרת
+          const userObj = { email: payload.email, userId };
+          localStorage.setItem('user_data', JSON.stringify(userObj));
+
+          this.formCoordinator.reset();
+          this.dialogRef.close(); // סגור את הדיאלוג
+          this.router.navigate(['welcome/Home_Page']);
+        });
     } else {
       console.error('טופס לא תקין:', this.formCoordinator.errors);
     }

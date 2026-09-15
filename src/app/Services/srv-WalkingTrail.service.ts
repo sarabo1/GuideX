@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Int_WalkingTrail } from '../Interfaces/Int_WalkingTrail';
+import { Int_WalkingTrail, Int_WalkingTrailFile } from '../Interfaces/Int_WalkingTrail';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 
@@ -83,15 +83,17 @@ export class SrvWalkingTrailService {
       );
   }
 
-AddNewTrail(route: Int_WalkingTrail): Observable<{ message: string, attractionId: number }> {
+AddNewTrail(route: Int_WalkingTrail): Observable<any> {
     console.log('Sending new trail data:', route);
+    // מחזיר את המסלול החדש שנשמר (כולל ה- WalkingTrailId שנוצר בשרת),
+    // כדי שנוכל להעלות אליו תמונות אחרי השמירה.
     return this.http
-        .post<{ message: string, attractionId: number }>(`${this.baseUrl}/new`, route)
+        .post<any>(`${this.baseUrl}/new`, route)
         .pipe(
             catchError((error) => {
                 console.error('Error adding walking trail:', error);
                 // מחזיר Observable ריק במקרה של שגיאה
-                return of({ message: 'שגיאה בהוספת מסלול הליכה', attractionId: null } as any); 
+                return of(null as any);
             })
         );
 }
@@ -107,6 +109,37 @@ AddNewTrail(route: Int_WalkingTrail): Observable<{ message: string, attractionId
         }),
       );
   }
+
+  // ─────────── תמונות מסלול הליכה ───────────
+
+  /** מחזיר את רשימת התמונות (מטא-דאטה) של מסלול לפי ID. */
+  GetImages(hostelId: number): Observable<Int_WalkingTrailFile[]> {
+    return this.http
+      .get<Int_WalkingTrailFile[]>(`${this.baseUrl}/${hostelId}/images`)
+      .pipe(catchError(() => of([])));
+  }
+
+  /** מעלה תמונה/ות (File[]) למסלול לפי ID — via multipart/form-data. מחזיר את הרשימה המעודכנת. */
+  AddImages(hostelId: number, files: File[]): Observable<Int_WalkingTrailFile[]> {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file, file.name));
+    return this.http
+      .post<Int_WalkingTrailFile[]>(`${this.baseUrl}/${hostelId}/images`, formData)
+      .pipe(catchError(() => of([])));
+  }
+
+  /** מוחק תמונה לפי FileId. */
+  DeleteImage(fileId: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.baseUrl}/file/${fileId}`)
+      .pipe(catchError(() => of()));
+  }
+
+  /** כתובת URL לשליפת תוכן התמונה (לקריאת ה- src של <img>). */
+  ImageUrl(fileId: number): string {
+    return `${this.baseUrl}/file/${fileId}`;
+  }
+
   formatDuration(minutes: number) {
     if (minutes > 60) {
       if (minutes % 60 === 0) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { int_Attractions } from '../Interfaces/int_Attractions';
+import { int_Attractions, int_AttractionFile } from '../Interfaces/int_Attractions';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 
@@ -141,10 +141,12 @@ export class srv_Attractions {
   //     );
   // }
 
-AddNewAttraction(attraction: int_Attractions): Observable<void> {
+AddNewAttraction(attraction: int_Attractions): Observable<any> {
     console.log(attraction);
+    // מחזיר את האטרקציה החדשה שנשמרה (כולל ה- attractionId שנוצר בשרת),
+    // כדי שנוכל להעלות אליה תמונות אחרי השמירה.
     return this.http
-      .post<void>(`https://localhost:7098/Attractions/new`, attraction)
+      .post<any>(`https://localhost:7098/Attractions/new`, attraction)
       .pipe(
         catchError((error) => {
           console.error('Error updating attraction:', error);
@@ -153,6 +155,36 @@ AddNewAttraction(attraction: int_Attractions): Observable<void> {
         }),
       );
 }
+
+  // ─────────── תמונות אטרקציה ───────────
+
+  /** מחזיר את רשימת התמונות (מטא-דאטה) של אטרקציה לפי ID. */
+  GetImages(attractionId: number): Observable<int_AttractionFile[]> {
+    return this.http
+      .get<int_AttractionFile[]>(`https://localhost:7098/Attractions/${attractionId}/images`)
+      .pipe(catchError(() => of([])));
+  }
+
+  /** מעלה תמונה/ות (File[]) לאטרקציה לפי ID — via multipart/form-data. מחזיר את הרשימה המעודכנת. */
+  AddImages(attractionId: number, files: File[]): Observable<int_AttractionFile[]> {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file, file.name));
+    return this.http
+      .post<int_AttractionFile[]>(`https://localhost:7098/Attractions/${attractionId}/images`, formData)
+      .pipe(catchError(() => of([])));
+  }
+
+  /** מוחק תמונה לפי FileId. */
+  DeleteImage(fileId: number): Observable<void> {
+    return this.http
+      .delete<void>(`https://localhost:7098/Attractions/file/${fileId}`)
+      .pipe(catchError(() => of()));
+  }
+
+  /** כתובת URL לשליפת תוכן התמונה (לקריאת ה- src של <img>). */
+  ImageUrl(fileId: number): string {
+    return `https://localhost:7098/Attractions/file/${fileId}`;
+  }
   deleteAttraction(atractionId : number){
         return this.http
       .delete<void>(

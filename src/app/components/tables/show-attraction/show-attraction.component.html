@@ -69,6 +69,73 @@
       ></textarea>
     }
 
+    <!-- תמונות האטרקציה -->
+    <div class="attraction-images">
+      @if (userCanEdit) {
+        <label class="image-upload-badge">
+          <mat-icon>add_a_photo</mat-icon>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            (change)="onImagesSelected($event)"
+          />
+        </label>
+      }
+
+      <!-- תמונות שמורות בשרת -->
+      @for (image of images; track image.fileId; let i = $index) {
+        <div class="image-item">
+          <img
+            [src]="imageUrl(image.fileId)"
+            alt="תמונה {{ i + 1 }}"
+            (click)="openImagePreview(imageUrl(image.fileId))"
+          />
+          @if (userCanEdit) {
+            <button
+              class="image-delete"
+              (click)="deleteImage(image.fileId, i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+      }
+
+      <!-- תמונות חדשות שנבחרו (אטרקציה חדשה, עדיין לא הועלו) -->
+      @for (pending of pendingImages; track pending.name; let i = $index) {
+        <div class="image-item">
+          <img
+            [src]="pendingImageUrl(pending)"
+            alt="תמונה חדשה {{ i + 1 }}"
+            (click)="openImagePreview(pendingImageUrl(pending))"
+          />
+          <button class="image-delete" (click)="removePendingImage(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- תצוגת תמונה גדולה (lightbox) -->
+    @if (previewImageUrl) {
+      <div class="image-preview-overlay" (click)="closeImagePreview()">
+        <button
+          class="image-preview-close"
+          (click)="closeImagePreview()"
+          aria-label="סגירת התמונה"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <img
+          class="image-preview-img"
+          [src]="previewImageUrl"
+          alt="תצוגה גדולה"
+          (click)="$event.stopPropagation()"
+        />
+      </div>
+    }
+
     <!-- אזור -->
     <p>
       <!-- {{data | json}} -->

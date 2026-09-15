@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
-import { InterfaceCoordinator } from '../Interfaces/int-coordinator';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import {
+  CoordinatorRegisterPayload,
+  InterfaceCoordinator,
+} from '../Interfaces/int-coordinator';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceCoordinatorService {
-  constructor() {}
+  // הנתיב תואם ל-[Route("/all_[controller]")] בקונטרולר Coordinator בשרת.
+  private readonly registerUrl = 'https://localhost:7098/coordinator/register';
+
+  constructor(private http: HttpClient) {}
   mock_Coordinators: InterfaceCoordinator[] = [
     {
       UserId: 1,
@@ -65,5 +74,21 @@ export class ServiceCoordinatorService {
   }
    userExist(userId: number): boolean {
     return this.mock_Coordinators.some(c => c.UserId === userId);
+  }
+
+  /**
+   * שולח את כל פרטי רישום הכורדינטור (משתמש + תפקיד + מוסד-אם-חדש)
+   * ל-POST /all_coordinator/register ומפיק את ה-{ userId } שמוחזר מהשרת.
+   * ה-Identity של השרת מייצר את המזהים לבד.
+   */
+  registerCoordinator(payload: CoordinatorRegisterPayload): Observable<any> {
+    return this.http.post<any>(this.registerUrl, payload).pipe(
+      catchError((err) => {
+        console.error('שגיאה ברישום הכורדינטור:', err);
+        console.error('סטטוס:', err.status);
+        console.error('גוף התשובה:', err.error);
+        return of(null);
+      }),
+    );
   }
 }

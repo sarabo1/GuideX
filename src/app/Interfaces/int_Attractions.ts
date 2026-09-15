@@ -16,4 +16,12 @@ attractionId: number;
   description: string | null;
   shomerShabat: number | null;
   phone: string | null;
+  /** רשימת התמונות של האטרקציה — מאפשרת הצגה ומחיקה. נטענת בנפרד בפרטי האטרקציה. */
+  images?: int_AttractionFile[];
+}
+
+/** פריט תמונה של אטרקציה — מטא-דאטה בלבד (FileId + FileName), לשימוש הצגה ומחיקה. */
+export interface int_AttractionFile {
+  fileId: number;
+  fileName: string;
 }
