@@ -144,4 +144,26 @@ getUserByEmailIdNumberPhone(EmPhId: JSON) {
         })
     );
   }
+
+  /** שולף את פרופיל המשתמש (מדריכה/רכזת) מהשרת לפי UserId — לצורך טופס העריכה. */
+  getProfile(userId: number | string): Observable<any> {
+    const baseUrl = `https://localhost:7098/profile/${userId}`;
+    return this.http.get<any>(baseUrl).pipe(
+      catchError((error) => {
+        console.error('שגיאה בשליפת הפרופיל:', error);
+        return of(null);
+      }),
+    );
+  }
+
+  /** מעדכן פרופיל של רכזת/מוסד (PUT /coordinator/update). */
+  updateCoordinator(payload: any): Observable<any> {
+    const baseUrl = 'https://localhost:7098/coordinator/update';
+    return this.http.put<any>(baseUrl, payload).pipe(
+      catchError((error) => {
+        console.error('שגיאה בעדכון הכורדינטור:', error);
+        return of(null);
+      }),
+    );
+  }
 }

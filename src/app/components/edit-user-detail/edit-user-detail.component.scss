@@ -5,10 +5,9 @@
   flex-direction: column;
   margin: 20px;
   padding: 30px;
- height: 457px;
     display: flex;
-    flex-direction: column; 
-    gap: 1rem; 
+    flex-direction: column;
+    gap: 1rem;
 
   div {
     margin-bottom: 20px;
@@ -109,6 +108,44 @@
     direction: rtl;
     margin: 10px;
     padding: 10px;
+}
+.note {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  color: #888;
+}
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #004AAD;
+}
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    input {
+      width: auto;
+      accent-color: #004AAD;
+    }
+  }
+}
+input:disabled {
+  background-color: #eee;
+  color: #777;
+  cursor: not-allowed;
+  border-color: #ddd !important;
+}
+select:disabled {
+  background-color: #eee;
+  color: #777;
+  cursor: not-allowed;
 }
 .close-btn {
   color: #6c757d;

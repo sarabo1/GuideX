@@ -1,91 +1,289 @@
 <div class="all">
   <div class="header">
-    <h3>עריכת הפרטים האישיים לך...</h3>
+    <h3>עריכת הפרטים שלך</h3>
     <button mat-icon-button (click)="onClose()" class="close-btn">
       <mat-icon>close</mat-icon>
     </button>
   </div>
-  <div class="aa">
-    <form
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-      class="form coordinator-form"
-    >
-      <ng-container>
-        @for (field of fields; track field) {
-          <div>
-            <label>{{ field.label }}</label>
 
-            @switch (field.type) {
-              @case ("text") {
-                <input type="text" [formControlName]="field.key" />
-              }
-
-              @case ("number") {
-                <input type="number" [formControlName]="field.key" />
-              }
-              @case ("email") {
-                <input type="email" [formControlName]="field.key" />
-              }
-              @case ("select") {
-                <select [formControlName]="field.key">
-                  @for (option of field.options; track option) {
-                    <option [value]="option">{{ option }}</option>
-                  }
-                </select>
-              }
-              @case ("radio") {
-                @for (option of field.options; track option) {
-                  <label>
-                    <input
-                      type="radio"
-                      [formControlName]="field.key"
-                      [value]="option"
-                    />
-                    {{ option === "1" ? "מוסד לבנים" : "מוסד לבנות" }}
-                  </label>
-                }
-              }
-              @case ("checkbox") {
-                <input type="checkbox" [formControlName]="field.key" />
-              }
-            }
-          </div>
-
-          <div>
-            @if (form.get(field.key); as control) {
-              @if (control && control.touched && control.invalid) {
-                @if (control.errors) {
-                  @if (control.errors["required"]) {
-                    <span>אויששש, שכחת אותי....</span>
-                  }
-                  @if (control.errors["minlength"]) {
-                    <span
-                      >יש להכניס מינימום {{ field["minLength"] }} תווים⚠️</span
-                    >
-                  }
-                  @if (
-                    field.key === "IdNumber" && control.errors["invalidID"]
-                  ) {
-                    <span>יש להכניס מספר תעודת זהות תקינה</span>
-                  }
-                  @if (
-                    field.key === "PhoneNumber" &&
-                    control.errors["invalidPhone"]
-                  ) {
-                    <span>יש להכניס מספר פלאפון נייד תקין</span>
-                  }
-                  @if (field.key === "Email" && control.errors["email"]) {
-                    <span>יש להכניס כתובת אימייל תקינה⚠️</span>
-                  }
-                }
-              }
-            }
-          </div>
+  @if (loading) {
+    <div class="loading">טוען את הפרטים...</div>
+  } @else if (error) {
+    <div class="red">{{ error }}</div>
+  } @else if (profileType === 'guide') {
+    <div class="aa">
+      <form [formGroup]="formGuide" (ngSubmit)="onSubmit()" class="form guide-form">
+        <div>
+          <label>שם פרטי:</label>
+          <input type="text" formControlName="FirstName" />
+        </div>
+        @if (formGuide.get('FirstName')?.touched && formGuide.get('FirstName')?.invalid) {
+          <span class="red">יש להכניס שם פרטי תקין</span>
         }
-      </ng-container>
 
-      <button type="submit">שליחה</button>
-    </form>
-  </div>
+        <div>
+          <label>שם משפחה:</label>
+          <input type="text" formControlName="LastName" />
+        </div>
+        @if (formGuide.get('LastName')?.touched && formGuide.get('LastName')?.invalid) {
+          <span class="red">יש להכניס שם משפחה תקין</span>
+        }
+
+        <div>
+          <label>מספר זהות:</label>
+          <input type="text" formControlName="IdNumber" [disabled]="true" />
+        </div>
+
+        <div>
+          <label>מספר טלפון:</label>
+          <input type="text" formControlName="PhoneNumber" />
+        </div>
+        @if (formGuide.get('PhoneNumber')?.touched && formGuide.get('PhoneNumber')?.invalid) {
+          <span class="red">יש להכניס מספר פלאפון נייד תקין</span>
+        }
+
+        <div>
+          <label>אימייל:</label>
+          <input type="email" formControlName="Email" />
+        </div>
+        @if (formGuide.get('Email')?.touched && formGuide.get('Email')?.invalid) {
+          <span class="red">יש להכניס כתובת אימייל תקינה</span>
+        }
+
+        <div>
+          <label>סיסמה:</label>
+          <input type="password" formControlName="UserPassword" [disabled]="true" />
+          <span class="note">הסיסמה אינה ניתנת לשינוי כאן</span>
+        </div>
+
+        <div>
+          <label>עיר:</label>
+          <input
+            type="text"
+            formControlName="CityId"
+            (input)="filterCity($event)"
+            placeholder="חפש עיר..."
+            list="citiesList"
+          />
+          <datalist id="citiesList">
+            <option disabled>בחר עיר</option>
+            @for (city of filteredCities; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </datalist>
+        </div>
+        @if (formGuide.get('CityId')?.touched && formGuide.get('CityId')?.invalid) {
+          <span class="red">יש לבחור עיר</span>
+        }
+
+        <div>
+          <label>השתייכות דתית:</label>
+          <select formControlName="ReligiousId">
+            <option disabled selected>בחר עדה</option>
+            @for (item of religiousData; track item.religiousId) {
+              <option [value]="item.religiousId">{{ item.religiousName }}</option>
+            }
+          </select>
+        </div>
+        @if (formGuide.get('ReligiousId')?.touched && formGuide.get('ReligiousId')?.invalid) {
+          <span class="red">יש לבחור השתייכות דתית</span>
+        }
+
+        <div class="form-group">
+          <label>אזורי התמחות:</label>
+          <div class="checkbox-group">
+            @for (item of AreasOfExpertises; track item.regionId) {
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [value]="item.regionId"
+                  (change)="onCheckboxChange($event)"
+                  [checked]="isChecked(item.regionId)"
+                />
+                {{ item.regionName }}
+              </label>
+            }
+          </div>
+        </div>
+
+        <div>
+          <label>קבצי תעודות:</label>
+          <input type="file" multiple (change)="onFileSelected($event)" />
+        </div>
+
+        <div>
+          <label>קורות חיים:</label>
+          <input type="file" (change)="onOneFileSelected($event)" />
+        </div>
+
+        <button type="submit" class="save-btn" [disabled]="saving">
+          {{ saving ? 'שומר...' : 'שמירת הפרטים' }}
+        </button>
+      </form>
+    </div>
+  } @else if (profileType === 'coordinator') {
+    <div class="aa">
+      <form
+        [formGroup]="formCoordinator"
+        (ngSubmit)="onSubmit()"
+        class="form coordinator-form"
+      >
+        <div>
+          <label>שם פרטי:</label>
+          <input type="text" formControlName="FirstName" />
+        </div>
+        @if (formCoordinator.get('FirstName')?.touched && formCoordinator.get('FirstName')?.invalid) {
+          <span class="red">יש להכניס שם פרטי תקין</span>
+        }
+
+        <div>
+          <label>שם משפחה:</label>
+          <input type="text" formControlName="LastName" />
+        </div>
+        @if (formCoordinator.get('LastName')?.touched && formCoordinator.get('LastName')?.invalid) {
+          <span class="red">יש להכניס שם משפחה תקין</span>
+        }
+
+        <div>
+          <label>מספר זהות:</label>
+          <input type="text" formControlName="IdNumber" [disabled]="true" />
+        </div>
+
+        <div>
+          <label>מספר פלאפון נייד:</label>
+          <input type="text" formControlName="PhoneNumber" />
+        </div>
+        @if (formCoordinator.get('PhoneNumber')?.touched && formCoordinator.get('PhoneNumber')?.invalid) {
+          <span class="red">יש להכניס מספר פלאפון נייד תקין</span>
+        }
+
+        <div>
+          <label>אימייל:</label>
+          <input type="email" formControlName="Email" />
+        </div>
+        @if (formCoordinator.get('Email')?.touched && formCoordinator.get('Email')?.invalid) {
+          <span class="red">יש להכניס כתובת אימייל תקינה</span>
+        }
+
+        <div>
+          <label>סיסמה:</label>
+          <input type="password" formControlName="UserPassword" [disabled]="true" />
+          <span class="note">הסיסמה אינה ניתנת לשינוי כאן</span>
+        </div>
+
+        <div>
+          <label>תפקיד במוסד:</label>
+          <select formControlName="RoleId">
+            <option disabled selected>בחרי את תפקידך במוסד</option>
+            @for (item of RoleIdData; track item.roleId) {
+              <option [value]="item.roleId">{{ item.roleName }}</option>
+            }
+          </select>
+        </div>
+        @if (formCoordinator.get('RoleId')?.touched && formCoordinator.get('RoleId')?.invalid) {
+          <span class="red">יש לבחור תפקיד</span>
+        }
+
+        <div>
+          <label>שם המוסד:</label>
+          <input
+            type="text"
+            formControlName="SchoolName"
+            (input)="filterSchool($event)"
+            placeholder="בחרי מהרשימה או הקלידי"
+            list="SchoolsList"
+          />
+          <datalist id="SchoolsList">
+            @for (school of filteredSchools; track school.SchoolId) {
+              <option [value]="school.SchoolName">{{ school.SchoolName }}</option>
+            }
+          </datalist>
+        </div>
+        @if (formCoordinator.get('SchoolName')?.touched && formCoordinator.get('SchoolName')?.invalid) {
+          <span class="red">יש להכניס שם מוסד</span>
+        }
+
+        <div>
+          <label>עיר:</label>
+          <input
+            type="text"
+            formControlName="CityId"
+            (input)="filterCity($event)"
+            placeholder="חפש עיר..."
+            list="citiesCoordList"
+          />
+          <datalist id="citiesCoordList">
+            <option disabled selected>בחר עיר</option>
+            @for (city of filteredCities; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </datalist>
+        </div>
+        @if (formCoordinator.get('CityId')?.touched && formCoordinator.get('CityId')?.invalid) {
+          <span class="red">יש לבחור עיר</span>
+        }
+
+        <div>
+          <label>מגדר:</label>
+          <div>
+            <label>
+              <input type="radio" formControlName="IsBoys" value="1" /> מוסד לבנים
+            </label>
+            <label>
+              <input type="radio" formControlName="IsBoys" value="0" /> מוסד לבנות
+            </label>
+          </div>
+        </div>
+        @if (formCoordinator.get('IsBoys')?.touched && formCoordinator.get('IsBoys')?.invalid) {
+          <span class="red">יש לבחור מגדר</span>
+        }
+
+        <div>
+          <label>שם מנהל:</label>
+          <input type="text" formControlName="PrincipalName" />
+        </div>
+        @if (formCoordinator.get('PrincipalName')?.touched && formCoordinator.get('PrincipalName')?.invalid) {
+          <span class="red">יש להכניס שם מנהל</span>
+        }
+
+        <div>
+          <label>מספר טלפון נייד מוסד:</label>
+          <input type="text" formControlName="PhoneSecretary" />
+        </div>
+        @if (formCoordinator.get('PhoneSecretary')?.touched && formCoordinator.get('PhoneSecretary')?.invalid) {
+          <span class="red">יש להכניס מספר פלאפון נייד מוסד תקין</span>
+        }
+
+        <div>
+          <label>סוג מוסד:</label>
+          <select formControlName="TypeSchoolId">
+            <option disabled selected>בחרי את סוג המוסד</option>
+            @for (item of religiousData; track item.religiousId) {
+              <option [value]="item.religiousId">{{ item.religiousName }}</option>
+            }
+          </select>
+        </div>
+        @if (formCoordinator.get('TypeSchoolId')?.touched && formCoordinator.get('TypeSchoolId')?.invalid) {
+          <span class="red">יש לבחור סוג מוסד</span>
+        }
+
+        <div>
+          <label>גיל מוסד:</label>
+          <select formControlName="AgeSchoolId">
+            <option disabled selected>בחרי את גיל המוסד</option>
+            @for (item of AgeSchoolIdData; track item.id) {
+              <option [value]="item.id">{{ item.name }}</option>
+            }
+          </select>
+        </div>
+        @if (formCoordinator.get('AgeSchoolId')?.touched && formCoordinator.get('AgeSchoolId')?.invalid) {
+          <span class="red">יש לבחור גיל מוסד</span>
+        }
+
+        <button type="submit" class="save-btn" [disabled]="saving">
+          {{ saving ? 'שומר...' : 'שמירת הפרטים' }}
+        </button>
+      </form>
+    </div>
+  }
 </div>

@@ -7,6 +7,7 @@ import { ServiceAllService } from '../../../Services/service-all.service';
 import {
   Int_Guide,
   GuideFileDto,
+  GuideFileWithUrl,
   GuideWithFiles,
 } from './int-guide';
 
@@ -63,18 +64,24 @@ export class AdminPageComponent {
     });
   }
 
-  /** טוען את המדריכות שטרם אושרו, עם מטא-הקבצים שכבר מגיע בתשובה. */
+  /** טוען את המדריכות שטרם אושרו, וגורר את הקבצים של כל אחת מהן. */
   loadData() {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // false = רק מי שטרם אושרה (RetrieveApprovals=false — הקונטרולר מסנן לא-מאושרות).
+    // false = רק מי שטרם אושרה (סינון בצד הלקוח).
     this.srv_guide.GetGuides(false).subscribe({
       next: (guides: any[]) => {
-        this.data = (guides ?? []).map((g) => {
-          const files = this.filesFromGuide(g);
-          return { guide: g as Int_Guide, files };
-        });
+        const entries: GuideWithFiles[] = (guides ?? []).map((g) => ({
+          guide: g as Int_Guide,
+          files: this.filesFromGuide(g),
+        }));
+        this.data = entries;
+console.log('מדריכות ממתינות לאישור:', entries);
+        // בכל מקרה משיכת הקבצים גם בדרך נפרדת (getGuideFiles) — כך שהקבצים
+        // יוצגו גם אם השרת לא מחזיר אותם בתוך תשובת המדריכות עצמה.
+        entries.forEach((entry) => this.loadFilesForGuide(entry, entry.guide.guideId));
+
         this.isLoading = false;
       },
       error: (err: any) => {
@@ -85,28 +92,62 @@ export class AdminPageComponent {
     });
   }
 
+  /** שולף את קבצי מדריכה אחת (Overview / Certificates) דרך ה-API הנפרד ומצרף לכרטיס. */
+  private loadFilesForGuide(entry: GuideWithFiles, guideId: number) {
+    this.srv_guide.getGuideFiles(guideId).subscribe({
+      next: (fileObjs: any[]) => {
+        const fetched: GuideFileWithUrl[] = (fileObjs ?? []).map((raw) => {
+          const f: any = raw; // יכול לבוא ב-camelCase או PascalCase.
+          return {
+            fileName: f.FileName ?? f.fileName ?? '',
+            kind: ((f.Kind ?? f.kind ?? '') === 'Cv' ? 'Cv' : 'Certificate') as
+              | 'Cv'
+              | 'Certificate',
+            // השרת מחזיר את המזהה בשם FileId (לא GuideFileId) — תומכים בשתי הצורות.
+            url: this.fileUrl(Number(f.GuideFileId ?? f.guideFileId ?? f.FileId ?? f.fileId)),
+          };
+        }).filter((f) => f.url !== '');
+
+        // אם אין קבצים מהשדה בתשובה — נשתמש בקבצים שהגיעו מ-getGuideFiles.
+        if (entry.files.length === 0) {
+          entry.files = fetched;
+        }
+      },
+      error: () => {},
+    });
+  }
+
   /**
    * מחלץ את מטא-הקבצים (GuideFileDto) מתוך תשובת המדריכה.
    * השרת (GuideResponseDto) מחזיר את הקבצים בשדה "Files" עבור כל מדריכה,
    * כך שאין צורך בקריאה נפרדת — הקישורים נבנים ישירות מהמטא הזה.
    */
   private filesFromGuide(g: any): { fileName: string; kind: 'Cv' | 'Certificate'; url: string }[] {
+    // השרת עשוי להחזיר את שדה הקבצים כ-"Files" (PascalCase) או "files" (camelCase).
     const files: GuideFileDto[] = Array.isArray(g?.[this.filesKey])
       ? (g[this.filesKey] as GuideFileDto[])
-      : [];
-    return files.map((f) => ({
-      fileName: f.FileName ?? '',
-      kind: f.Kind === 'Cv' ? 'Cv' : 'Certificate',
-      url: this.fileUrl(f.GuideFileId),
-    }));
+      : Array.isArray(g?.['files']) // camelCase
+        ? (g['files'] as GuideFileDto[])
+        : [];
+    return files.map((f2) => {
+      const f: any = f2; // יכול לבוא ב-camelCase או PascalCase.
+      return {
+        // קבלת שדות הקובץ בשני הפורמטים (PascalCase / camelCase).
+        fileName: f.FileName ?? f.fileName ?? '',
+        kind: (f.Kind ?? f.kind ?? '') === 'Cv' ? 'Cv' : 'Certificate',
+        // השרת מחזיר את המזהה בשם FileId (לא GuideFileId) — תומכים בשתי הצורות.
+        url: this.fileUrl(Number(f.GuideFileId ?? f.guideFileId ?? f.FileId ?? f.fileId)),
+      };
+    });
   }
 
   /**
-   * קישור לפתיחה/הורדה של קובץ — לפי המסלול האמיתי שקיים בשרת:
-   * GuideController → GET api/Guide/file/{guideFileId}.
+   * קישור לפתיחה/הורדה של קובץ — לפי ה-baseUrl של השירות
+   * (כולל את תבנית הקובץ שאליה מתחבר השרת).
    */
   private fileUrl(guideFileId: number): string {
-    return `https://localhost:7098/api/Guide/file/${guideFileId}`;
+    if (Number.isNaN(guideFileId)) return '';
+    return `${this.srv_guide.getFileUrl(guideFileId)}`;
   }
 
   /** שם מלא של מדריכה. */

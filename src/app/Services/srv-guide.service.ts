@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GuideRegistrationPayload, Int_Guide } from '../Interfaces/int-guide';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, lastValueFrom } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -25,16 +25,18 @@ export class Srv_Guide {
    *  ללא פרמטר (ריק) — לא נשלח query param, והשרת מחזיר את ברירת המחדל שלו.
    */
   GetGuides(ApprovedImports?: boolean): Observable<any[]> {
-    if (ApprovedImports === undefined) {
-      return this.http.get<any[]>(this.baseUrl).pipe(catchError(() => of([])));
-    }
-    const params = new HttpParams().set(
-      'RetrieveApprovals',
-      ApprovedImports.toString(),
+    return this.http.get<any[]>(this.baseUrl).pipe(
+      map((guides) => {
+        const list = guides ?? [];
+        if (ApprovedImports === undefined) {
+          return list;
+        }
+        // סינון בצד הלקוח לפי סטטוס האישור — כך שאין תלות בפרמטר RetrieveApprovals
+        // שאינו קיים בהכרח במסלול אליו מתחבר השרת.
+        return list.filter((g) => Boolean(g.isApproved) === ApprovedImports);
+      }),
+      catchError(() => of([])),
     );
-    return this.http
-      .get<any[]>(this.baseUrl, { params })
-      .pipe(catchError(() => of([])));
   }
   /** מחזיר את המספר הגבוה ביותר של GuideId שנשמר + 1 (ללא קריאה כשהשרת לא זמין → 1). */
   async GetLastGuideId(): Promise<number> {
@@ -123,6 +125,14 @@ export class Srv_Guide {
     return this.GetGuides().pipe(
       map((guides: any[]) => guides.find((g) => Number(g.userId) === Number(userId)) ?? null),
     );
+  }
+
+  /**
+   * מחזיר את מסלול (URL) להורדה/פתיחה של קובץ מדריך לפי ה-FileId.
+   * המסלול עקבי עם המסלול בשרת: /all_guide/download/{fileId}.
+   */
+  getFileUrl(guideFileId: number): string {
+    return `${this.baseUrl}/download/${guideFileId}`;
   }
 
   /** מחזיר את קבצי המדריך מהשרת לפי GuideId (Observable). */

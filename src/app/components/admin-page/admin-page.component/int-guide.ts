@@ -40,7 +40,7 @@ export interface GuideFileDto {
 export interface GuideFileWithUrl {
   fileName: string;
   kind: 'Cv' | 'Certificate';
-  /** קישור להורדת תוכן הקובץ מהשרת (לפי תבנית /file/{id}). */
+  /** קישור להורדת תוכן הקובץ מהשרת (לפי תבנית /download/{id}). */
   url: string;
 }
 
