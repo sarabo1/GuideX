@@ -12,6 +12,9 @@ namespace GuideX.Data
         /// <summary>מזהה העדה (Religious) של המדריך.</summary>
         public int ReligiousId { get; set; }
 
+        /// <summary>האם המדריך אושר ע"י מנהל (FALSE = ממתין לאישור).</summary>
+        public bool IsApproved { get; set; }
+
         /// <summary>תחומי ההתמחות של המדריך (many-to-many).</summary>
         public List<GuideArea> Areas { get; set; } = new();
 

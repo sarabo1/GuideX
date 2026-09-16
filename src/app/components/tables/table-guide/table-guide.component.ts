@@ -134,7 +134,7 @@ export class TableGuideComponent implements AfterViewInit {
 
   loadData() {
     this.isLoading = true;
-    this.Guides.GetGuides().subscribe({
+    this.Guides.GetGuides(true).subscribe({
       next: (guides: Int_Guide[]) => {
         // שמירת כל המדריכות — הבסיס לסינון לפי אזור ומלל.
         this.allGuides = guides;
@@ -258,7 +258,6 @@ export class TableGuideComponent implements AfterViewInit {
   resetFilters() {
     this.searchText = '';
     this.selectedAreas = [];
-
     // ניקוי שדה החיפוש החופשי כדי שהחיפוש הבא יחל מהתחלה
     if (this.searchInput) this.searchInput.nativeElement.value = '';
 

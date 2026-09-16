@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GuideRegistrationPayload, Int_Guide } from '../Interfaces/int-guide';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, lastValueFrom } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -18,11 +18,24 @@ export class Srv_Guide {
 
   constructor(private http: HttpClient) {}
 
-  /** מחזיר את כל המדריכים מהשרת (GuideResponseDto). */
-  GetGuides(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl).pipe(catchError(() => of([])));
+  /**
+   * מחזיר את המדריכים מהשרת (GuideResponseDto).
+   * @param ApprovedImports אופציונלי:
+   *  true = רק מאושרות, false = רק לא-מאושרות (ממתינות לאישור).
+   *  ללא פרמטר (ריק) — לא נשלח query param, והשרת מחזיר את ברירת המחדל שלו.
+   */
+  GetGuides(ApprovedImports?: boolean): Observable<any[]> {
+    if (ApprovedImports === undefined) {
+      return this.http.get<any[]>(this.baseUrl).pipe(catchError(() => of([])));
+    }
+    const params = new HttpParams().set(
+      'RetrieveApprovals',
+      ApprovedImports.toString(),
+    );
+    return this.http
+      .get<any[]>(this.baseUrl, { params })
+      .pipe(catchError(() => of([])));
   }
-
   /** מחזיר את המספר הגבוה ביותר של GuideId שנשמר + 1 (ללא קריאה כשהשרת לא זמין → 1). */
   async GetLastGuideId(): Promise<number> {
     try {
@@ -117,5 +130,15 @@ export class Srv_Guide {
     return this.http.get<any[]>(`${this.baseUrl}/files/${guideId}`).pipe(
       catchError(() => of([])),
     );
+  }
+
+  /**
+   * מאשר מדריכה אחת לפי GuideId (משנה את ערך האישור ל-TRUE בשרת).
+   * מחזיר את תשובת השרת; עם שגיאה — null.
+   */
+  approveGuide(guideId: number): Observable<any> {
+    return this.http
+      .put<any>(`${this.baseUrl}/approve/${guideId}`, {})
+      .pipe(catchError(() => of(null)));
   }
 }

@@ -23,6 +23,8 @@ namespace GuideX.Data
                 g.ToTable("Guide");
                 g.HasKey(x => x.GuideId);
                 g.Property(x => x.GuideId).ValueGeneratedOnAdd();
+                // ברירת מחדל: מדריך חדש לא מאושר עד שהמנהל מאשר אותו.
+                g.Property(x => x.IsApproved).HasDefaultValue(false);
             });
 
             // קובץ

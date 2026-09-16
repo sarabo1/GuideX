@@ -38,6 +38,10 @@ namespace GuideX.DTOs
         public int GuideId { get; set; }
         public int UserId { get; set; }
         public int ReligiousId { get; set; }
+
+        /// <summary>האם המדריך אושר ע"י מנהל (שולט בהצגה ברשימות).</summary>
+        public bool IsApproved { get; set; }
+
         public List<int> AreasOfExpertise { get; set; } = new();
         public List<GuideFileDto> Files { get; set; } = new();
 

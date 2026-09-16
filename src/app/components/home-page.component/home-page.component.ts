@@ -102,6 +102,12 @@ export class HomePageComponent {
     this.router.navigate(['welcome/Guides'])
   }
 
+  openAdminGuides() {
+    console.log("AdminGuide")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/AdminGuide'])
+  }
+
   openRegionSearch() {
     console.log("RegionSearch")
     this.showBtnTable = false;

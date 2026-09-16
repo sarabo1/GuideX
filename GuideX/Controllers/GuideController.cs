@@ -78,5 +78,26 @@ namespace GuideX.Controllers
             var fileName = Uri.EscapeDataString(file.FileName);
             return File(file.Data, file.ContentType, file.FileName);
         }
+
+        /// <summary>PUT /api/Guide/approve/{guideId} — מאשר מדריך: מעדכן את IsApproved ל-True.
+        /// מחזיר 200 עם הערך החדש, או 404 אם המדריך לא נמצא.</summary>
+        [HttpPut("approve/{guideId}")]
+        public async Task<IActionResult> ApproveGuide(int guideId)
+        {
+            var updated = await _guideService.ApproveGuideAsync(guideId, true);
+            return updated
+                ? Ok(new { guideId, isApproved = true })
+                : NotFound();
+        }
+
+        /// <summary>PUT /api/Guide/disapprove/{guideId} — מבטל אישור: מעדכן את IsApproved ל-False.</summary>
+        [HttpPut("disapprove/{guideId}")]
+        public async Task<IActionResult> DisapproveGuide(int guideId)
+        {
+            var updated = await _guideService.ApproveGuideAsync(guideId, false);
+            return updated
+                ? Ok(new { guideId, isApproved = false })
+                : NotFound();
+        }
     }
 }
