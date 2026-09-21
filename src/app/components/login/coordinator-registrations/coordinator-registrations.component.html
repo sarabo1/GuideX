@@ -98,9 +98,9 @@
   <div>
     <label>תפקידך במוסד:</label>
     <select formControlName="RoleId">
-      <option disabled>בחרי את תפקידך במוסד</option>
-      @for (item of RoleIdData; track item.RoleId) {
-        <option [value]="item.RoleId">{{ item.RoleName }}</option>
+      <option disabled selected>בחרי את תפקידך במוסד</option>
+      @for (item of RoleIdData; track item.roleId) {
+        <option [value]="item.roleId">{{ item.roleName }}</option>
       }
     </select>
   </div>
@@ -146,7 +146,7 @@
       
     />
     <datalist id="citiesList">
-      <option disabled>בחר עיר</option>
+      <option disabled selected>בחר עיר</option>
       @for (city of filteredCities; track city) {
         <option [value]="city">{{ city }}</option>
       }
@@ -206,7 +206,7 @@
   <div>
     <label>סוג מוסד:</label>
     <select formControlName="TypeSchoolId">
-      <option disabled>בחרי את סוג המוסד</option>
+      <option disabled selected>בחרי את סוג המוסד</option>
       @for (item of religiousData; track item.religiousId) {
         <option [value]="item.religiousId">{{ item.religiousName }}</option>
       }
@@ -221,7 +221,7 @@
   <div>
     <label>גיל מוסד:</label>
     <select formControlName="AgeSchoolId" >
-      <option disabled>בחרי את גיל המוסד</option>
+      <option disabled selected>בחרי את גיל המוסד</option>
       @for (item of AgeSchoolIdData; track item.id) {
         <option [value]="item.id">{{ item.name }}</option>
       }

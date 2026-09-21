@@ -6,7 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
-import { Int_WalkingTrail } from '../../../Interfaces/Int_WalkingTrail';
+import { Int_WalkingTrail, Int_WalkingTrailFile } from '../../../Interfaces/Int_WalkingTrail';
 import { ServiceAllService } from '../../../Services/service-all.service';
 import { SrvWalkingTrailService } from '../../../Services/srv-WalkingTrail.service';
 import { srv_Favorite } from '../../../Services/srv_Favorite';
@@ -26,6 +26,12 @@ export class ShowWalkingTrailComponent {
   RegionsArrayData: any
   isLiked: boolean = false;
   isAddNew = false;
+
+  /** תמונות שכבר נשמרו בשרת עבור מסלול ההליכה (לתצוגה ולמחיקה). */
+  images: Int_WalkingTrailFile[] = [];
+  /** קבצי תמונה שנבחרו אך טרם הועלו (למסלול חדש שעדיין אין לו ID). */
+  pendingImages: File[] = [];
+
   userDetails: any = JSON.parse(localStorage.getItem('user_data') || '{}');
   constructor(
     public dialog: MatDialog,
@@ -75,14 +81,21 @@ export class ShowWalkingTrailComponent {
 
     if (!userId || !this.data?.WalkingTrailId) {
       this.isLiked = false;
-      return;
+    } else {
+      this.isLiked = this.srv_favorite.isFavorite(
+        userId,
+        Number(this.data.WalkingTrailId),
+        'trail',
+      );
     }
 
-    this.isLiked = this.srv_favorite.isFavorite(
-      userId,
-      Number(this.data.WalkingTrailId),
-      'trail',
-    );
+    // טעינת התמונות של המסלול שנפתח — שליפה לפי ה-ID שלו מהשרת.
+    // (רק אם הוא כבר שמור בשרת; למסלול חדש עדיין אין ID).
+    if (this.data?.WalkingTrailId && this.data.WalkingTrailId > 0) {
+      this.walkingTrails.GetImages(this.data.WalkingTrailId).subscribe((imgs) => {
+        this.images = imgs ?? [];
+      });
+    }
   }
   toggleFavorite() {
     if (
@@ -115,6 +128,77 @@ export class ShowWalkingTrailComponent {
   canEdit() {
     this.userCanEdit = true;
   }
+
+  // ─────────── תמונות ───────────
+
+  /** כתובת התמונה הפתוחה בתצוגה גדולה (null = פתוחה אין). */
+  previewImageUrl: string | null = null;
+
+  /** פותח את התמונה בתצוגה גדולה (lightbox). */
+  openImagePreview(url: string) {
+    this.previewImageUrl = url;
+  }
+
+  /** סוגר את תצוגת התמונה הגדולה. */
+  closeImagePreview() {
+    this.previewImageUrl = null;
+  }
+
+  /** כתובת URL לתצוגת תמונה שמורה לפי ה-FileId שלה בשרת. */
+  imageUrl(fileId: number): string {
+    return this.walkingTrails.ImageUrl(fileId);
+  }
+
+  /** כתובת URL זמנית לתצוגת קובץ מקומי שנבחר (טרם הועלה). */
+  pendingImageUrl(file: File): string {
+    return URL.createObjectURL(file);
+  }
+
+  /** בחירת קבצי תמונה חדשים. */
+  onImagesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const files = Array.from(input.files);
+
+    // מסלול קיים — מעלים מיד לשרת.
+    if (this.data?.WalkingTrailId && this.data.WalkingTrailId > 0) {
+      this.walkingTrails.AddImages(this.data.WalkingTrailId, files).subscribe(
+        (imgs) => {
+          this.images = imgs ?? [];
+        },
+      );
+    } else {
+      // מסלול חדש (אין עדיין ID) — שומרים את הקבצים להעלאה אחרי השמירה.
+      this.pendingImages.push(...files);
+    }
+
+    // איפוס שדה הבחירה כדי שאפשר יהיה לבחור שוב את אותו קובץ.
+    input.value = '';
+  }
+
+  /** מחיקת קובץ חדש שטרם הועלה (למסלול חדש). */
+  removePendingImage(index: number) {
+    this.pendingImages.splice(index, 1);
+  }
+
+  /** מחיקת תמונה שמורה מהשרת ומהתצוגה. */
+  deleteImage(fileId: number, index: number) {
+    this.walkingTrails.DeleteImage(fileId).subscribe(() => {
+      this.images.splice(index, 1);
+    });
+  }
+
+  /** מעלה את הקבצים שנבחרו למסלול חדש, אחרי שזה נשמר (יש כבר ID). */
+  uploadPendingImages(newTrailId: number) {
+    if (!this.pendingImages.length) return;
+    const files = [...this.pendingImages];
+    this.pendingImages = [];
+    this.walkingTrails.AddImages(newTrailId, files).subscribe((imgs) => {
+      this.images = imgs ?? [];
+    });
+  }
+
   saveEdit() {
     console.log('saveEdit');
       const seasons = [
@@ -194,9 +278,15 @@ export class ShowWalkingTrailComponent {
       }
 this.walkingTrails.AddNewTrail(this.data).subscribe({
     next: (response) => {
-        console.log('הוספת הליכה', response.message);
+        console.log('הוספת הליכה', response);
+        // המסלול נשמר — עכשיו יש לו ID. אם נבחרו תמונות, מעלים אותם אליו.
+        const newId =
+            response?.WalkingTrailId ?? response?.walkingTrailId ?? this.data.WalkingTrailId;
+        if (this.pendingImages.length && newId) {
+            this.uploadPendingImages(newId);
+        }
         this.onClose();
-        this.openDialogRegistrations(response.message);
+        this.openDialogRegistrations('מסלול ההליכה נוסף בהצלחה');
         this.refreshService.triggerRefresh();
     },
     error: (err) => {

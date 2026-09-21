@@ -6,7 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
-import { Int_Hostels } from '../../../Interfaces/Int_Hostels';
+import { Int_Hostels, Int_HostelFile } from '../../../Interfaces/Int_Hostels';
 import { ServiceAllService } from '../../../Services/service-all.service';
 import { srv_Hostels } from '../../../Services/srv_Hostels';
 import { srv_Favorite } from '../../../Services/srv_Favorite';
@@ -34,6 +34,12 @@ export class ShowHostelsComponent {
   KashrutArrayData: any;
   isLiked: boolean = false;
   isAddNew = false;
+
+  /** תמונות שכבר נשמרו בשרת עבור מקום הלינה (לתצוגה ולמחיקה). */
+  images: Int_HostelFile[] = [];
+  /** קבצי תמונה שנבחרו אך טרם הועלו (למקום לינה חדש שעדיין אין לו ID). */
+  pendingImages: File[] = [];
+
   userDetails: any = JSON.parse(localStorage.getItem('user_data') || '{}');
 
   constructor(
@@ -103,6 +109,14 @@ export class ShowHostelsComponent {
       Number(this.data.HostelsId),
       'hostel',
     );
+
+    // טעינת התמונות של מקום הלינה שנפתח — שליפה לפי ה-ID שלו מהשרת.
+    // (רק אם הוא כבר שמור בשרת; למקום לינה חדש עדיין אין ID).
+    if (this.data?.HostelsId && this.data.HostelsId > 0) {
+      this.hostels.GetImages(this.data.HostelsId).subscribe((imgs) => {
+        this.images = imgs ?? [];
+      });
+    }
   }
   toggleFavorite() {
     if (
@@ -158,8 +172,14 @@ export class ShowHostelsComponent {
         return;
       }
       this.hostels.AddNewHostel(this.data).subscribe({
-        next: () => {
-          console.log('הוספת מקום לינה');
+        next: (saved: any) => {
+          console.log('הוספת מקום לינה', saved);
+          // מקום הלינה נשמר — עכשיו יש לו ID. אם נבחרו תמונות, מעלים אותן אליו.
+          const newId =
+            saved?.HostelsId ?? saved?.hostelsId ?? this.data.HostelsId;
+          if (this.pendingImages.length && newId) {
+            this.uploadPendingImages(newId);
+          }
           this.onClose();
           this.openDialogRegistrations('מקום הלינה נוסף בהצלחה');
           this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
@@ -203,6 +223,76 @@ export class ShowHostelsComponent {
       width: '160px',
 
       data: element, // העברת הנתונים לדיאלוג
+    });
+  }
+
+  // ─────────── תמונות ───────────
+
+  /** כתובת התמונה הפתוחה בתצוגה גדולה (null = פתוחה אין). */
+  previewImageUrl: string | null = null;
+
+  /** פותח את התמונה בתצוגה גדולה (lightbox). */
+  openImagePreview(url: string) {
+    this.previewImageUrl = url;
+  }
+
+  /** סוגר את תצוגת התמונה הגדולה. */
+  closeImagePreview() {
+    this.previewImageUrl = null;
+  }
+
+  /** כתובת URL לתצוגת תמונה שמורה לפי ה-FileId שלה בשרת. */
+  imageUrl(fileId: number): string {
+    return this.hostels.ImageUrl(fileId);
+  }
+
+  /** כתובת URL זמנית לתצוגת קובץ מקומי שנבחר (טרם הועלה). */
+  pendingImageUrl(file: File): string {
+    return URL.createObjectURL(file);
+  }
+
+  /** בחירת קבצי תמונה חדשים. */
+  onImagesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const files = Array.from(input.files);
+
+    // מקום לינה קיים — מעלים מיד לשרת.
+    if (this.data?.HostelsId && this.data.HostelsId > 0) {
+      this.hostels.AddImages(this.data.HostelsId, files).subscribe(
+        (imgs) => {
+          this.images = imgs ?? [];
+        },
+      );
+    } else {
+      // מקום לינה חדש (אין עדיין ID) — שומרים את הקבצים להעלאה אחרי השמירה.
+      this.pendingImages.push(...files);
+    }
+
+    // איפוס שדה הבחירה כדי שאפשר יהיה לבחור שוב את אותו קובץ.
+    input.value = '';
+  }
+
+  /** מחיקת קובץ חדש שטרם הועלה (למקום לינה חדש). */
+  removePendingImage(index: number) {
+    this.pendingImages.splice(index, 1);
+  }
+
+  /** מחיקת תמונה שמורה מהשרת ומהתצוגה. */
+  deleteImage(fileId: number, index: number) {
+    this.hostels.DeleteImage(fileId).subscribe(() => {
+      this.images.splice(index, 1);
+    });
+  }
+
+  /** מעלה את הקבצים שנבחרו למקום לינה חדש, אחרי שזה נשמר (יש כבר ID). */
+  uploadPendingImages(newHostelsId: number) {
+    if (!this.pendingImages.length) return;
+    const files = [...this.pendingImages];
+    this.pendingImages = [];
+    this.hostels.AddImages(newHostelsId, files).subscribe((imgs) => {
+      this.images = imgs ?? [];
     });
   }
 }

@@ -22,7 +22,7 @@ export class FooterComponent {
     { label: 'פורום בטיחות', path: '/welcome/forum', queryParams: { ForumType: 3 } },
     { label: 'המעודפים', path: '/welcome/Favorites' },
     { label: 'מסלולי הליכה', path: '/welcome/Trails' },
-    { label: 'צימרים', path: '/welcome/Hostels' },
+    { label: 'מקומות לינה', path: '/welcome/Hostels' },
     { label: 'אטרקציות', path: '/welcome/Attractions' },
     { label: 'מדריכים', path: '/welcome/Guides' },
     { label: 'חיפוש אזור', path: '/welcome/RegionSearch' },
