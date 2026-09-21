@@ -62,7 +62,10 @@ export class EditUserDetailComponent {
     private srvCities: SrvCities,
     private srvSchools: SrvSchoolService,
   ) {
-    this.userId = data?.userId ?? null;
+    // this.userId = data?.userId ?? null;
+  
+    this.userId = localStorage.getItem('userId') || null;
+    console.log('EditUserDetailComponent initialized with userId:', this.userId);
   }
 
   // ── טופס מדריכה ──
@@ -143,18 +146,18 @@ export class EditUserDetailComponent {
     });
     this.schools = this.srvSchools.GetSchools();
     this.filteredSchools = this.schools;
-
     this.loadProfile();
   }
 
   /** שולף את הפרופיל מהשרת לפי UserId וממלא את הטופס. */
-  private loadProfile() {
+ loadProfile() {
+  this.userId = localStorage.getItem('userId') || null;
+  this.userId = this.data?.userId ?? this.userId; // אם קיים בנתוני הדיאלוג, עדיף אותו
     if (this.userId == null) {
       this.error = 'לא נמצא משתמש מחובר לעריכה.';
       this.loading = false;
       return;
     }
-
     this.srv_user.getProfile(this.userId).subscribe((profile) => {
       this.loading = false;
       if (!profile || (profile.type !== 'guide' && profile.type !== 'coordinator')) {

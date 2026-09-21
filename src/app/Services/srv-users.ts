@@ -147,13 +147,16 @@ getUserByEmailIdNumberPhone(EmPhId: JSON) {
 
   /** שולף את פרופיל המשתמש (מדריכה/רכזת) מהשרת לפי UserId — לצורך טופס העריכה. */
   getProfile(userId: number | string): Observable<any> {
+    console.log('getProfile called with userId:', userId);
     const baseUrl = `https://localhost:7098/profile/${userId}`;
-    return this.http.get<any>(baseUrl).pipe(
+    const  zzz =  this.http.get<any>(baseUrl).pipe(
       catchError((error) => {
         console.error('שגיאה בשליפת הפרופיל:', error);
         return of(null);
       }),
     );
+    console.log('getProfile response:', zzz);
+    return zzz;
   }
 
   /** מעדכן פרופיל של רכזת/מוסד (PUT /coordinator/update). */

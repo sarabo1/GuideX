@@ -108,7 +108,7 @@ export class RegionSearchComponent {
       complete: () => done(),
     });
 
-    this.srv_guide.GetGuides().subscribe({
+    this.srv_guide.GetGuides(true).subscribe({
       next: (d) => (this.allGuides = d),
       error: () => {},
       complete: () => done(),
