@@ -43,6 +43,7 @@ export class HeaderComponent {
   dateToHeader: Date = new Date();
   openMenu: boolean = false;
   username = 'אנונימית';
+  loggedInUserId: number | string | null = null;
   ngOnInit() {
     const userD = localStorage.getItem('user_data');
     let userData: any = null;
@@ -50,7 +51,8 @@ export class HeaderComponent {
       userData = JSON.parse(userD);
     }
     if (userData && userData.userId) {
-      this.username = userData.firstName
+      this.username = userData.firstName;
+      this.loggedInUserId = userData.userId;
     }
   }
 
@@ -81,9 +83,11 @@ export class HeaderComponent {
   }
 
   openDialogEditD() {
+    // מעביר את ה-UserId של המשתמש המחובר לצורך מילוי טופס העריכה
     const dialogRef = this.dialog.open(EditUserDetailComponent, {
       width: '950px',
-      data: {},
+      data: { userId: this.loggedInUserId },
+      height: '850px',
     });
   }
 

@@ -65,6 +65,13 @@ namespace GuideX.Services
             return await _repository.GetGuideFileAsync(guideFileId);
         }
 
+        /// <summary>מעדכן את סטטוס האישור של מדריך (IsApproved = approved).
+        /// מחזיר true אם המדריך נמצא ועודכן, false אם לא קיים.</summary>
+        public async Task<bool> ApproveGuideAsync(int guideId, bool approved)
+        {
+            return await _repository.ApproveGuideAsync(guideId, approved);
+        }
+
         private static async Task<byte[]> ReadFileAsync(IFormFile file)
         {
             using var ms = new MemoryStream();
@@ -90,6 +97,7 @@ namespace GuideX.Services
                 GuideId = g.GuideId,
                 UserId = g.UserId,
                 ReligiousId = g.ReligiousId,
+                IsApproved = g.IsApproved,
                 AreasOfExpertise = g.Areas.Select(a => a.AreaId).ToList(),
                 Files = files,
                 ResumeFile = files.FirstOrDefault(f => f.Kind == "Cv")

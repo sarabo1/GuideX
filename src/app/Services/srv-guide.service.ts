@@ -18,11 +18,26 @@ export class Srv_Guide {
 
   constructor(private http: HttpClient) {}
 
-  /** מחזיר את כל המדריכים מהשרת (GuideResponseDto). */
-  GetGuides(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl).pipe(catchError(() => of([])));
+  /**
+   * מחזיר את המדריכים מהשרת (GuideResponseDto).
+   * @param ApprovedImports אופציונלי:
+   *  true = רק מאושרות, false = רק לא-מאושרות (ממתינות לאישור).
+   *  ללא פרמטר (ריק) — לא נשלח query param, והשרת מחזיר את ברירת המחדל שלו.
+   */
+  GetGuides(ApprovedImports?: boolean): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl).pipe(
+      map((guides) => {
+        const list = guides ?? [];
+        if (ApprovedImports === undefined) {
+          return list;
+        }
+        // סינון בצד הלקוח לפי סטטוס האישור — כך שאין תלות בפרמטר RetrieveApprovals
+        // שאינו קיים בהכרח במסלול אליו מתחבר השרת.
+        return list.filter((g) => Boolean(g.isApproved) === ApprovedImports);
+      }),
+      catchError(() => of([])),
+    );
   }
-
   /** מחזיר את המספר הגבוה ביותר של GuideId שנשמר + 1 (ללא קריאה כשהשרת לא זמין → 1). */
   async GetLastGuideId(): Promise<number> {
     try {
@@ -112,10 +127,28 @@ export class Srv_Guide {
     );
   }
 
+  /**
+   * מחזיר את מסלול (URL) להורדה/פתיחה של קובץ מדריך לפי ה-FileId.
+   * המסלול עקבי עם המסלול בשרת: /all_guide/download/{fileId}.
+   */
+  getFileUrl(guideFileId: number): string {
+    return `${this.baseUrl}/download/${guideFileId}`;
+  }
+
   /** מחזיר את קבצי המדריך מהשרת לפי GuideId (Observable). */
   getGuideFiles(guideId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/files/${guideId}`).pipe(
       catchError(() => of([])),
     );
+  }
+
+  /**
+   * מאשר מדריכה אחת לפי GuideId (משנה את ערך האישור ל-TRUE בשרת).
+   * מחזיר את תשובת השרת; עם שגיאה — null.
+   */
+  approveGuide(guideId: number): Observable<any> {
+    return this.http
+      .put<any>(`${this.baseUrl}/approve/${guideId}`, {})
+      .pipe(catchError(() => of(null)));
   }
 }
