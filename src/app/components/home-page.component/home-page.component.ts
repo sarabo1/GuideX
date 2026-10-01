@@ -13,13 +13,8 @@ import { FevoriteComponent } from "../fevorite/fevorite.component";
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   imports: [
-    WalkingTrailComponent,
-    AttractionsComponent,
-    HostelsComponent,
-    TableGuideComponent,
     ScrollTopModule,
     MatIcon,
-    FevoriteComponent
   ],
   styleUrls: ['./home-page.component.scss'],
   standalone: true,
