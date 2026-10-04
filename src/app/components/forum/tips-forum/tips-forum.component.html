@@ -22,9 +22,13 @@
         }
         <br />
       </div>
+      @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
+            ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3) 
+            || (forumType == 1)){
       <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
         כתיבת הודעה חדשה
       </button>
+      }
     </div>
     <br />
     <br />
@@ -34,10 +38,10 @@
         @if (message.parentForumId) {
         <div class="card-header">
           <mat-icon class="rotate-90">u_turn_right</mat-icon>
-         @if(forumMessageStore.getTitleByForumId(message.parentForumId)){
+          @if(forumMessageStore.getTitleByForumId(message.parentForumId)){
           <i>{{ forumMessageStore.getTitleByForumId(message.parentForumId) }}</i>
-         } @else{
-          ______________________________________________________________________________ 
+          } @else{
+          ______________________________________________________________________________
           }
         </div>
         }
@@ -52,22 +56,29 @@
           </div>
 
           <p>{{ message.message }}</p>
-          
+@if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
+            ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3) 
+            || (forumType == 1)){
           <div class="newPostAndGarbage">
-          <button class="btn aadMessage" (click)="openDialogAddMessage(message.forumId, forumType)">
-            תגובה להודעה זו
-          </button>
-          <button class="garbage" (click)="DeletePost(message.forumId)">
-            <img src="garbage.png" class="garbage" /></button>
+            <button class="btn aadMessage" (click)="openDialogAddMessage(message.forumId, forumType)">
+              תגובה להודעה זו
+            </button>
+            <button class="garbage" (click)="DeletePost(message.forumId)">
+              <img src="garbage.png" class="garbage" /></button>
           </div>
+        }
         </div>
       </div>
       }
     </div>
+    @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
+            ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3) 
+            || (forumType == 1)){
     <div class="titleOfForum">
       <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
         כתיבת הודעה חדשה
       </button>
     </div>
+  }
   </div>
 </div>

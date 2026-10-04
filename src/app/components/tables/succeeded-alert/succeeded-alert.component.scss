@@ -1,23 +1,12 @@
-// .alert{
-//     // background-color: #F3FDF7;
-//     border-radius: 2px;
-// direction:rtl;
-//     margin: 0px;
-    
-// }
-// p{
-//     margin: auto;
-// }
-
 
 .alert {
   position: fixed; /* מיקום קבוע */
   bottom: 20px; /* מרחק מהחלק התחתון של הדף */
   right: 20px; /* מרחק מהחלק הימני של הדף */
-  background-color: #2d83e4; /* צבע הרקע (ירוק) */
-    // background-color: #030505; /* צבע הרקע (ירוק) */
+  background-color: #fcf5f5; /* צבע הרקע (ירוק) */
 
-  color: white; /* צבע הטקסט */
+  border-color:#6f2fe0; /* צבע הטקסט */
+  color: #ff5656; /* צבע הטקסט */
   padding: 15px; /* ריפוד סביב התוכן */
     padding-top: 9px; /* ריפוד סביב התוכן */
 

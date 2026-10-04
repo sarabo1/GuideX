@@ -4,6 +4,7 @@
   <div class="content">
     @if (!isAddNew) {
       <div class="likeAndEdit">
+        @if(this.authService.hasPermission('editRoutes')){
         <button
           [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
           (click)="deleteTrail()"
@@ -16,6 +17,7 @@
         >
           <mat-icon class="close-icon">edit</mat-icon>
         </button>
+      }
         <button class="likeButton" (click)="toggleFavorite()">
           <img
             class="img_like"

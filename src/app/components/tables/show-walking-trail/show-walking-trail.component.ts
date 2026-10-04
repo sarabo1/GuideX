@@ -14,6 +14,7 @@ import { regionNamePipe } from "../../../Pipes/regionName";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
+import { AuthService } from '../../../Services/auth-service.service';
 
 @Component({
   selector: 'app-show-walking-trail',
@@ -41,6 +42,7 @@ export class ShowWalkingTrailComponent {
     public walkingTrails: SrvWalkingTrailService,
     public srv_favorite: srv_Favorite,
     public refreshService: RefreshService,
+    public authService: AuthService
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {

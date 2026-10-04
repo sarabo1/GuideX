@@ -34,7 +34,38 @@ export class ServiceUsersService {
   }
   GetUsers(): any[] {
     return this.mock_Users;
-    
+
+  }
+
+  /** שולף את כל המשתמשים באתר מהשרת (GET /Users). */
+  GetAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>('https://localhost:7098/Users').pipe(
+      catchError((error) => {
+        console.error('שגיאה בשליפת המשתמשים:', error);
+        return of([] as any[]);
+      }),
+    );
+  }
+
+  /**
+   * מעדכן הרשאת משתמש אחת (PUT /Users/{userId}/permission).
+   * @param userId מזהה המשתמש.
+   * @param permission שם ההרשאה (למשל 'superAdmin', 'editRoutes'...).
+   * @param value הערך החדש (true/false).
+   */
+  UpdatePermission(
+    userId: number,
+    permission: string,
+    value: boolean,
+  ): Observable<any> {
+    const baseUrl = `https://localhost:7098/Users/${userId}/permission`;
+    const body = { permission, value };
+    return this.http.put<any>(baseUrl, body).pipe(
+      catchError((error) => {
+        console.error(`שגיאה בעדכון ההרשאה ${permission} למשתמש ${userId}:`, error);
+        return of(null);
+      }),
+    );
   }
   // aaa(){
   //   const base = 'https://localhost:7098/api/Login/hi'

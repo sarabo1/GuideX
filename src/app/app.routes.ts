@@ -11,6 +11,8 @@ import { WalkingTrailComponent } from './components/tables/walking-trail/walking
 import { TableGuideComponent } from './components/tables/table-guide/table-guide.component';
 import { RegionSearchComponent } from './components/region-search/region-search.component';
 import { AdminPageComponent } from './components/admin-page/admin-page.component/admin-page.component';
+import { UserPermissionsComponent } from './components/admin-page/user-permissions/user-permissions.component';
+import { permissionGuard } from './guards/permission-guard.guard';
 
 export const routes: Routes = [
   { path: '', component: WelcomePageComponent },
@@ -28,7 +30,14 @@ export const routes: Routes = [
       { path: 'Attractions', component: AttractionsComponent },
       { path: 'Guides', component: TableGuideComponent },
       { path: 'RegionSearch', component: RegionSearchComponent },
-      { path: 'AdminGuide', component: AdminPageComponent },
+      {
+        path: 'AdminGuide', component: AdminPageComponent,
+        canActivate: [permissionGuard('userManagement')],
+      },
+      {
+        path: 'AdminUsers', component: UserPermissionsComponent,
+        canActivate: [permissionGuard('userManagement')],
+      },
 
     ],
   },

@@ -2,211 +2,155 @@
   <div class="background"></div>
   <div class="content">
     @if (!isAddNew) {
-      <div class="likeAndEdit">
-        <div>
-          <button
-            [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-            (click)="deleteHostel()"
-          >
-            <mat-icon class="close-icon">delete</mat-icon>
-          </button>
+    <div class="likeAndEdit">
+      @if(this.authService.hasPermission('editHostels')){
+      <div>
+        <button [class]="userCanEdit ? 'close-btn edit' : 'close-btn'" (click)="deleteHostel()">
+          <mat-icon class="close-icon">delete</mat-icon>
+        </button>
 
-          <button
-            [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-            (click)="canEdit()"
-          >
-            <mat-icon class="close-icon">edit</mat-icon>
-          </button>
-        </div>
-
-        <button class="likeButton" (click)="toggleFavorite()">
-          <img
-            class="img_like"
-            [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
-          />
+        <button [class]="userCanEdit ? 'close-btn edit' : 'close-btn'" (click)="canEdit()">
+          <mat-icon class="close-icon">edit</mat-icon>
         </button>
       </div>
+      }
+      <button class="likeButton" (click)="toggleFavorite()">
+        <img class="img_like" [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'" />
+      </button>
+    </div>
     } @else {
-      <br />
-      <h3>
-        <strong>הוספת מקום לינה</strong>
-      </h3>
-      <br />
+    <br />
+    <h3>
+      <strong>הוספת מקום לינה</strong>
+    </h3>
+    <br />
     }
 
     <h2>
       @if (!userCanEdit) {
-        <strong>{{ data.HostelsName }}</strong>
+      <strong>{{ data.HostelsName }}</strong>
       } @else {
-        <input
-          class="inputToEdit"
-          id="HostelsName"
-          type="text"
-          [(ngModel)]="data.HostelsName"
-          [placeholder]="isAddNew ? 'שם מקום הלינה' : ''"
-        />
+      <input class="inputToEdit" id="HostelsName" type="text" [(ngModel)]="data.HostelsName"
+        [placeholder]="isAddNew ? 'שם מקום הלינה' : ''" />
       }
     </h2>
 
     @if (!userCanEdit) {
-      <h5>
-        <strong>{{ data.Description }}</strong>
-      </h5>
+    <h5>
+      <strong>{{ data.Description }}</strong>
+    </h5>
     } @else {
-      <textarea
-        cols="45"
-        id="Description"
-        class="inputToEdit"
-        [(ngModel)]="data.Description"
-        [placeholder]="isAddNew ? 'תיאור מקום הלינה' : ''"
-      >
+    <textarea cols="45" id="Description" class="inputToEdit" [(ngModel)]="data.Description"
+      [placeholder]="isAddNew ? 'תיאור מקום הלינה' : ''">
       </textarea>
     }
 
     <!-- תמונות מקום הלינה -->
     <div class="attraction-images">
       @if (userCanEdit) {
-        <label class="image-upload-badge">
-          <mat-icon>add_a_photo</mat-icon>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            (change)="onImagesSelected($event)"
-          />
-        </label>
+      <label class="image-upload-badge">
+        <mat-icon>add_a_photo</mat-icon>
+        <input type="file" accept="image/*" multiple (change)="onImagesSelected($event)" />
+      </label>
       }
 
       <!-- תמונות שמורות בשרת -->
       @for (image of images; track image.fileId; let i = $index) {
-        <div class="image-item">
-          <img
-            [src]="imageUrl(image.fileId)"
-            alt="תמונה {{ i + 1 }}"
-            (click)="openImagePreview(imageUrl(image.fileId))"
-          />
-          @if (userCanEdit) {
-            <button
-              class="image-delete"
-              (click)="deleteImage(image.fileId, i)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
-        </div>
+      <div class="image-item">
+        <img [src]="imageUrl(image.fileId)" alt="תמונה {{ i + 1 }}"
+          (click)="openImagePreview(imageUrl(image.fileId))" />
+        @if (userCanEdit) {
+        <button class="image-delete" (click)="deleteImage(image.fileId, i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+      </div>
       }
 
       <!-- תמונות חדשות שנבחרו (מקום לינה חדש, עדיין לא הועלו) -->
       @for (pending of pendingImages; track pending.name; let i = $index) {
-        <div class="image-item">
-          <img
-            [src]="pendingImageUrl(pending)"
-            alt="תמונה חדשה {{ i + 1 }}"
-            (click)="openImagePreview(pendingImageUrl(pending))"
-          />
-          <button class="image-delete" (click)="removePendingImage(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
+      <div class="image-item">
+        <img [src]="pendingImageUrl(pending)" alt="תמונה חדשה {{ i + 1 }}"
+          (click)="openImagePreview(pendingImageUrl(pending))" />
+        <button class="image-delete" (click)="removePendingImage(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
       }
     </div>
 
     <!-- תצוגת תמונה גדולה (lightbox) -->
     @if (previewImageUrl) {
-      <div class="image-preview-overlay" (click)="closeImagePreview()">
-        <button
-          class="image-preview-close"
-          (click)="closeImagePreview()"
-          aria-label="סגירת התמונה"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        <img
-          class="image-preview-img"
-          [src]="previewImageUrl"
-          alt="תצוגה גדולה"
-          (click)="$event.stopPropagation()"
-        />
-      </div>
+    <div class="image-preview-overlay" (click)="closeImagePreview()">
+      <button class="image-preview-close" (click)="closeImagePreview()" aria-label="סגירת התמונה">
+        <mat-icon>close</mat-icon>
+      </button>
+      <img class="image-preview-img" [src]="previewImageUrl" alt="תצוגה גדולה" (click)="$event.stopPropagation()" />
+    </div>
     }
 
     <p>
       <strong>אזור: </strong>
       @if (!userCanEdit) {
-        @if (data.regionId) {
-          {{ data.regionId | regionName | async }}
-        }
+      @if (data.regionId) {
+      {{ data.regionId | regionName | async }}
+      }
       } @else {
-        <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
-          <option [ngValue]="0">בחירת אזור</option>
-          @for (item of RegionsArrayData; track item.regionId) {
-            <option [ngValue]="item.regionId">
-              {{ item.regionName }}
-            </option>
-          }
-        </select>
+      <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
+        <option [ngValue]="0">בחירת אזור</option>
+        @for (item of RegionsArrayData; track item.regionId) {
+        <option [ngValue]="item.regionId">
+          {{ item.regionName }}
+        </option>
+        }
+      </select>
       }
     </p>
     <p>
       <strong>כתובת:</strong>
       @if (!userCanEdit) {
-        {{ data.Address }}
+      {{ data.Address }}
       } @else {
-        <input
-          class="inputToEdit"
-          id="Address"
-          type="text"
-          [(ngModel)]="data.Address"
-        />
+      <input class="inputToEdit" id="Address" type="text" [(ngModel)]="data.Address" />
       }
     </p>
     <p>
       <strong>טלפון:</strong>
       @if (!userCanEdit) {
-        {{ data.Phone }}
+      {{ data.Phone }}
       } @else {
-        <input
-          class="inputToEdit"
-          id="Phone"
-          type="text"
-          [(ngModel)]="data.Phone"
-        />
+      <input class="inputToEdit" id="Phone" type="text" [(ngModel)]="data.Phone" />
       }
     </p>
     <p>
       <strong>מספר מיטות: </strong>
       @if (!userCanEdit) {
-        {{ data.NumberOfPlaces }}
+      {{ data.NumberOfPlaces }}
       } @else {
-        <input
-          class="inputToEdit"
-          type="number"
-          id="NumberOfPlaces"
-          [(ngModel)]="data.NumberOfPlaces"
-        />
+      <input class="inputToEdit" type="number" id="NumberOfPlaces" [(ngModel)]="data.NumberOfPlaces" />
       }
     </p>
     <p>
       <strong>כשרות המקום: </strong>
       @if (!userCanEdit) {
-        {{ data.kashrutId | kashrutName | async }}
+      {{ data.kashrutId | kashrutName | async }}
       } @else {
-        <select class="inputToEdit" id="kashrutId" [(ngModel)]="data.kashrutId">
-          <option [ngValue]="0">בחירת כשרות</option>
-          @for (item of KashrutArrayData; track item.kashrutId) {
-            <option [ngValue]="+item.kashrutId">
-              {{ item.kashrutName }}
-            </option>
-          }
-        </select>
+      <select class="inputToEdit" id="kashrutId" [(ngModel)]="data.kashrutId">
+        <option [ngValue]="0">בחירת כשרות</option>
+        @for (item of KashrutArrayData; track item.kashrutId) {
+        <option [ngValue]="+item.kashrutId">
+          {{ item.kashrutName }}
+        </option>
+        }
+      </select>
       }
     </p>
 
     <br />
     @if (userCanEdit) {
-      <button (click)="saveEdit()" class="close-btn">
-        <mat-icon class="close-icon">task_alt</mat-icon>
-      </button>
+    <button (click)="saveEdit()" class="close-btn">
+      <mat-icon class="close-icon">task_alt</mat-icon>
+    </button>
     }
     <button (click)="onClose()" class="close-btn">
       <mat-icon class="close-icon">close</mat-icon>

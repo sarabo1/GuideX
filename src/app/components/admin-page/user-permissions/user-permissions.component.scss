@@ -1,0 +1,204 @@
+.user-permissions {
+  direction: rtl;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  font-family: heebo, sans-serif;
+  color: #444;
+}
+
+.page-title {
+  color: #5f16eb;
+  border-bottom: 2px solid #dccdf5;
+  padding-bottom: 10px;
+  margin: 0 0 22px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.loading,
+.empty,
+.error {
+  text-align: center;
+  padding: 50px 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.loading {
+  color: #7a2be6;
+}
+
+.empty {
+  color: #a99;
+}
+
+.error {
+  color: #ff5656;
+  background-color: #fff0f1;
+  border: 1px solid #ffb3b8;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* ── טבלת המשתמשים ── */
+.table-wrap {
+  overflow-x: auto;
+  border: 1.5px solid #dccdf5;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 12px rgba(111, 47, 224, 0.08);
+}
+
+.perms-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.perms-table thead th {
+  background-color: #f5f0ff;
+  color: #6f2fe0;
+  padding: 12px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #dccdf5;
+  white-space: nowrap;
+}
+
+.perms-table thead th .th-icon {
+  display: block;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 4px;
+  color: #a78fd6;
+}
+
+.perms-table thead th .th-label {
+  display: block;
+}
+
+.perms-table tbody td {
+  padding: 18px 10px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid #eadff8;
+}
+
+.perms-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.perms-table tbody tr:nth-child(even) {
+  background-color: #fcfaff;
+}
+
+.perms-table tbody tr:hover {
+  background-color: #f4eeff;
+}
+
+.col-user {
+  text-align: right !important;
+}
+
+.col-user .name {
+  color: #3c3c3c;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.col-id {
+  min-width: 48px;
+}
+
+.user-id {
+  color: #a78fd6;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.col-perm {
+  min-width: 110px;
+}
+
+/* ── מתג הרשאה בתא ── */
+.cell-inner {
+  position: relative;
+  display: inline-block;
+}
+
+.perm-toggle {
+  display: inline-block;
+  min-width: 74px;
+  border: 1.5px solid #dccdf5;
+  background-color: #f7f5fb;
+  color: #6c6c6c;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-family: heebo, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.perm-toggle .state {
+  display: block;
+}
+
+.perm-toggle .saving {
+  display: block;
+  color: #6f2fe0;
+}
+
+/* מצב מופעל (ON) */
+.perm-toggle.on {
+  background-color: #e8f7ee;
+  border-color: #2e9e5b;
+  color: #1d7a44;
+}
+
+.perm-toggle:hover:not(:disabled) {
+  border-color: #6f2fe0;
+  box-shadow: 0 3px 10px rgba(111, 47, 224, 0.15);
+}
+
+.perm-toggle.on:hover:not(:disabled) {
+  border-color: #2e9e5b;
+  box-shadow: 0 3px 10px rgba(46, 158, 91, 0.18);
+}
+
+.perm-toggle:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── הודעת שגיאה עדינה בתוך התא, ליד הכפתור ── */
+/* מוצגת ככיסוי מוחלט מעל התא — כך שהיא אינה מרימה את גובה השורה
+   ואינה "מקפיצה" את שאר הטבלה כשמופיעה/נעלמת. */
+.cell-error {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  margin-top: 4px;
+  white-space: nowrap;
+  font-size: 11.5px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #b07777;
+  background-color: #fdf6f6;
+  border: 1px solid #f0e0e0;
+  border-radius: 8px;
+  padding: 5px 8px;
+  box-shadow: 0 2px 8px rgba(120, 60, 60, 0.12);
+  opacity: 1;
+  transition: opacity 0.9s ease;
+}
+
+.cell-error.fading {
+  opacity: 0;
+}

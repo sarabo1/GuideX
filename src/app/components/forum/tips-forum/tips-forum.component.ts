@@ -9,6 +9,7 @@ import { ServiceUsersService } from '../../../Services/srv-users';
 import { HebrewDateConverterPipe } from '../../../Pipes/hebrewDateConverter ';
 import { ActivatedRoute } from '@angular/router';
 import { SrvForumMessageService } from '../../../Services/srv-forum-message.service';
+import { AuthService } from '../../../Services/auth-service.service';
 
 @Component({
   selector: 'app-tips-forum',
@@ -25,7 +26,8 @@ export class TipsForumComponent {
     public forumMessageStore: ForumMessageStoreService,
     public srv_user: ServiceUsersService,
     private route: ActivatedRoute,
-    public Srv_Forum: SrvForumMessageService
+    public Srv_Forum: SrvForumMessageService,
+    public authService: AuthService
   ) {
     this.route.queryParams.subscribe((params) => {
       this.forumType = Number(params['ForumType']);

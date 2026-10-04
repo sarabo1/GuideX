@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { MatIcon } from '@angular/material/icon';
-import { WalkingTrailComponent } from '../tables/walking-trail/walking-trail.component';
-import { AttractionsComponent } from '../tables/attractions/attractions.component';
-import { HostelsComponent } from '../tables/hostels/hostels.component';
-import { TableGuideComponent } from '../tables/table-guide/table-guide.component';
-import { Router, RouterOutlet } from '@angular/router';
-import { FevoriteComponent } from "../fevorite/fevorite.component";
+import { Router} from '@angular/router';
+import { AuthService } from '../../Services/auth-service.service';
 
 @Component({
   selector: 'app-home-page',
@@ -25,16 +20,15 @@ export class HomePageComponent {
   openHostels: boolean;
   openGuide: boolean;
   showBtnTable: boolean = false;
-  constructor(private router: Router) {
+  constructor(private router: Router,
+    public authService: AuthService
+  ) {
     this.openTrail = false;
     this.openAttraction = false;
     this.openHostels = false;
     this.openGuide = false;
   }
-  // openBtnTable() {
-  //   this.showBtnTable = !this.showBtnTable;
-  //   this.scroll()
-  // }
+  
   openBtnTable() {
     this.showBtnTable = !this.showBtnTable;
     if (this.showBtnTable) {
@@ -101,6 +95,12 @@ export class HomePageComponent {
     console.log("AdminGuide")
     this.showBtnTable = false;
     this.router.navigate(['welcome/AdminGuide'])
+  }
+
+  openAdminUsers() {
+    console.log("AdminUsers")
+    this.showBtnTable = false;
+    this.router.navigate(['welcome/AdminUsers'])
   }
 
   openRegionSearch() {

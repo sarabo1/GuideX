@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
 import { KashrutNamePipe } from "../../../Pipes/kashrutName";
+import { AuthService } from '../../../Services/auth-service.service';
 
 @Component({
   selector: 'app-show-hostels',
@@ -50,6 +51,7 @@ export class ShowHostelsComponent {
     public hostels: srv_Hostels,
     public srv_favorite: srv_Favorite,
     public refreshService: RefreshService,
+    public authService: AuthService
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {

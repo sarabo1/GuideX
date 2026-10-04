@@ -64,15 +64,26 @@
             <br/><br/></div>
           </button>
         </div>
-        <div class="buttonShow" title="דף ניהול — אישור מדריכות">
+        @if(this.authService.hasPermission('userManagement')) {
+        <div class="buttonShow" >
           <button class="open btn" (click)="openAdminGuides()">
             <div><br/>
-              <span>דף ניהול</span>
+              <span>דף ניהול מדריכות</span>
               <br />
               <span><mat-icon>admin_panel_settings</mat-icon></span>
             <br/><br/></div>
           </button>
         </div>
+        <div class="buttonShow" >
+          <button class="open btn" (click)="openAdminUsers()">
+            <div><br/>
+              <span>ניהול הרשאות</span>
+              <br />
+              <span><mat-icon>manage_accounts</mat-icon></span>
+            <br/><br/></div>
+          </button>
+        </div>
+      }
         <div class="buttonShow">
           <button class="open btn" (click)="openTipsForum(1)">
             <div><br/>

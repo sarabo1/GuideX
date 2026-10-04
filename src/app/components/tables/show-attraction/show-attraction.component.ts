@@ -16,6 +16,7 @@ import { srv_Favorite } from '../../../Services/srv_Favorite';
 import { AttractionTypeNamePipe } from '../../../Pipes/attractionTypeName';
 import { regionNamePipe } from '../../../Pipes/regionName';
 import { RefreshService } from '../../../Services/RefreshService';
+import { AuthService } from '../../../Services/auth-service.service';
 
 @Component({
   selector: 'app-show-attraction',
@@ -44,7 +45,7 @@ export class ShowAttractionComponent {
 
   constructor(
     public dialog: MatDialog,
-
+    public authService: AuthService,
     public dialogRef: MatDialogRef<ShowAttractionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: int_Attractions,
     public srv_all: ServiceAllService,
