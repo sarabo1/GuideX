@@ -14,6 +14,7 @@ import { ServiceAllService } from '../../Services/service-all.service';
 import { SrvCities } from '../../Services/srv-cities.service';
 import { SrvSchoolService } from '../../Services/srv-school.service';
 import { PhoneValidatorService } from '../../Services/phone_validator';
+import { AuthService } from '../../Services/auth-service.service';
 
 @Component({
   selector: 'app-edit-user-detail',
@@ -25,7 +26,7 @@ export class EditUserDetailComponent {
   // ── נתוני המשתמש והפרופיל ──
   userId: number | string | null = null;
   profile: any = null;
-  profileType: '' | 'guide' | 'coordinator' = '';
+  profileType: '' | 'guide' | 'coordinator' | 'admin' = '';
 
   loading = true;
   saving = false;
@@ -61,6 +62,8 @@ export class EditUserDetailComponent {
     public srv_all: ServiceAllService,
     private srvCities: SrvCities,
     private srvSchools: SrvSchoolService,
+    private authService: AuthService,
+
   ) {
     const saved = localStorage.getItem('user_data');
     const savedUser = saved ? JSON.parse(saved) : null;
@@ -129,6 +132,25 @@ export class EditUserDetailComponent {
     AgeSchoolId: new FormControl('', [Validators.required]),
   });
 
+  // ── טופס משתמש בסיסי (מנהל) ──
+  formUser = new FormGroup({
+    FirstName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    LastName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    IdNumber: new FormControl({ value: '', disabled: true }),
+    PhoneNumber: new FormControl('', [
+      Validators.required,
+      this.phoneValidator,
+    ]),
+    Email: new FormControl('', [Validators.required, Validators.email]),
+    UserPassword: new FormControl({ value: '', disabled: true }),
+  });
+
   ngOnInit() {
     // טעינת רשימות העזר
     this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
@@ -150,9 +172,13 @@ export class EditUserDetailComponent {
   }
 
   /** שולף את הפרופיל מהשרת לפי UserId וממלא את הטופס. */
- loadProfile() {
-  this.userId = localStorage.getItem('userId') || null;
-  this.userId = this.data?.userId ?? this.userId; // אם קיים בנתוני הדיאלוג, עדיף אותו
+  loadProfile() {
+
+    if (!this.userId) {
+      const saved = localStorage.getItem('user_data');
+      const savedUser = saved ? JSON.parse(saved) : null;
+      this.userId = this.data?.userId ?? savedUser?.userId ?? null;
+    }
     if (this.userId == null) {
       this.error = 'לא נמצא משתמש מחובר לעריכה.';
       this.loading = false;
@@ -166,7 +192,12 @@ export class EditUserDetailComponent {
       }
 
       this.profile = profile;
-      this.profileType = profile.type;
+      if (this.authService.hasPermission('superAdmin')) {
+        this.profileType = 'admin';
+      }
+      else {
+        this.profileType = profile.type;
+      }
       this.fillForm();
     });
   }
@@ -204,6 +235,15 @@ export class EditUserDetailComponent {
         PhoneSecretary: s?.phoneSecretary || '',
         TypeSchoolId: s?.typeSchoolId ? String(s.typeSchoolId) : '',
         AgeSchoolId: s?.ageSchoolId ? String(s.ageSchoolId) : '',
+      });
+    } else if (this.profileType === 'admin') {
+      const u = this.profile.user;
+      this.formUser.patchValue({
+        FirstName: u.firstName,
+        LastName: u.lastName,
+        IdNumber: u.idNumber,
+        PhoneNumber: u.phoneNumber || '',
+        Email: u.email,
       });
     }
   }
@@ -274,7 +314,34 @@ export class EditUserDetailComponent {
         return;
       }
       this.saveCoordinator();
+    } else if (this.profileType === 'admin') {
+      if (this.formUser.invalid) {
+        this.formUser.markAllAsTouched();
+        return;
+      }
+      this.saveUser();
     }
+  }
+
+  private saveUser() {
+    this.saving = true;
+    const v = this.formUser.getRawValue(); // כולל שדות disabled (ת.ז. וסיסמה)
+
+    const payload = {
+      FirstName: v.FirstName || '',
+      LastName: v.LastName || '',
+      Email: v.Email || '',
+      PhoneNumber: v.PhoneNumber || '',
+    };
+
+    this.srv_user.updateUser(this.userId!, payload).subscribe((res) => {
+      this.saving = false;
+      if (!res) {
+        this.error = 'אירעה שגיאה בשמירת הפרטים. נא לנסות שוב.';
+        return;
+      }
+      this.dialogRef.close(true);
+    });
   }
 
   private saveGuide() {

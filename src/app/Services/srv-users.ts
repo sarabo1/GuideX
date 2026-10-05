@@ -66,15 +66,9 @@ export class ServiceUsersService {
       }),
     );
   }
-  // aaa(){
-  //   const base = 'https://localhost:7098/api/Login/hi'
-  //      this.http.get<any>(base).subscribe(    response => {
-  //           console.log('Response:', response);
-  //       },
-  //       error => {
-  //           console.error('Error:', error);
-  //       });
-  // }
+
+  
+  
   GetLastUserId() {
     const userIds = this.mock_Users.map((user) => user.UserId);
     return Math.max(...userIds);
@@ -139,10 +133,22 @@ export class ServiceUsersService {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user.FirstName : '';
   }
-  getEmailByUserId(userId: number): string {
-    const user = this.mock_Users.find((u) => u.UserId === userId);
-    return user ? user.Email : '';
-  }
+  // getEmailByUserId(userId: number): string {
+  //   // const user = this.mock_Users.find((u) => u.UserId === userId);
+  //   // return user ? user.Email : '';
+    
+
+  //   const urlToGetEmail = 'https://localhost:7098/Users/user_${userId}'
+  //   return this.http.get(urlToGetEmail).subscribe(
+  //     (response: any) => {
+  //       // Assuming the response contains the email in a property called 'email'
+  //     }
+  //   );
+  // }
+  getEmailByUserId(userId: number): Observable<string> {
+  const urlToGetEmail = `https://localhost:7098/Users/email_${userId}`;
+  return this.http.get<string>(urlToGetEmail);
+}
   getUserById(userId: number) {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user : '';
@@ -195,6 +201,18 @@ getUserByEmailIdNumberPhone(EmPhId: JSON) {
     return this.http.put<any>(baseUrl, payload).pipe(
       catchError((error) => {
         console.error('שגיאה בעדכון הכורדינטור:', error);
+        return of(null);
+      }),
+    );
+  }
+
+  /** מעדכן פרטים בסיסיים של משתמש רגיל (למשל מנהל) — PUT /Users/{userId}.
+   *  ת.ז. וסיסמה אינן ניתנות לעריכה ואינן נשלחות. */
+  updateUser(userId: number | string, payload: any): Observable<any> {
+    const baseUrl = `https://localhost:7098/Users/${userId}`;
+    return this.http.put<any>(baseUrl, payload).pipe(
+      catchError((error) => {
+        console.error('שגיאה בעדכון המשתמש:', error);
         return of(null);
       }),
     );

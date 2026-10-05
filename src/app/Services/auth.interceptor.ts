@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // לא נמצא ברשימת Access-Control-Allow-Headers של הצד השלישי).
     const isOurApi = req.url.includes(this.apiOrigin);
 
-    console.log('🔎 AuthInterceptor → URL:', req.url, '| hasToken:', !!token, '| toOurApi:', isOurApi);
+    // console.log('🔎 AuthInterceptor → URL:', req.url, '| hasToken:', !!token, '| toOurApi:', isOurApi);
 
     // אין טוקן, או שזו בקשה חיצונית — שולחים כמו שהיא.
     if (!token || !isOurApi) {
@@ -43,9 +43,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
     });
-
-    // 🔍 דיאגנוסטיקה זמנית: מראה את 10 התווים הראשונים של הטוקן שנשלח.
-    console.log('🗝️ טוקן (חלקי):', token.slice(0, 10) + '…');
 
     return next.handle(authReq);
   }

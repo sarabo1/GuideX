@@ -15,10 +15,12 @@
           <tr>
             <th class="col-user">שם מלא</th>
             @for (perm of permissions; track perm.key) {
-              <th class="col-perm" [title]="perm.label">
-                <mat-icon class="th-icon">{{ perm.icon }}</mat-icon>
-                <span class="th-label">{{ perm.label }}</span>
-              </th>
+              @if (showUserManagementColumn || perm.key !== 'userManagement') {
+                <th class="col-perm" [title]="perm.label">
+                  <mat-icon class="th-icon">{{ perm.icon }}</mat-icon>
+                  <span class="th-label">{{ perm.label }}</span>
+                </th>
+              }
             }
           </tr>
         </thead>
@@ -29,35 +31,37 @@
                 <span class="name">{{ fullName(user) }}</span>
               </td>
               @for (perm of permissions; track perm.key) {
-                <td class="col-perm">
-                  <div class="cell-inner">
-                    <button
-                      class="perm-toggle"
-                      [class.on]="getValue(user, perm.key)"
-                      [disabled]="savingKey !== null"
-                      (click)="toggle(user, perm)"
-                      [attr.aria-pressed]="getValue(user, perm.key)"
-                      [title]="
-                        (getValue(user, perm.key) ? 'לבטל ' : 'להפעיל ') +
-                        perm.label
-                      "
-                    >
-                      @if (savingKey === buildKey(user, perm.key)) {
-                        <span class="saving">מעדכן…</span>
-                      } @else {
-                        <span class="state">{{
-                          getValue(user, perm.key) ? 'מאושר' : 'לא מאושר'
-                        }}</span>
+                @if (showUserManagementColumn || perm.key !== 'userManagement') {
+                  <td class="col-perm">
+                    <div class="cell-inner">
+                      <button
+                        class="perm-toggle"
+                        [class.on]="getValue(user, perm.key)"
+                        [disabled]="savingKey !== null"
+                        (click)="toggle(user, perm)"
+                        [attr.aria-pressed]="getValue(user, perm.key)"
+                        [title]="
+                          (getValue(user, perm.key) ? 'לבטל ' : 'להפעיל ') +
+                          perm.label
+                        "
+                      >
+                        @if (savingKey === buildKey(user, perm.key)) {
+                          <span class="saving">מעדכן…</span>
+                        } @else {
+                          <span class="state">{{
+                            getValue(user, perm.key) ? 'מאושר' : 'לא מאושר'
+                          }}</span>
+                        }
+                      </button>
+                      @if (errorKey === buildKey(user, perm.key)) {
+                        <span
+                          class="cell-error"
+                          [class.fading]="fading"
+                        >{{ updateError }}</span>
                       }
-                    </button>
-                    @if (errorKey === buildKey(user, perm.key)) {
-                      <span
-                        class="cell-error"
-                        [class.fading]="fading"
-                      >{{ updateError }}</span>
-                    }
-                  </div>
-                </td>
+                    </div>
+                  </td>
+                }
               }
             </tr>
           }

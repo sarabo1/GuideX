@@ -1,20 +1,26 @@
-
-
-
-// פלטת צבעים מודרנית
-$primary-color: #4f46e5; // אינדיגו מודרני ויוקרתי
-$primary-hover: #4338ca;
-$text-main: #1f2937; // אפור כהה מאוד לקריאות מקסימלית
-$text-muted: #6b7280; // אפור עדין לפרטים משניים
-$bg-global: #f9fafb; // רקע דף רך
-$card-bg: #ffffff; // רקע כרטיסייה נקי
-$border-color: #e5e7eb; // גבולות מעודנים
+// ── פלטת צבעים של האתר (GuideX) ─────────────────────
+$primary: #5f16eb; // סגול המותג הראשי של האתר
+$primary-hover: #4d0fd0;
+$primary-accent: #0657c2;
+$accent-coral: #ff5c67; // צבע ההדגשה (אדום-אלמוג)
+$soft-bg: #f6f6ff; // רקע לבנדר רך
+$soft-bg-2: #f8f6fd;
+$soft-bg-3: #fbfaff;
+$border-purple: #e3d9f7; // גבולות סגולים בהירים
+$border-purple-2: #c5b8f0;
+$text-main: #1d1d1f; // כמעט שחור
+$text-muted: #6b7280;
+$bg-global: #fffeff; // רקע דף חמים בהיר
+$card-bg: #ffffff;
+$border-color: #e5e7eb;
+$danger: #e53935;
+$danger-soft: #fef2f2;
 
 // עטיפה גלובלית לכל האזור (ה-div החיצוני ביותר)
 div:has(> .icon-background) {
   background-color: $bg-global;
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
   direction: rtl;
   font-family: heebo, sans-serif;
   position: relative;
@@ -28,9 +34,9 @@ div:has(> .icon-background) {
     width: 100%;
     height: 100%;
     z-index: 0;
-    opacity: 0.3;
-    background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
-    background-size: 24px 24px;
+    opacity: 0.14;
+    background-image: radial-gradient(#c9c3f2 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
     pointer-events: none;
   }
 }
@@ -39,50 +45,93 @@ div:has(> .icon-background) {
 .forumTips {
   position: relative;
   z-index: 1;
-  max-width: 950px;
+  max-width: 980px;
   margin: 0 auto;
 
   // עיצוב כללי לכפתורים בפורום
   .btn.aadMessage {
-    background-color: $primary-color;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: $primary;
     color: #ffffff;
     border: none;
-    padding: 0.75rem 1.75rem;
+    padding: 0.8rem 1.8rem;
     font-size: 0.95rem;
     font-weight: 600;
+    font-family: heebo, sans-serif;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
-      0 4px 6px -1px rgba($primary-color, 0.1),
-      0 2px 4px -1px rgba($primary-color, 0.06);
+      0 4px 12px -2px rgba(95, 22, 235, 0.35),
+      0 2px 4px -2px rgba(95, 22, 235, 0.2);
+
+    mat-icon {
+      font-size: 1.1rem;
+      width: auto;
+      height: auto;
+    }
 
     &:hover {
-      background-color: $primary-hover;
+      background: $primary-hover;
       transform: translateY(-1px);
-      box-shadow: 0 10px 15px -3px rgba($primary-color, 0.2);
+      box-shadow:
+        0 10px 20px -4px rgba(95, 22, 235, 0.45),
+        0 4px 8px -4px rgba(95, 22, 235, 0.3);
     }
 
     &:active {
       transform: translateY(1px);
+      box-shadow: 0 2px 6px -2px rgba(95, 22, 235, 0.3);
+    }
+
+    // כפתור תגובה — גרסה שקטה ורזה יותר (מתאמת ל-soft variant של האתר)
+    &.reply-btn {
+      background: $soft-bg-3;
+      color: $primary;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      border-radius: 10px;
+      box-shadow: none;
+
+      &:hover {
+        background: #eee8fb;
+        color: $primary-hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px -4px rgba(95, 22, 235, 0.35);
+      }
     }
   }
 
-  // שורת כותרת עליונה ותחתונה (מכילה את כותרות הפורום וכפתור הודעה חדשה)
+  // שורת כותרת עליונה ותחתונה
   .titleOfForum {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
+    background: $card-bg;
+    border: 1px solid $border-purple;
+    border-bottom: 2px solid $primary; // הד, בדומה ל-header/Footer של האתר
+    border-radius: 16px;
+    padding: 1.6rem 1.9rem;
+    box-shadow:
+      0 6px 16px -8px rgba(95, 22, 235, 0.18),
+      0 2px 6px -4px rgba(0, 0, 0, 0.05);
 
-    // התאמה ספציפית לכפתור התחתון שיהיה ממורכז ויפה
+    // התאמה לכפתור התחתון — ממורכז וללא רקע כרטיס
     &:last-of-type {
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 2rem;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
 
       .btn.aadMessage {
-        padding: 0.85rem 3.5rem;
+        padding: 0.9rem 4rem;
         font-size: 1.05rem;
       }
     }
@@ -91,29 +140,65 @@ div:has(> .icon-background) {
       flex: 1;
       min-width: 280px;
 
+      .forumTag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: $soft-bg;
+        color: $primary;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        margin-bottom: 0.9rem;
+
+        mat-icon {
+          font-size: 1rem;
+          width: auto;
+          height: auto;
+        }
+      }
+
       h3 {
         color: $text-main;
-        font-size: 1.5rem;
-        font-weight: 800;
-        line-height: 1.35;
-        margin: 0 0 0.5rem 0;
+        font-size: 1.45rem;
+        font-weight: 700;
+        line-height: 1.4;
+        margin: 0 0 0.4rem 0;
       }
 
       h4 {
         color: $text-muted;
-        font-size: 1rem;
+        font-size: 0.98rem;
         font-weight: 400;
         margin: 0;
       }
     }
   }
 
-  // אזור רשימת הכרטיסיות (נפטרים מה-br המיותרים בעזרת gap)
+  // אזור רשימת הכרטיסיות
   .messages {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.4rem;
     margin: 2rem 0;
+  }
+
+  // תגובה: מוזחת פנימה מצד ימין
+  .card.reply {
+    margin-right: 2.5rem;
+    background-color: #fdfcff;
+    border-color: #eee8fb;
+    box-shadow:
+      0 2px 6px -2px rgba(95, 22, 235, 0.06),
+      0 1px 2px -1px rgba(0, 0, 0, 0.02);
+
+    &:hover {
+      box-shadow:
+        0 8px 16px -6px rgba(95, 22, 235, 0.12),
+        0 2px 6px -3px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+    }
   }
 
   // עיצוב כרטיסיית הודעה בודדת
@@ -122,28 +207,30 @@ div:has(> .icon-background) {
     border: 1px solid $border-color;
     border-radius: 16px;
     box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.03),
-      0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      0 4px 12px -4px rgba(95, 22, 235, 0.07),
+      0 2px 4px -2px rgba(0, 0, 0, 0.04);
     transition:
       transform 0.25s ease,
-      box-shadow 0.25s ease;
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
     overflow: hidden;
 
     &:hover {
       transform: translateY(-1px);
+      border-color: $border-purple;
       box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.05),
-        0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        0 14px 24px -8px rgba(95, 22, 235, 0.14),
+        0 6px 10px -6px rgba(0, 0, 0, 0.06);
     }
 
     // כותרת עליונה המציינת שזו תגובה
     .card-header {
-      background-color: #f3f4f6;
-      padding: 0.65rem 1.5rem;
+      background-color: $soft-bg-2;
+      padding: 0.7rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $border-purple;
       color: $text-muted;
       font-size: 0.85rem;
 
@@ -152,17 +239,27 @@ div:has(> .icon-background) {
         font-size: 1.1rem;
         width: auto;
         height: auto;
+        color: $primary;
+        opacity: 0.75;
+      }
+
+      .reply-to {
+        font-weight: 500;
+        white-space: nowrap;
       }
 
       i {
         font-style: italic;
         font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
     // גוף הכרטיסייה
     .card-body {
-      padding: 1.5rem;
+      padding: 1.5rem 1.6rem;
 
       // כותרת ההודעה + פרטי שולח ותאריך
       .titleAndHeader {
@@ -171,9 +268,9 @@ div:has(> .icon-background) {
         align-items: flex-start;
         gap: 1rem;
         flex-wrap: wrap;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $soft-bg;
         padding-bottom: 1rem;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.1rem;
 
         h5 {
           color: $text-main;
@@ -186,7 +283,7 @@ div:has(> .icon-background) {
         .toDateAndUserEmail {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.85rem;
           color: $text-muted;
           font-size: 0.85rem;
 
@@ -194,38 +291,94 @@ div:has(> .icon-background) {
             margin: 0;
           }
 
+          // עיצוב פרטי המשתמש — פיל בלבנדר עדין
+          .author {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: $soft-bg-3;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid $border-purple;
+
+            .person {
+              font-size: 1rem;
+              width: auto;
+              height: auto;
+              color: $primary;
+              opacity: 0.8;
+            }
+          }
+
           // עיצוב הקו המפריד בין המייל לתאריך
           .marginDate {
             position: relative;
-            padding-right: 0.75rem;
+            padding-right: 0.85rem;
+            white-space: nowrap;
 
             &::before {
-              content: "|";
+              content: "";
               position: absolute;
-              right: -0.25rem;
-              color: $text-muted;
+              right: -0.15rem;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 1px;
+              height: 14px;
+              background-color: $border-purple-2;
+              border-radius: 1px;
             }
           }
         }
       }
+
+      // טקסט ההודעה
+      .message-text {
+        color: #374151;
+        font-size: 0.98rem;
+        line-height: 1.8;
+        margin: 0 0 1.2rem 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
     }
   }
-  .garbage{
-    width: 20px;
+
+  // כפתור המחיקה — בצבע האלמוג של האתר
+  .garbage {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
     background-color: transparent;
-    border:none;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: $text-muted;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    mat-icon {
+      font-size: 1.4rem;
+      width: auto;
+      height: auto;
+    }
+
     &:hover {
-      transform: translateY(-0.2px);
-      box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.05),
-        0 4px 6px -2px rgba(0, 0, 0, 0.03);
-      width: 21px;
+      background-color: $danger-soft;
+      color: $danger;
+      border-color: lighten($danger, 30%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(1px);
     }
   }
-  .newPostAndGarbage{
+
+  // סידור כפתורי התגובה והמחיקה
+  .newPostAndGarbage {
     display: flex;
     justify-content: space-between;
-        align-items: flex-end
+    align-items: center;
   }
 }
-

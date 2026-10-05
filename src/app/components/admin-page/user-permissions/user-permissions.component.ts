@@ -43,10 +43,19 @@ export class UserPermissionsComponent implements OnDestroy {
     { key: 'respondInSafetyForum', label: 'הגבה בפורום בטיחות', icon: 'shield' },
   ];
 
+  /**
+   * נכון רק למנהל ראשי (superAdmin).
+   * מי שיש לו הרשאת "ניהול משתמשים" בלבד (ולא superAdmin) לא רואה
+   * בכלל את עמודת "ניהול משתמשים" בטבלה — אינו רשאי לנהל את ההרשאה הזו של אחרים.
+   */
+  showUserManagementColumn = false;
+
   constructor(
     public serviceUsers: ServiceUsersService,
     private authService: AuthService,
   ) {
+    // העמודה "ניהול משתמשים" מוצגת רק למנהל ראשי (superAdmin).
+    this.showUserManagementColumn = this.authService.hasPermission('superAdmin');
     this.loadData();
   }
 

@@ -18,6 +18,7 @@ import { AuthService } from '../../../Services/auth-service.service';
   styleUrl: './tips-forum.component.scss',
 })
 export class TipsForumComponent {
+  // כל ההודעות בסדר צפייה: כל תגובה מופיעה מיד לאחר הודעת המקור שלה
   allTheMessage: int_ForumMessage[] | undefined;
   forumType: number = 0;
 
@@ -31,26 +32,62 @@ export class TipsForumComponent {
   ) {
     this.route.queryParams.subscribe((params) => {
       this.forumType = Number(params['ForumType']);
-
       this.forumMessageStore.fetchMessagesByForumType(this.forumType);
     });
 
-this.forumMessageStore.getMessages().subscribe((messages) => {
-  const sorted = [...messages].sort((a, b) => {
-    const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
-    return this.forumType === 3 ? diff : -diff;
-  });
-  this.allTheMessage = sorted.map(message => ({
-    ...message,
-    date: new Date(message.date) 
-  }));
-  this.allTheMessage = this.allTheMessage.filter(mess => mess.forumTypeId = this.forumType)
+    this.forumMessageStore.getMessages().subscribe((messages) => {
+      this.allTheMessage = this.organizeMessages(messages || []);
+    });
+  }
 
-  console.log("הגיע לפה: ", this.allTheMessage); 
-    this.allTheMessage = this.allTheMessage.filter(mess => mess.forumTypeId = this.forumType)
+  /**
+   * מסנן את ההודעות של פורום זה, ממיין אותן בצורה היררכית
+   * ומחזיר רשימה מסודרת שבה כל תגובה מופיעה מיד לאחר הודעת המקור שלה.
+   */
+  private organizeMessages(messages: int_ForumMessage[]): int_ForumMessage[] {
+    const forumMessages = messages.filter(
+      (mess) => mess.forumTypeId === this.forumType
+    );
 
-});
+    const byId = new Map<number, int_ForumMessage>();
+    forumMessages.forEach((m) => byId.set(m.forumId, { ...m }));
 
+    // מיין לפי תאריך (עולה לרשומות, יורד ליתר הפורומים)
+    forumMessages.sort((a, b) => {
+      const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
+      return this.forumType === 3 ? diff : -diff;
+    });
+
+    const roots: int_ForumMessage[] = [];
+    const replies: int_ForumMessage[] = [];
+
+    forumMessages.forEach((m) => {
+      if (m.parentForumId && byId.has(m.parentForumId)) {
+        replies.push(m);
+      } else if (m.parentForumId) {
+        // תגובה להודעה שנמצאת בפורום אחר/נמחקה — מציגים אותה כהודעה עצמאית
+        roots.push(m);
+      } else {
+        roots.push(m);
+      }
+    });
+
+    // סדר סופי: הודעות מקור, וכל אחת מופיעה עם התגובות שלה
+    const ordered: int_ForumMessage[] = [];
+    roots.forEach((root) => {
+      ordered.push(root);
+      replies.forEach((reply) => {
+        if (reply.parentForumId === root.forumId) {
+          ordered.push(reply);
+        }
+      });
+    });
+
+    return ordered.map((m) => ({ ...m, date: new Date(m.date) }));
+  }
+
+  isReply(message: int_ForumMessage): boolean {
+    return !!message.parentForumId;
   }
 
   openDialogAddMessage(parent: number, typeForum: number) {
@@ -77,13 +114,15 @@ this.forumMessageStore.getMessages().subscribe((messages) => {
     return maskedName + domain;
   }
 
-  DeletePost(forumId: number ){
-     if (confirm("האם הנכם בטוחים במחיקה?")) {
-        this.Srv_Forum.deletePost(forumId);
-        this.forumMessageStore.fetchMessagesByForumType(this.forumType);
+  DeletePost(forumId: number) {
+    if (confirm('האם הנכם בטוחים במחיקה?')) {
+      this.Srv_Forum.deletePost(forumId);
+      this.forumMessageStore.fetchMessagesByForumType(this.forumType);
     } else {
-        console.log("מחיקה בוטלה");
+      console.log('מחיקה בוטלה');
       return;
     }
- }
+  }
+
+ 
 }

@@ -9,10 +9,7 @@ import { HebrewDateConverterPipe } from '../../Pipes/hebrewDateConverter ';
 import { CommonModule } from '@angular/common';
 import { GreetingPipe } from '../../Pipes/GreetingPipe';
 import { EditUserDetailComponent } from '../edit-user-detail/edit-user-detail.component';
-import { SidebarModule } from 'primeng/sidebar';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { ButtonModule } from 'primeng/button';
-
 
 
 @Component({
