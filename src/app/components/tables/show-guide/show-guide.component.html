@@ -1,28 +1,42 @@
-<div class="show">
-  <div class="background"></div>
-  <div class="content">
-    <h2><strong>{{ fullName(data) }}</strong></h2>
-
-    <p>
-      <strong>עיר: </strong>{{ data.city ?? '—' }}
-    </p>
-    <p>
-      <strong>טלפון: </strong>{{ data.phoneNumber ?? '—' }}
-    </p>
-    <p>
-      <strong>אימייל: </strong>{{ data.email ?? '—' }}
-    </p>
-    <p>
-     
-      <strong>עדה: </strong>{{ getReligiousName(data.religiousId) }}
-    </p>
-    <p>
-      <strong>אזורי התמחות: </strong>{{ getRegionsNames(data.regionId) || 'לא צוין' }}
-    </p>
-    
-
-    <button (click)="onClose()" class="close-btn">
-      <mat-icon class="close-icon">close</mat-icon>
+<div class="hostel-dialog">
+  <div class="dialog-header">
+    <button (click)="onClose()" class="action-btn cancel" aria-label="סגירה">
+      <mat-icon>close</mat-icon>
     </button>
+  </div>
+
+  <div class="dialog-body">
+    <!-- שם המדריכה -->
+    <div class="field-block">
+      <h2 class="field-title">{{ fullName(data) }}</h2>
+    </div>
+
+    <!-- פרטים -->
+    <div class="details-grid">
+      <div class="detail-item">
+        <span class="detail-label">עיר</span>
+        <span class="detail-value">{{ data.city ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">טלפון</span>
+        <span class="detail-value">{{ data.phoneNumber ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">אימייל</span>
+        <span class="detail-value">{{ data.email ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">עדה</span>
+        <span class="detail-value">{{ getReligiousName(data.religiousId) }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">אזורי התמחות</span>
+        <span class="detail-value">{{ getRegionsNames(data.regionId) || 'לא צוין' }}</span>
+      </div>
+    </div>
   </div>
 </div>

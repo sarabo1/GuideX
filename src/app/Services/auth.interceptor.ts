@@ -17,14 +17,25 @@ import { AuthService } from './auth-service.service';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
+  /** הדומיין של השרת שלנו — רק לו נצרף את ה-token. */
+  private readonly apiOrigin = 'localhost:7098';
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
 
-    // אם אין טוקן — שולחים את הבקשה כמו שהיא.
-    if (!token) {
+    // מצרפים את הטוקן רק לבקשות לשרת שלנו.
+    // בקשות חיצוניות (למשל hebcal.com) לא אמורות לקבל את ה-Header
+    // של Authorization — אחרת הדפדפן חוסם אותן בגלל CORS (ה-header
+    // לא נמצא ברשימת Access-Control-Allow-Headers של הצד השלישי).
+    const isOurApi = req.url.includes(this.apiOrigin);
+
+    console.log('🔎 AuthInterceptor → URL:', req.url, '| hasToken:', !!token, '| toOurApi:', isOurApi);
+
+    // אין טוקן, או שזו בקשה חיצונית — שולחים כמו שהיא.
+    if (!token || !isOurApi) {
       return next.handle(req);
     }
 
@@ -32,6 +43,9 @@ export class AuthInterceptor implements HttpInterceptor {
     const authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
     });
+
+    // 🔍 דיאגנוסטיקה זמנית: מראה את 10 התווים הראשונים של הטוקן שנשלח.
+    console.log('🗝️ טוקן (חלקי):', token.slice(0, 10) + '…');
 
     return next.handle(authReq);
   }

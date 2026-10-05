@@ -62,9 +62,9 @@ export class EditUserDetailComponent {
     private srvCities: SrvCities,
     private srvSchools: SrvSchoolService,
   ) {
-    // this.userId = data?.userId ?? null;
-  
-    this.userId = localStorage.getItem('userId') || null;
+    const saved = localStorage.getItem('user_data');
+    const savedUser = saved ? JSON.parse(saved) : null;
+    this.userId = this.data?.userId ?? savedUser?.userId ?? null;
     console.log('EditUserDetailComponent initialized with userId:', this.userId);
   }
 

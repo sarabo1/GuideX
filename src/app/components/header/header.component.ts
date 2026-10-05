@@ -39,7 +39,7 @@ export class HeaderComponent {
   ) {}
 
  
-
+listOfPermissions: string[] = [];
   dateToHeader: Date = new Date();
   openMenu: boolean = false;
   username = 'אנונימית';
@@ -54,6 +54,10 @@ export class HeaderComponent {
       this.username = userData.firstName;
       this.loggedInUserId = userData.userId;
     }
+
+    const permissions: any = this.authService.getUserData()?.permission || {};
+    this.listOfPermissions = Object.keys(permissions).filter(key => permissions[key]);
+
   }
 
   logo() {
@@ -92,8 +96,8 @@ export class HeaderComponent {
   }
 
   goToFevorite(){
-        this.route.navigate(['welcome/Favorites'])
-
-  
+        this.route.navigate(['welcome/Favorites'])  
 }
+
+
 }

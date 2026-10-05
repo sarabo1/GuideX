@@ -141,7 +141,7 @@ export class UserPermissionsComponent implements OnDestroy {
     this.updateError = '';
 
     this.serviceUsers
-      .UpdatePermission(user.userId, String(perm.key), newValue)
+      .UpdatePermission(user.userId, String(perm.key))
       .subscribe({
         next: (res: any) => {
           this.savingKey = null;

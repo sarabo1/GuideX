@@ -43,7 +43,6 @@
 
 /* ── טבלת המשתמשים ── */
 .table-wrap {
-  overflow-x: auto;
   border: 1.5px solid #dccdf5;
   border-radius: 12px;
   background-color: #ffffff;
@@ -57,6 +56,9 @@
 }
 
 .perms-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   background-color: #f5f0ff;
   color: #6f2fe0;
   padding: 12px 10px;
@@ -65,6 +67,11 @@
   text-align: center;
   border-bottom: 2px solid #dccdf5;
   white-space: nowrap;
+}
+
+/* צל מתחת לשורה המקובעת כדי להפריד אותה מה-tbody הגולל */
+.perms-table thead {
+  box-shadow: 0 3px 8px rgba(111, 47, 224, 0.18);
 }
 
 .perms-table thead th .th-icon {

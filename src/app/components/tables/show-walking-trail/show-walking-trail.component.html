@@ -1,312 +1,224 @@
-<div class="show">
-  <div class="background"></div>
-
-  <div class="content">
+<div class="hostel-dialog">
+  <div class="dialog-header">
     @if (!isAddNew) {
-      <div class="likeAndEdit">
-        @if(this.authService.hasPermission('editRoutes')){
-        <button
-          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-          (click)="deleteTrail()"
-        >
-          <mat-icon class="close-icon">delete</mat-icon>
-        </button>
-        <button
-          [class]="userCanEdit ? 'close-btn edit' : 'close-btn'"
-          (click)="canEdit()"
-        >
-          <mat-icon class="close-icon">edit</mat-icon>
-        </button>
+    <div class="header-actions">
+      @if (this.authService.hasPermission('editRoutes')) {
+      <button class="icon-btn danger" (click)="deleteTrail()" aria-label="מחיקת מסלול">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button class="icon-btn" (click)="canEdit()" aria-label="עריכה">
+        <mat-icon>edit</mat-icon>
+      </button>
       }
-        <button class="likeButton" (click)="toggleFavorite()">
-          <img
-            class="img_like"
-            [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'"
-          />
-        </button>
-      </div>
+      <button class="like-btn" (click)="toggleFavorite()" aria-label="הוספה למועדפים">
+        <img class="like-img" [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'" />
+      </button>
+    </div>
     } @else {
-      <br />
-      <h3>
-        <strong>הוספת מסלול הליכה</strong>
-      </h3>
-      <br />
+    <h3 class="add-title">הוספת מסלול הליכה</h3>
     }
-    <h2>
+    <button (click)="onClose()" class="action-btn cancel">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <!-- שם המסלול -->
+    <div class="field-block">
       @if (!userCanEdit) {
-        <strong>{{ data.WalkingTrailName }}</strong>
+      <h2 class="field-title">{{ data.WalkingTrailName }}</h2>
       } @else {
-        <input
-          class="inputToEdit"
-          id="WalkingTrailName"
-          type="text"
-          [(ngModel)]="data.WalkingTrailName"
-          [placeholder]="isAddNew ? 'שם המסלול' : ''"
-        />
-      }
-    </h2>
-    @if (!userCanEdit) {
-      <h5>
-        <strong>{{ data.Description }}</strong>
-      </h5>
-    } @else {
-      <h6>
-        <textarea
-          cols="{{ data.Description.length / 2 }}"
-          id="Description"
-          class="inputToEdit"
-          type="text"
-          [(ngModel)]="data.Description"
-          [placeholder]="isAddNew ? 'תיאור המסלול' : ''"
-        >
-        </textarea>
-      </h6>
-    }
-
-    <!-- תמונות מסלול ההליכה -->
-    <div class="attraction-images">
-      @if (userCanEdit) {
-        <label class="image-upload-badge">
-          <mat-icon>add_a_photo</mat-icon>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            (change)="onImagesSelected($event)"
-          />
-        </label>
-      }
-
-      <!-- תמונות שמורות בשרת -->
-      @for (image of images; track image.fileId; let i = $index) {
-        <div class="image-item">
-          <img
-            [src]="imageUrl(image.fileId)"
-            alt="תמונה {{ i + 1 }}"
-            (click)="openImagePreview(imageUrl(image.fileId))"
-          />
-          @if (userCanEdit) {
-            <button
-              class="image-delete"
-              (click)="deleteImage(image.fileId, i)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
-        </div>
-      }
-
-      <!-- תמונות חדשות שנבחרו (מסלול חדש, עדיין לא הועלו) -->
-      @for (pending of pendingImages; track pending.name; let i = $index) {
-        <div class="image-item">
-          <img
-            [src]="pendingImageUrl(pending)"
-            alt="תמונה חדשה {{ i + 1 }}"
-            (click)="openImagePreview(pendingImageUrl(pending))"
-          />
-          <button class="image-delete" (click)="removePendingImage(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
+      <input class="inputToEdit" id="WalkingTrailName" type="text" [(ngModel)]="data.WalkingTrailName"
+        [placeholder]="isAddNew ? 'שם המסלול' : ''" />
       }
     </div>
 
-    <!-- תצוגת תמונה גדולה (lightbox) -->
-    @if (previewImageUrl) {
-      <div class="image-preview-overlay" (click)="closeImagePreview()">
-        <button
-          class="image-preview-close"
-          (click)="closeImagePreview()"
-          aria-label="סגירת התמונה"
-        >
+    <!-- תיאור -->
+    @if (!userCanEdit) {
+    <p class="description">{{ data.Description }}</p>
+    } @else {
+    <textarea cols="45" id="Description" class="inputToEdit" rows="3" [(ngModel)]="data.Description"
+      [placeholder]="isAddNew ? 'תיאור המסלול' : ''">
+      </textarea>
+    }
+
+    <!-- תמונות המסלול -->
+    <div class="gallery">
+      @if (userCanEdit) {
+      <label class="gallery-add">
+        <mat-icon>add_a_photo</mat-icon>
+        <span>הוספת תמונות</span>
+        <input type="file" accept="image/*" multiple (change)="onImagesSelected($event)" />
+      </label>
+      }
+
+      @for (image of images; track image.fileId; let i = $index) {
+      <div class="gallery-item">
+        <img [src]="imageUrl(image.fileId)" alt="תמונה {{ i + 1 }}"
+          (click)="openImagePreview(imageUrl(image.fileId))" />
+        @if (userCanEdit) {
+        <button class="gallery-delete" (click)="deleteImage(image.fileId, i)" aria-label="מחיקת תמונה">
           <mat-icon>close</mat-icon>
         </button>
-        <img
-          class="image-preview-img"
-          [src]="previewImageUrl"
-          alt="תצוגה גדולה"
-          (click)="$event.stopPropagation()"
-        />
+        }
       </div>
-    }
+      }
 
-    <p>
-      <strong>אזור:</strong>
-      @if (!userCanEdit) {
-        {{ data.regionId | regionName | async }}
-      } @else {
-        <select class="inputToEdit" id="regionId">
+      @for (pending of pendingImages; track pending.name; let i = $index) {
+      <div class="gallery-item">
+        <img [src]="pendingImageUrl(pending)" alt="תמונה חדשה {{ i + 1 }}"
+          (click)="openImagePreview(pendingImageUrl(pending))" />
+        <button class="gallery-delete" (click)="removePendingImage(i)" aria-label="הסרת תמונה">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      }
+    </div>
+
+    <!-- פרטים -->
+    <div class="details-grid">
+      <div class="detail-item">
+        <span class="detail-label">אזור</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ data.regionId ? (data.regionId | regionName | async) : '—' }}</span>
+        } @else {
+        <select class="inputToEdit" id="regionId" [(ngModel)]="data.regionId">
+          <option [ngValue]="0">בחירת אזור</option>
           @for (item of RegionsArrayData; track item.regionId) {
-            <option
-              [value]="item.regionId"
-              [selected]="item.regionId == data.regionId"
-            >
-              <!-- {{ item | json}} -->
-              {{ item.regionName }}
-            </option>
+          <option [ngValue]="item.regionId">{{ item.regionName }}</option>
           }
         </select>
-      }
-    </p>
-    <p>
-      @if (!userCanEdit) {
-        <strong>משך המסלול: </strong>
-        {{ walkingTrails.formatDuration(data.RouteDuration) }}
-      } @else {
-        <strong>משך המסלול בדקות: </strong>
-        <input
-          class="inputToEdit"
-          id="RouteDuration"
-          type="number"
-          [(ngModel)]="data.RouteDuration"
-          [placeholder]="isAddNew ? 'לדוגמה 90' : ''"
-        />
-      }
-    </p>
-    <p>
-      <strong>אורך המסלול: </strong>
-      @if (!userCanEdit) {
-        {{ data.LengthInKm }} ק"מ
-      } @else {
-        <strong>אורך המסלול בק"מ: </strong>
-        <input
-          class="inputToEdit"
-          id="LengthInKm"
-          type="text"
-          [(ngModel)]="data.LengthInKm"
-          [placeholder]="isAddNew ? 'לדוגמה 3.5' : ''"
-        />
-      }
-    </p>
-    <p>
-      <strong>דרגת המסלול: </strong>
-      @if (!userCanEdit) {
-        {{ data.Difficulty }}
-      } @else {
-        <select class="inputToEdit" id="Difficulty">
-          <option [value]="1" [selected]="data.Difficulty == 1">1</option>
-          <option [value]="2" [selected]="data.Difficulty == 2">2</option>
-          <option [value]="3" [selected]="data.Difficulty == 3">3</option>
-          <option [value]="4" [selected]="data.Difficulty == 4">4</option>
-        </select>
-      }
-    </p>
+        }
+      </div>
 
-    <p>
-      <strong>מתאים לגילאי: </strong>
-      @if (!userCanEdit) {
-        {{ data.MinAge }} - {{ data.MaxAge }}
-      } @else {
-        <P><strong>מגיל: </strong></P>
-        <input
-          class="inputToEdit"
-          id="MinAge"
-          type="number"
-          [(ngModel)]="data.MinAge"
-          [placeholder]="isAddNew ? 'לדוגמה 5' : ''"
-        />
-        <P><strong>עד גיל: </strong></P>
-        <input
-          class="inputToEdit"
-          id="MaxAge"
-          type="number"
-          [(ngModel)]="data.MaxAge"
-          [placeholder]="isAddNew ? 'לדוגמה 80' : ''"
-        />
-      }
-    </p>
-    <p>
-      @if (!userCanEdit) {
-        @if (data.IsWet) {
-          מסלול רטוב
+      <div class="detail-item">
+        <span class="detail-label">משך המסלול</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ walkingTrails.formatDuration(data.RouteDuration) }}</span>
         } @else {
-          מסלול יבש
+        <input class="inputToEdit" id="RouteDuration" type="number" [(ngModel)]="data.RouteDuration"
+          [placeholder]="isAddNew ? 'בדקות, לדוגמה 90' : ''" />
         }
-      } @else {
-        <strong> <p>המסלול רטוב?</p></strong>
-        <h3 class="form-check form-switch centered">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [checked]="data.IsWet"
-            value="data.IsWet"
-            id="IsWet"
-            switch
-          />
-        </h3>
-      }
-    </p>
-    <p>
-      @if (!userCanEdit) {
-        <strong>הוראות הגעה: </strong>{{ data.Directions }}
-      } @else {
-        <h6>
-          <textarea
-            cols="{{ data.Directions.length / 2 }}"
-            id="Directions"
-            class="inputToEdit"
-            type="text"
-            [(ngModel)]="data.Directions"
-            [placeholder]="isAddNew ? 'הוראות הגעה למסלול' : ''"
-          >
-          </textarea>
-        </h6>
-      }
-    </p>
-    <p>
-      @if (userCanEdit) {
-        <strong>עונות מתאימות: </strong>
-        <div class="seasons">
-          <label>
-            <input type="checkbox" [checked]="data.SeasonSummer" id="Summer" />
-            קיץ
-          </label>
-          <label>
-            <input type="checkbox" [checked]="data.SeasonWinter" id="Winter" />
-            חורף
-          </label>
-          <label>
-            <input type="checkbox" [checked]="data.SeasonSpring" id="Spring" />
-            אביב
-          </label>
-          <label>
-            <input type="checkbox" [checked]="data.SeasonAutumn" id="Autumn" />
-            סתיו
-          </label>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">אורך המסלול</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ data.LengthInKm }} ק"מ</span>
+        } @else {
+        <input class="inputToEdit" id="LengthInKm" type="text" [(ngModel)]="data.LengthInKm"
+          [placeholder]="isAddNew ? 'לדוגמה 3.5' : ''" />
+        }
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">דרגת המסלול</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ data.Difficulty }}</span>
+        } @else {
+        <select class="inputToEdit" id="Difficulty" [(ngModel)]="data.Difficulty">
+          <option [ngValue]="1">1</option>
+          <option [ngValue]="2">2</option>
+          <option [ngValue]="3">3</option>
+          <option [ngValue]="4">4</option>
+        </select>
+        }
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">מתאים לגילאי</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ data.MinAge }} - {{ data.MaxAge }}</span>
+        } @else {
+        <div class="age-fields">
+          <input class="inputToEdit" id="MinAge" type="number" [(ngModel)]="data.MinAge"
+            [placeholder]="isAddNew ? 'מגיל' : ''" />
+          <input class="inputToEdit" id="MaxAge" type="number" [(ngModel)]="data.MaxAge"
+            [placeholder]="isAddNew ? 'עד גיל' : ''" />
         </div>
-      } @else {
-        <strong>עונות מומלצות: </strong>
-        @if (
-          data.SeasonSummer &&
-          data.SeasonWinter &&
-          data.SeasonSpring &&
-          data.SeasonAutumn
-        ) {
-          כל עונות השנה.
-        } @else {
-          @if (data.SeasonSummer) {
-            קיץ,
-          }
-          @if (data.SeasonWinter) {
-            חורף,
-          }
-          @if (data.SeasonSpring) {
-            אביב,
-          }
-          @if (data.SeasonAutumn) {
-            סתיו,
-          }
         }
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">מסלול</span>
+        @if (!userCanEdit) {
+        <span class="detail-value">{{ data.IsWet ? 'רטוב' : 'יבש' }}</span>
+        } @else {
+        <label class="checkbox-inline">
+          <input class="form-check-input" type="checkbox" [checked]="data.IsWet" value="data.IsWet" id="IsWet" />
+          <span>רטוב</span>
+        </label>
+        }
+      </div>
+    </div>
+
+    <!-- עונות -->
+    <div class="detail-item seasons-block">
+      <span class="detail-label">עונות</span>
+      @if (userCanEdit) {
+      <div class="checkbox-row">
+        <label>
+          <input type="checkbox" [checked]="data.SeasonSummer" id="Summer" />
+          קיץ
+        </label>
+        <label>
+          <input type="checkbox" [checked]="data.SeasonWinter" id="Winter" />
+          חורף
+        </label>
+        <label>
+          <input type="checkbox" [checked]="data.SeasonSpring" id="Spring" />
+          אביב
+        </label>
+        <label>
+          <input type="checkbox" [checked]="data.SeasonAutumn" id="Autumn" />
+          סתיו
+        </label>
+      </div>
+      } @else {
+      <span class="detail-value">
+        @if (data.SeasonSummer && data.SeasonWinter && data.SeasonSpring && data.SeasonAutumn) {
+        כל עונות השנה
+        } @else {
+        <ng-container>
+          @if (data.SeasonSummer) { קיץ, }
+          @if (data.SeasonWinter) { חורף, }
+          @if (data.SeasonSpring) { אביב, }
+          @if (data.SeasonAutumn) { סתיו, }
+        </ng-container>
+        }
+      </span>
       }
-    </p>
-    <br />
-    @if (userCanEdit) {
-      <button (click)="saveEdit()" class="close-btn">
-        <mat-icon class="close-icon">task_alt</mat-icon>
-      </button>
-    }
-    <button (click)="onClose()" class="close-btn">
-      <mat-icon class="close-icon">close</mat-icon>
-    </button>
+    </div>
+
+    <!-- הוראות הגעה -->
+    <div class="detail-item">
+      <span class="detail-label">הוראות הגעה</span>
+      @if (!userCanEdit) {
+      <span class="detail-value">{{ data.Directions }}</span>
+      } @else {
+      <textarea cols="45" id="Directions" class="inputToEdit" rows="3" [(ngModel)]="data.Directions"
+        [placeholder]="isAddNew ? 'הוראות הגעה למסלול' : ''">
+        </textarea>
+      }
+    </div>
   </div>
+
+  <div class="dialog-footer">
+    @if (userCanEdit) {
+    <button (click)="saveEdit()" class="action-btn save">
+      <mat-icon>check</mat-icon>
+      <span>{{ isAddNew ? 'שמירה' : 'שמירת שינויים' }}</span>
+    </button>
+    }
+  </div>
+
+  <!-- תצוגת תמונה גדולה (lightbox) -->
+  @if (previewImageUrl) {
+  <div class="image-preview-overlay" (click)="closeImagePreview()">
+    <button class="image-preview-close" (click)="closeImagePreview()" aria-label="סגירת התמונה">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img class="image-preview-img" [src]="previewImageUrl" alt="תצוגה גדולה" (click)="$event.stopPropagation()" />
+  </div>
+  }
 </div>

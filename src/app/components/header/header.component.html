@@ -14,20 +14,20 @@
     </div>
   </div>
   <div>
-     
+
     <div class="container">
       <div class="dropdown">
         <button class="moreOptions" (click)="toggleMenu()">
           <mat-icon class="mat-icon-btn">{{
             openMenu ? "close" : "more_vert"
-          }}</mat-icon>
+            }}</mat-icon>
         </button>
         <div class="dropdown-menu" id="menu">
           <button class="option logout edit" (click)="logo()" (click)="toggleMenu()">
             <span>
               <!-- <img class="img_like" src="home.png" alt="home" /> -->
-               <img class="img_like" src="home_rose.png" alt="home" />
-                <!-- <img class="img_like" src="home_blue.png" alt="home" /> -->
+              <img class="img_like" src="home_rose.png" alt="home" />
+              <!-- <img class="img_like" src="home_blue.png" alt="home" /> -->
             </span>
             <span>חזרה לדף הבית</span>
           </button>
@@ -39,13 +39,38 @@
             <span>המעודפים שלך </span>
           </button>
 
-              <button class="option logout edit" (click)="openDialogEditD()" (click)="toggleMenu()">
-                <span>
-                  <img class="img_like" src="edit_rose.png" alt="favorites" />
-                  <!-- <mat-icon class="mat-icon-btn icon">edit</mat-icon> -->
-                </span>
-                <span>עריכת הפרטים שלך</span>
-              </button>
+          <button class="option logout edit" (click)="openDialogEditD()" (click)="toggleMenu()">
+            <span>
+              <img class="img_like" src="edit_rose.png" alt="favorites" />
+              <!-- <mat-icon class="mat-icon-btn icon">edit</mat-icon> -->
+            </span>
+            <span>עריכת הפרטים שלך</span>
+          </button>
+          @if(listOfPermissions.length > 0) {
+          <div class="divider"></div>
+          
+          <img class="img_like" src="garbage1.png" alt="favorites" />
+          <span>ההרשאות שלך:</span>
+          <br />
+
+          @for (permission of listOfPermissions; track permission; let i = $index) {
+          <span>
+            @switch (permission) {
+            @case ('superAdmin') { מנהלת ראשית }
+            @case ('userManagement') { ניהול משתמשים }
+            @case ('editRoutes') { עריכת מסלולים }
+            @case ('editAttractions') { עריכת אתרים }
+            @case ('editHostels') { עריכת מקומות לינה }
+            @case ('respondInGeneralForum') { הגבה בפורום כללי }
+            @case ('respondInSafetyForum') { הגבה בפורום בטיחות }
+            @default { {{ permission }} }
+            }
+          </span>
+
+          <br />
+          }
+
+          }
           <div class="divider"></div>
           <button (click)="logout()" class="option logout">
             <span>

@@ -48,18 +48,17 @@ export class ServiceUsersService {
   }
 
   /**
-   * מעדכן הרשאת משתמש אחת (PUT /Users/{userId}/permission).
+   * הופך (toggles) הרשאת משתמש אחת בשרת (PUT /Users/{userId}/permission).
+   * השרת קורא את הערך הנוכחי, הופך אותו ושומר — אין צורך לשלוח את הערך עצמו.
    * @param userId מזהה המשתמש.
    * @param permission שם ההרשאה (למשל 'superAdmin', 'editRoutes'...).
-   * @param value הערך החדש (true/false).
    */
   UpdatePermission(
     userId: number,
     permission: string,
-    value: boolean,
   ): Observable<any> {
     const baseUrl = `https://localhost:7098/Users/${userId}/permission`;
-    const body = { permission, value };
+    const body = { permission };
     return this.http.put<any>(baseUrl, body).pipe(
       catchError((error) => {
         console.error(`שגיאה בעדכון ההרשאה ${permission} למשתמש ${userId}:`, error);
