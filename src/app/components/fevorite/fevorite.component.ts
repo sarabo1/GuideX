@@ -40,7 +40,7 @@ export class FevoriteComponent {
   ) {
     this.userDetails = this.authService.getUserData();
 
-    this.allTheFavorite = this.srv_favorite.getFavoriteByCoordinatorId(
+    this.allTheFavorite = this.srv_favorite.getFavoriteByUserId(
       this.userDetails.userId,
     );
 

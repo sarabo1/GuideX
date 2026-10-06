@@ -114,7 +114,7 @@ export class WalkingTrailComponent implements AfterViewInit {
     const userId = this.userDetails?.userId;
     if (!userId) return;
 
-    const favs = this.srv_favorite.getFavoriteByCoordinatorId(userId);
+    const favs = this.srv_favorite.getFavoriteByUserId(userId);
 
     favs.forEach((f) => {
       if (f.WalkingTrailId) {

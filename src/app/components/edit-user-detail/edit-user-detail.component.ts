@@ -32,6 +32,8 @@ export class EditUserDetailComponent {
   saving = false;
   error = '';
 
+  regionBegin: any[] = [];
+
   // ── רשימות מילוי ──
   cities: string[] = [];
   filteredCities: string[] = [];
@@ -156,6 +158,7 @@ export class EditUserDetailComponent {
     this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
       this.religiousData = religious;
     });
+    
     this.srv_all.getRegionsArray().subscribe((areas: any[]) => {
       this.AreasOfExpertises = areas;
     });
@@ -217,6 +220,10 @@ export class EditUserDetailComponent {
         ReligiousId: g.religiousId ? String(g.religiousId) : '',
         selectedAreasOfExpertises: g.regionId ?? [],
       });
+      if(this.formGuide.value.selectedAreasOfExpertises){
+           this.regionBegin = this.formGuide.value.selectedAreasOfExpertises;
+           }
+
     } else if (this.profileType === 'coordinator') {
       const u = this.profile.user;
       const c = this.profile.coordinator;
@@ -303,7 +310,11 @@ export class EditUserDetailComponent {
     if (this.saving) return;
 
     if (this.profileType === 'guide') {
+      console.log("this.formGuide.value.selectedAreasOfExpertises:  ", this.formGuide.value.selectedAreasOfExpertises);
+        console.log("this.regionBegin:  ", this.regionBegin);
+      
       if (this.formGuide.invalid) {
+        
         this.formGuide.markAllAsTouched();
         return;
       }
