@@ -36,28 +36,29 @@
             <span>
               <img class="img_like" src="heart_rose.png" alt="favorites" />
             </span>
-            <span>המעודפים שלך </span>
+            <span>למעודפים שלך </span>
           </button>
-
+          @if(!this.authService.hasPermission('superAdmin')){
           <button class="option logout edit" (click)="openDialogEditD()" (click)="toggleMenu()">
             <span>
               <img class="img_like" src="edit_rose.png" alt="favorites" />
               <!-- <mat-icon class="mat-icon-btn icon">edit</mat-icon> -->
             </span>
-            <span>עריכת הפרטים שלך</span>
+            <span>לעריכת הפרטים שלך</span>
           </button>
+          }
           @if(listOfPermissions.length > 0) {
           <div class="divider"></div>
-          <button class="option logout edit" >
-          <img class="img_like" src="Permissions.png" alt="favorites" />
-          <span>ההרשאות שלך:</span>
+          <button class="option logout edit">
+            <img class="img_like" src="Permissions.png" alt="favorites" />
+            <span>ההרשאות שלך:</span>
           </button>
 
 
           @for (permission of listOfPermissions; track permission; let i = $index) {
-          <button class="option logout edit"  style="padding: 4px; margin-right: 8px;">
+          <button class="option logout edit" style="padding: 4px; margin-right: 8px;">
             <!-- <span style="margin-right: 10px;"> -->
-              <mat-icon class="mat-icon-btn icon">check</mat-icon>
+            <mat-icon class="mat-icon-btn icon">check</mat-icon>
             <!-- </span> -->
             @switch (permission) {
             @case ('superAdmin') { מנהלת ראשית }
@@ -69,8 +70,8 @@
             @case ('respondInSafetyForum') { הגבה בפורום בטיחות }
             @default { {{ permission }} }
             }
-          <!-- </span> -->
-</button>
+            <!-- </span> -->
+          </button>
           <!-- <br /> -->
           }
           }

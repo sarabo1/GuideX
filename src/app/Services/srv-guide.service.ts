@@ -151,4 +151,15 @@ export class Srv_Guide {
       .put<any>(`${this.baseUrl}/approve/${guideId}`, {})
       .pipe(catchError(() => of(null)));
   }
+
+  /**
+   * מבטל אישור של מדריכה לפי GuideId (משנה את ערך האישור ל-FALSE בשרת).
+   * מקביל ל-approveGuide — המסלול בשרת: PUT /disapprove/{guideId}.
+   * מחזיר את תשובת השרת; עם שגיאה — null.
+   */
+  disapproveGuide(guideId: number): Observable<any> {
+    return this.http
+      .put<any>(`${this.baseUrl}/disapprove/${guideId}`, {})
+      .pipe(catchError(() => of(null)));
+  }
 }

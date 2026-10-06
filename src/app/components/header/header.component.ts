@@ -30,7 +30,7 @@ export class HeaderComponent {
 
   constructor(
     private route: Router,
-    private authService: AuthService,
+    public authService: AuthService,
     public srv_user: ServiceUsersService,
     public dialog: MatDialog,
   ) {}

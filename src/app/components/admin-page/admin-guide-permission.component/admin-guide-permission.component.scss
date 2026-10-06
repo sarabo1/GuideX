@@ -215,3 +215,68 @@
   width: 18px;
   height: 18px;
 }
+
+/* ── מקטע המדריכות המאושרות ── */
+.approved-title {
+  margin-top: 34px;
+}
+
+.approved-card {
+  border-color: #c9e8d4;
+}
+
+/* תג "מאושרת" בראש הכרטיס — בצד שמאל של השורה (RTL). */
+.approved-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+  background-color: #e8f7ee;
+  border: 1px solid #2e9e5b;
+  color: #1d7a44;
+  border-radius: 14px;
+  padding: 2px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ── כפתור ביטול אישור ── */
+.disapprove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e05a5a;
+  background-color: #fff0f1;
+  color: #c33a3a;
+  border-radius: 22px;
+  padding: 8px 20px;
+  font-family: heebo, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.disapprove-btn:hover:not(:disabled) {
+  background-color: #e05a5a;
+  border-color: #e05a5a;
+  color: #ffffff;
+}
+
+.disapprove-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disapprove-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

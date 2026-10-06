@@ -91,4 +91,102 @@
       }
     </div>
   }
+
+  <!-- ── מדריכות מאושרות — ניתן לבטל את האישור ── -->
+  <h2 class="page-title approved-title">מדריכות מאושרות</h2>
+
+  @if (isLoadingApproved) {
+    <div class="loading">טוען נתונים…</div>
+  } @else if (errorMessageApproved) {
+    <div class="error">{{ errorMessageApproved }}</div>
+  } @else if (approvedData.length === 0) {
+    <div class="empty">אין מדריכות מאושרות כרגע.</div>
+  } @else {
+    <div class="cards">
+      @for (entry of approvedData; track entry.guide.guideId) {
+        <div class="guide-card approved-card">
+          <div class="card-header">
+            <mat-icon class="avatar-icon">person</mat-icon>
+            <h3 class="name">{{ fullName(entry.guide) }}</h3>
+            <span class="approved-badge">
+              <mat-icon class="badge-icon">verified</mat-icon>
+              מאושרת
+            </span>
+          </div>
+
+          <div class="card-body">
+            <div class="field">
+              <span class="label">עיר:</span>
+              <span class="value">{{ entry.guide.city ?? '—' }}</span>
+            </div>
+            <div class="field">
+              <span class="label">טלפון:</span>
+              <span class="value">{{ entry.guide.phoneNumber ?? '—' }}</span>
+            </div>
+            <div class="field">
+              <span class="label">אימייל:</span>
+              <span class="value">{{ entry.guide.email ?? '—' }}</span>
+            </div>
+            <div class="field">
+              <span class="label">עדה:</span>
+              <span class="value">{{
+                getReligiousName(entry.guide.religiousId)
+              }}</span>
+            </div>
+            <div class="field">
+              <span class="label">אזורי התמחות:</span>
+              <span class="value">{{
+                getRegionsNames(entry.guide.regionId) || 'לא צוין'
+              }}</span>
+            </div>
+          </div>
+
+          <!-- קורות חיים ותעודות הכשרה -->
+          <div class="files-section">
+            <h4>קורות חיים ותעודות הכשרה</h4>
+            @if (allFiles(entry).length === 0) {
+              <p class="no-files">אין קבצים להצגה.</p>
+            } @else {
+              <ul class="files-list">
+                @for (file of allFiles(entry); track file.url) {
+                  <li>
+                    <mat-icon class="file-icon">
+                      {{ file.kind === 'Cv' ? 'description' : 'badge' }}
+                    </mat-icon>
+                    <span class="file-kind">{{
+                      file.kind === 'Cv' ? 'קורות חיים' : 'תעודה'
+                    }}</span>
+                    <a
+                      class="file-link"
+                      [href]="file.url"
+                      target="_blank"
+                      rel="noopener"
+                      title="פתיחת קובץ ה{{ file.kind === 'Cv' ? 'קורות חיים' : 'תעודה' }} בחלון חדש"
+                    >
+                      {{ file.fileName }}
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <div class="card-actions">
+            <button
+              class="disapprove-btn"
+              (click)="disapprove(entry.guide.guideId)"
+              [disabled]="disapprovingGuideId !== null"
+            >
+              <mat-icon>cancel</mat-icon>
+              {{
+                disapprovingGuideId === entry.guide.guideId
+                  ? 'מבטל…'
+                  : 'בטל אישור'
+              }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>
