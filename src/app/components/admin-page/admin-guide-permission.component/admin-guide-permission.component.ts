@@ -18,13 +18,13 @@ import {
  * בלחיצה על הקובץ — הוא נפתח/מורד מהשרת (GET api/Guide/file/{id}).
  */
 @Component({
-  selector: 'app-admin-page',
+  selector: 'app-admin-guide-permission',
   standalone: true,
   imports: [CommonModule, MatIconModule],
-  templateUrl: './admin-page.component.html',
-  styleUrl: './admin-page.component.scss',
+  templateUrl: './admin-guide-permission.component.html',
+  styleUrl: './admin-guide-permission.component.scss',
 })
-export class AdminPageComponent {
+export class AdminGuidePermissionComponent {
   /** המדריכות הממתינות לאישור + הקבצים שלהן. */
   data: GuideWithFiles[] = [];
 

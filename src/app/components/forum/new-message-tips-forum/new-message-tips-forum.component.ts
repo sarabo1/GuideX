@@ -55,6 +55,7 @@ export class NewMessageTipsForumComponent {
     if (!this.userDetails) {
       return;
     }
+    console.log('User details:', this.userDetails);
     const userId = this.userDetails.userId;
     console.log('user id: ' + userId);
     const parent = this.data.parent;
@@ -64,6 +65,8 @@ console.log("התאריך: ")
     console.log("התאריך: ",date)
     const title = this.formNewMesagge.get('titleName')?.value?.trim() ?? '';
     const message = this.formNewMesagge.get('message')?.value?.trim() ?? '';
+    const emailUser = this.userDetails.email;
+    
     const newMessage: int_ForumMessage = {
       forumId: 0,
       userId: userId,
@@ -72,6 +75,7 @@ console.log("התאריך: ")
       title: title,
       message: message,
       forumTypeId: forumType,
+      userEmail:emailUser,
     };
 
     this.srv_forum.postMessage(newMessage).subscribe({

@@ -10,6 +10,7 @@ import { HebrewDateConverterPipe } from '../../../Pipes/hebrewDateConverter ';
 import { ActivatedRoute } from '@angular/router';
 import { SrvForumMessageService } from '../../../Services/srv-forum-message.service';
 import { AuthService } from '../../../Services/auth-service.service';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-tips-forum',
@@ -21,6 +22,8 @@ export class TipsForumComponent {
   // כל ההודעות בסדר צפייה: כל תגובה מופיעה מיד לאחר הודעת המקור שלה
   allTheMessage: int_ForumMessage[] | undefined;
   forumType: number = 0;
+    errorMessage: string = ''; // משתנה לאחסון השגיאה
+
 
   constructor(
     public dialog: MatDialog,
@@ -40,13 +43,10 @@ export class TipsForumComponent {
     });
   }
 
-  /**
-   * מסנן את ההודעות של פורום זה, ממיין אותן בצורה היררכית
-   * ומחזיר רשימה מסודרת שבה כל תגובה מופיעה מיד לאחר הודעת המקור שלה.
-   */
   private organizeMessages(messages: int_ForumMessage[]): int_ForumMessage[] {
+    
     const forumMessages = messages.filter(
-      (mess) => mess.forumTypeId === this.forumType
+      (mess) => Number(mess.forumTypeId) == this.forumType
     );
 
     const byId = new Map<number, int_ForumMessage>();
@@ -99,6 +99,9 @@ export class TipsForumComponent {
   }
 
   maskEmail(email: string) {
+        if (!email) return email; // אם המייל הוא undefined או ריק, מחזירים אותו כפי שהוא
+
+
     const atIndex = email.indexOf('@');
     if (atIndex === -1) return email; // במידה ואין סימן '@', מחזירים את המייל כפי שהוא
 
@@ -110,10 +113,21 @@ export class TipsForumComponent {
       return email;
     }
 
-    const maskedName = name.substring(0, 3) + '*'.repeat(name.length - 3);
+    const maskedName = name.substring(0, 2) + '*'.repeat(name.length - 3);
     return maskedName + domain;
   }
-
+//  getEmailAndHandleError(userId: number) : Observable<string | null> {
+//     return this.srv_user.getEmailByUserId(userId).pipe(
+//        tap(email => {
+//       console.log("המייל שהתקבל הוא:", email); // הוספת קונסולה כאן
+//     }),
+//       catchError(error => {
+//         this.errorMessage = "שגיאה בהבאת המייל: " + error.message;
+//         console.error(this.errorMessage+":(");
+//         return of(null); // מחזיר null במקרה של שגיאה
+//       })
+//     );      
+//   }
   DeletePost(forumId: number) {
     if (confirm('האם הנכם בטוחים במחיקה?')) {
       this.Srv_Forum.deletePost(forumId);

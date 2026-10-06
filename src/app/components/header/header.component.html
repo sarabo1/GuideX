@@ -48,13 +48,17 @@
           </button>
           @if(listOfPermissions.length > 0) {
           <div class="divider"></div>
-          
-          <img class="img_like" src="garbage1.png" alt="favorites" />
+          <button class="option logout edit" >
+          <img class="img_like" src="Permissions.png" alt="favorites" />
           <span>ההרשאות שלך:</span>
-          <br />
+          </button>
+
 
           @for (permission of listOfPermissions; track permission; let i = $index) {
-          <span>
+          <button class="option logout edit"  style="padding: 4px; margin-right: 8px;">
+            <!-- <span style="margin-right: 10px;"> -->
+              <mat-icon class="mat-icon-btn icon">check</mat-icon>
+            <!-- </span> -->
             @switch (permission) {
             @case ('superAdmin') { מנהלת ראשית }
             @case ('userManagement') { ניהול משתמשים }
@@ -65,11 +69,10 @@
             @case ('respondInSafetyForum') { הגבה בפורום בטיחות }
             @default { {{ permission }} }
             }
-          </span>
-
-          <br />
+          <!-- </span> -->
+</button>
+          <!-- <br /> -->
           }
-
           }
           <div class="divider"></div>
           <button (click)="logout()" class="option logout">

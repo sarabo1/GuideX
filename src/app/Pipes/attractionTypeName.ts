@@ -14,7 +14,6 @@ export class AttractionTypeNamePipe implements PipeTransform {
       const url = `https://localhost:7098/Attractions/${attractionsTypeId}`;
       return this.http.get<string>(url).pipe(
         map(response => {
-          console.log('Received response:', response); // הוסף לוגציה לניתוח התגובה
           return response;
         }),
         catchError(() => {

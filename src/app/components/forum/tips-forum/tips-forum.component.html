@@ -37,9 +37,10 @@
         <h4>קראו כאן לפני שאתם יוצאים לדרך</h4>
         }
       </div>
-      @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
-            ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
-            || (forumType == 1)){
+      @if((forumType==2)
+      ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+      || (forumType == 1)
+      ){
       <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
         <mat-icon>edit</mat-icon>
         כתיבת הודעה חדשה
@@ -49,7 +50,7 @@
 
     <!-- רשימת ההודעות -->
     <div class="messages">
-      @for (message of allTheMessage; track message) {
+      @for (message of allTheMessage; track message.forumId) {
       <div class="card" [class.reply]="isReply(message)">
         @if (message.parentForumId) {
         <div class="card-header">
@@ -70,30 +71,31 @@
               <div class="author">
                 <mat-icon class="person">person</mat-icon>
                 <p>
-                  @if (srv_user.getEmailByUserId(message.userId) | async; as email) {
-                    {{ maskEmail(email) }}
-                  }
+                  {{ maskEmail(message.userEmail) }}
                 </p>
-                 <p>{{message.userId }}</p>
-           
-            </div>
+                <!-- <p>{{message.userId }}</p> -->
+
+              </div>
               <p class="marginDate">{{ message.date | hebrewDateConverter | async }}</p>
             </div>
           </div>
 
           <p class="message-text">{{ message.message }}</p>
+          <!-- <p class="message-text">{{ message.forumTypeId }}</p> -->
 
           @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
-                ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
-                || (forumType == 1)){
+          ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+          || (forumType == 1)){
           <div class="newPostAndGarbage">
+            <button class="garbage" (click)="DeletePost(message.forumId)" title="מחיקת ההודעה">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+            @if(message.parentForumId == 0){
             <button class="btn aadMessage reply-btn" (click)="openDialogAddMessage(message.forumId, forumType)">
               <mat-icon>reply</mat-icon>
               תגובה להודעה זו
             </button>
-            <button class="garbage" (click)="DeletePost(message.forumId)" title="מחיקת ההודעה">
-              <mat-icon>delete_outline</mat-icon>
-            </button>
+            }
           </div>
           }
         </div>
@@ -101,9 +103,9 @@
       }
     </div>
 
-    @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
-            ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
-            || (forumType == 1)){
+    @if((forumType==2)
+    ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+    || (forumType == 1)){
     <div class="titleOfForum">
       <button class="btn aadMessage" (click)="openDialogAddMessage(0, forumType)">
         <mat-icon>edit</mat-icon>

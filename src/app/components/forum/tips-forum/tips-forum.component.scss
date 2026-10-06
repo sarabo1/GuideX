@@ -380,5 +380,8 @@ div:has(> .icon-background) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row-reverse
+
+
   }
 }

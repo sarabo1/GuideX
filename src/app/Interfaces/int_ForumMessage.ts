@@ -6,6 +6,7 @@ forumId :number,
 	title :string
 	message :string
 	forumTypeId :number
+	userEmail: string
 	// AboutGuideId int constraint FK_Forum_AboutGuideId 
 	// 					foreign key references Guides(GuideId),
 	// AboutWalkingTrailId int constraint FK_Forum_WalkingTrail 

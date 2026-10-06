@@ -20,6 +20,8 @@ import { SrvCities } from '../../../Services/srv-cities.service';
 import { InterfaceSchool } from '../../../Interfaces/interface-school';
 import { CoordinatorRegisterPayload } from '../../../Interfaces/int-coordinator';
 import { ServiceAllService } from '../../../Services/service-all.service';
+import { AuthService } from '../../../Services/auth-service.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-coordinator-registrations',
@@ -51,7 +53,9 @@ export class CoordinatorRegistrationsComponent {
     private router: Router,
     private dialogRef: MatDialogRef<CoordinatorRegistrationsComponent>,
     private srvCities: SrvCities,
-    public srv_all : ServiceAllService
+    public srv_all : ServiceAllService,
+    public authService: AuthService,
+    public http: HttpClient
   ) {
       // טעינת רשימת התפקידים ורשימת סוגי המוסד/העדות מהשרת
       this.srv_all.getRolesArray().subscribe((roles: any[]) => {
@@ -89,32 +93,7 @@ export class CoordinatorRegistrationsComponent {
     this.filteredSchools = this.schools;
   }
 
-  // writeData() {
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  //   this.formCoordinator.get('PrincipalName')?.setValue('');
-  // }
-
-  // religiousData = [
-  //   { id: 1, name: 'חסידי' },
-  //   { id: 2, name: 'ספרדי' },
-  //   { id: 3, name: 'אשכנזי' },
-  //   { id: 4, name: 'אחר' },
-  // ];
-  // religiousData = this.srv_all.getReligiousName()
-  // RoleIdData = [
-  //   { id: 1, name: 'סגנית' },
-  //   { id: 2, name: 'מנהלת' },
-  //   { id: 3, name: 'מורה' },
-  //   { id: 4, name: 'מזכירה' },
-  //   { id: 5, name: 'אחר' },
-  // ];
-  // RoleIdData = this.srv_all.getRolesArray()
+ 
   AgeSchoolIdData = [
     { id: 1, name: 'יסודי' },
     { id: 2, name: 'חט"ב' },
@@ -227,13 +206,49 @@ export class CoordinatorRegistrationsComponent {
           console.log('רישום הצליח, userId:', userId);
 
           // שמירת פרטי המשתמש ב-LOCAL STORAGE לפי ה-ID שקיבלנו מהשרת
-          const userObj = { email: payload.email, userId };
-          localStorage.setItem('user_data', JSON.stringify(userObj));
+          // const userObj = { email: payload.email, userId };
+          // localStorage.setItem('user_data', JSON.stringify(userObj));
 
-          this.formCoordinator.reset();
-          this.dialogRef.close(); // סגור את הדיאלוג
-          this.router.navigate(['welcome/Home_Page']);
-        });
+          // this.formCoordinator.reset();
+          // this.dialogRef.close(); // סגור את הדיאלוג
+          // this.router.navigate(['welcome/Home_Page']);
+          const aaa = 'https://localhost:7098/api/Login/login';
+      const userInput = {
+        Email: payload.email,
+        UserPassword: payload.userPassword,
+      };
+
+      this.http.post<any>(aaa, userInput).subscribe(
+        response => {
+          console.log('User found:', response);
+
+          if (response) {
+            const userObj = {
+              token: response.token // אם הטוקן הגיע כאן בתגובה
+            };
+            console.log("הני: ", userObj);
+            localStorage.setItem('user_data', JSON.stringify(userObj));
+
+            // שמור גם ב-AuthService
+            this.authService.login(userObj.token);
+
+
+            this.router.navigate(['welcome/Home_Page']);
+          } else {
+            alert('אירעה שגיאה בהתחברות לאחר ההרשמה. נא לנסות שוב.');
+          }
+        },
+        error => {
+          alert('אירעה שגיאה בהתחברות לאחר ההרשמה. נא לנסות שוב.');
+        }
+
+
+      );
+      this.formCoordinator.reset();
+      this.dialogRef.close();
+      this.router.navigate(['welcome/Home_Page']);
+    });
+       
     } else {
       console.error('טופס לא תקין:', this.formCoordinator.errors);
     }

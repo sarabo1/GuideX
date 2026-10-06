@@ -122,13 +122,13 @@ export class AuthService {
     const userData = this.getUserData();
     const value = userData?.permission?.[permission];
     const result = typeof value === 'boolean' ? value : false;
-    if (!result) {
-      console.warn(
-        `hasPermission('${permission}') → false. ` +
-          `המשתמש ב-localStorage:`,
-        userData,
-      );
-    }
+    // if (!result) {
+    //   console.warn(
+    //     `hasPermission('${permission}') → false. ` +
+    //       `המשתמש ב-localStorage:`,
+    //     userData,
+    //   );
+    // }
     return result;
   }
 }

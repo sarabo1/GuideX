@@ -4,7 +4,7 @@ import { InterfaceUsers } from '../Interfaces/interface-users';
 import { Srv_Guide } from './srv-guide.service';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -145,10 +145,16 @@ export class ServiceUsersService {
   //     }
   //   );
   // }
-  getEmailByUserId(userId: number): Observable<string> {
-  const urlToGetEmail = `https://localhost:7098/Users/email_${userId}`;
-  return this.http.get<string>(urlToGetEmail);
-}
+// getEmailByUserId(userId: number): Observable<string> {
+//   const urlToGetEmail = `https://localhost:7098/Users/email_${userId}`;
+//   return this.http.get<string>(urlToGetEmail).pipe(
+//     catchError(error => {
+//       console.error("שגיאה בהבאת המייל:", error);
+//       return throwError(error);
+//     })
+//   );
+// }
+
   getUserById(userId: number) {
     const user = this.mock_Users.find((u) => u.UserId === userId);
     return user ? user : '';

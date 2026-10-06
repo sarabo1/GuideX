@@ -10,7 +10,7 @@ import { HostelsComponent } from './components/tables/hostels/hostels.component'
 import { WalkingTrailComponent } from './components/tables/walking-trail/walking-trail.component';
 import { TableGuideComponent } from './components/tables/table-guide/table-guide.component';
 import { RegionSearchComponent } from './components/region-search/region-search.component';
-import { AdminPageComponent } from './components/admin-page/admin-page.component/admin-page.component';
+import { AdminGuidePermissionComponent } from './components/admin-page/admin-guide-permission.component/admin-guide-permission.component';
 import { UserPermissionsComponent } from './components/admin-page/user-permissions/user-permissions.component';
 import { permissionGuard } from './guards/permission-guard.guard';
 
@@ -31,7 +31,7 @@ export const routes: Routes = [
       { path: 'Guides', component: TableGuideComponent },
       { path: 'RegionSearch', component: RegionSearchComponent },
       {
-        path: 'AdminGuide', component: AdminPageComponent,
+        path: 'AdminGuide', component: AdminGuidePermissionComponent,
         canActivate: [permissionGuard('userManagement')],
       },
       {

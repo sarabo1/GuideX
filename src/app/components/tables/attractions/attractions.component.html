@@ -13,19 +13,18 @@
       placeholder="חיפוש חופשי: שם, אזור, סוג, תיאור..."
     />
 
-    <div class="areas-filter">
+    
+<div class="areas-filter">
       <span class="areas-label">סינון לפי אזורים:</span>
       @for (item of RegionsArrayData; track item.regionId) {
         <label class="area-check">
-          <input
-            type="checkbox"
-            [checked]="selectedRegions.includes(+item.regionId)"
-            (change)="toggleRegion(+item.regionId, $any($event.target).checked)"
-          />
+          <input type="checkbox" [checked]="selectedRegions.includes(+item.regionId)"
+            (change)="toggleRegion(+item.regionId, $any($event.target).checked)" />
           {{ item.regionName }}
         </label>
       }
     </div>
+
 
     <div class="Reset_feeder">
       <button type="button" class="reset btn" (click)="resetFilters()">

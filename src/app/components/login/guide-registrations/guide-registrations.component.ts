@@ -20,6 +20,8 @@ import { PasswordvalidatorService } from '../../../Services/Password_validator';
 import { Srv_Guide } from '../../../Services/srv-guide.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { regionNamePipe } from "../../../Pipes/regionName";
+import { AuthService } from '../../../Services/auth-service.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-guide-registrations',
@@ -32,7 +34,7 @@ import { regionNamePipe } from "../../../Pipes/regionName";
     MatFormFieldModule,
     MatSelectModule,
     regionNamePipe
-],
+  ],
   templateUrl: './guide-registrations.component.html',
   styleUrl: './guide-registrations.component.scss',
   standalone: true,
@@ -55,8 +57,10 @@ export class GuideRegistrationsComponent {
     public srv_all: ServiceAllService,
     private srvCities: SrvCities,
     public srv_guides: Srv_Guide,
+    public authService: AuthService,
+    public http: HttpClient
   ) {
-      this.srv_all.getRegionsArray().subscribe((areas) => {
+    this.srv_all.getRegionsArray().subscribe((areas) => {
       this.AreasOfExpertises = areas;
       this.srv_all.getreligiousArray().subscribe((religious: any[]) => {
         this.religiousData = religious;
@@ -163,8 +167,40 @@ export class GuideRegistrationsComponent {
       console.log('GuideId:', res.guideId, 'RegionIds:', res.regionIds);
 
       // הכנסת הנתונים ב-LOCAL STORAGE
-      const userObj = { email: payload.Email, userId: res.userId };
-      localStorage.setItem('user_data', JSON.stringify(userObj));
+      // const userObj = { email: payload.Email, userId: res.userId };
+      // localStorage.setItem('user_data', JSON.stringify(userObj));
+      const aaa = 'https://localhost:7098/api/Login/login';
+      const userInput = {
+        Email: payload.Email,
+        UserPassword: payload.UserPassword,
+      };
+
+      this.http.post<any>(aaa, userInput).subscribe(
+        response => {
+          console.log('User found:', response);
+
+          if (response) {
+            const userObj = {
+              token: response.token // אם הטוקן הגיע כאן בתגובה
+            };
+            console.log("הני: ", userObj);
+            localStorage.setItem('user_data', JSON.stringify(userObj));
+
+            // שמור גם ב-AuthService
+            this.authService.login(userObj.token);
+
+
+            this.router.navigate(['welcome/Home_Page']);
+          } else {
+            alert('אירעה שגיאה בהתחברות לאחר ההרשמה. נא לנסות שוב.');
+          }
+        },
+        error => {
+          alert('אירעה שגיאה בהתחברות לאחר ההרשמה. נא לנסות שוב.');
+        }
+
+
+      );
       this.formGuide.reset();
       this.dialogRef.close();
       this.router.navigate(['welcome/Home_Page']);
@@ -174,7 +210,6 @@ export class GuideRegistrationsComponent {
   PasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
-
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;

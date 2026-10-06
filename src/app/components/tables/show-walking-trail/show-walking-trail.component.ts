@@ -203,21 +203,21 @@ export class ShowWalkingTrailComponent {
 
   saveEdit() {
     console.log('saveEdit');
-      const seasons = [
-    document.getElementById('Summer') as HTMLInputElement,
-    document.getElementById('Winter') as HTMLInputElement,
-    document.getElementById('Spring') as HTMLInputElement,
-    document.getElementById('Autumn') as HTMLInputElement
-  ];
+    const seasons = [
+      document.getElementById('Summer') as HTMLInputElement,
+      document.getElementById('Winter') as HTMLInputElement,
+      document.getElementById('Spring') as HTMLInputElement,
+      document.getElementById('Autumn') as HTMLInputElement
+    ];
 
-  const isAtLeastOneChecked = seasons.some(season => season.checked);
+    const isAtLeastOneChecked = seasons.some(season => season.checked);
 
-  if (!isAtLeastOneChecked) {
-    alert("אנא בחר לפחות עונה אחת.");
-    return;
-  }
+    if (!isAtLeastOneChecked) {
+      alert("אנא בחר לפחות עונה אחת.");
+      return;
+    }
 
-   this.data.SeasonSummer = seasons[0].checked;
+    this.data.SeasonSummer = seasons[0].checked;
     this.data.SeasonWinter = seasons[1].checked;
     this.data.SeasonSpring = seasons[2].checked;
     this.data.SeasonAutumn = seasons[3].checked;
@@ -228,9 +228,10 @@ export class ShowWalkingTrailComponent {
     this.data.Description = (
       document.getElementById('Description') as HTMLInputElement
     ).value;
-    this.data.regionId = Number(
-      (document.getElementById('regionId') as HTMLInputElement).value,
-    );
+    // this.data.regionId = Number(
+    //   (document.getElementById('regionId') as HTMLInputElement).value,
+    // );
+    this.data.regionId = this.data.regionId;
     this.data.Difficulty = Number(
       (document.getElementById('Difficulty') as HTMLInputElement).value,
     );
@@ -240,15 +241,17 @@ export class ShowWalkingTrailComponent {
     this.data.MaxAge = Number(
       (document.getElementById('MaxAge') as HTMLInputElement).value,
     );
-    ((this.data.Directions = (
+    (this.data.Directions = (
       document.getElementById('Directions') as HTMLInputElement
     ).value),
       (this.data.LengthInKm = Number(
         (document.getElementById('LengthInKm') as HTMLInputElement).value,
       )),
-      (this.data.RouteDuration = Number(
-        (document.getElementById('RouteDuration') as HTMLInputElement).value,
-      )));
+      // (this.data.RouteDuration = Number(
+      //   (document.getElementById('RouteDuration') as HTMLInputElement).value,
+      // )));
+     this.data.RouteDuration = this.data.RouteDuration,
+
     this.data.IsWet = (
       document.getElementById('IsWet') as HTMLInputElement
     ).checked;
@@ -278,23 +281,23 @@ export class ShowWalkingTrailComponent {
       ) {
         return;
       }
-this.walkingTrails.AddNewTrail(this.data).subscribe({
-    next: (response) => {
-        console.log('הוספת הליכה', response);
-        // המסלול נשמר — עכשיו יש לו ID. אם נבחרו תמונות, מעלים אותם אליו.
-        const newId =
+      this.walkingTrails.AddNewTrail(this.data).subscribe({
+        next: (response) => {
+          console.log('הוספת הליכה', response);
+          // המסלול נשמר — עכשיו יש לו ID. אם נבחרו תמונות, מעלים אותם אליו.
+          const newId =
             response?.WalkingTrailId ?? response?.walkingTrailId ?? this.data.WalkingTrailId;
-        if (this.pendingImages.length && newId) {
+          if (this.pendingImages.length && newId) {
             this.uploadPendingImages(newId);
-        }
-        this.onClose();
-        this.openDialogRegistrations('מסלול ההליכה נוסף בהצלחה');
-        this.refreshService.triggerRefresh();
-    },
-    error: (err) => {
-        console.error('שגיאה בהוספת מסלול 4444ההליכה:', err.error || err.message || 'שגיאה לא ידועה');
-    },
-});
+          }
+          this.onClose();
+          this.openDialogRegistrations('מסלול ההליכה נוסף בהצלחה');
+          this.refreshService.triggerRefresh();
+        },
+        error: (err) => {
+          console.error('שגיאה בהוספת מסלול 4444ההליכה:', err.error || err.message || 'שגיאה לא ידועה');
+        },
+      });
     } else {
       this.walkingTrails.UpdateTrail(this.data).subscribe({
         next: () => {
