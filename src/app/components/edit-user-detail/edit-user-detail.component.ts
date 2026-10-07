@@ -65,6 +65,13 @@ export class EditUserDetailComponent {
   CertificatesFiles: File[] = [];
   resumeFiles: File | null = null;
 
+  /** הקבצים הקיימים של המדריכה (קורות חיים ותעודות) — להצגה בלבד. */
+  existingFiles: {
+    fileName: string;
+    kind: 'Cv' | 'Certificate';
+    url: string;
+  }[] = [];
+
   private phoneValidatorSrv = inject(PhoneValidatorService);
   phoneValidator = this.phoneValidatorSrv.phoneValidator;
 
@@ -213,10 +220,41 @@ export class EditUserDetailComponent {
       // כך שמוצגים כל הנתונים של אותו משתמש.
       this.profileType = profile.type;
       this.fillForm();
+      // הצגת הקבצים הקיימים של המדריכה (קורות חיים ותעודות) —
+      // כמו בדף האישור: שליפה מהשרת וקישורי פתיחה/הורדה.
+      if (this.profileType === 'guide' && profile?.guide?.guideId) {
+        this.loadExistingFiles(profile.guide.guideId);
+      }
       // כשנפתח הצגה מהמנהל (readOnly) — כל השדות לא ניתנים לעריכה.
       if (this.readOnly) {
         this.disableCurrentForm();
       }
+    });
+  }
+
+  /** שולף את קבצי ההעלאה הקיימים של המדריכה ומציג אותם כקישורים לפתיחה/הורדה. */
+  private loadExistingFiles(guideId: number) {
+    this.srv_guide.getGuideFiles(guideId).subscribe({
+      next: (fileObjs: any[]) => {
+        this.existingFiles = (fileObjs ?? [])
+          .map((raw: any) => {
+            const f: any = raw;
+            const id = Number(f.FileId ?? f.fileId);
+            if (!id) return null; // בלי מזהה — אי אפשר לבנות קישור
+            return {
+              fileName: f.FileName ?? f.fileName ?? '',
+              kind: ((f.Kind ?? f.kind ?? '') === 'Cv' ? 'Cv' : 'Certificate') as
+                | 'Cv'
+                | 'Certificate',
+              url: this.srv_guide.getFileUrl(id),
+            };
+          })
+          .filter(
+            (x: any): x is { fileName: string; kind: 'Cv' | 'Certificate'; url: string } =>
+              x !== null,
+          );
+      },
+      error: () => {}, // אין קבצים או שגיאה — משאירים את הרשימה ריקה
     });
   }
 

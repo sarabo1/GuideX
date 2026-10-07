@@ -118,6 +118,37 @@
 
         <!-- ─── קבצים ─── -->
         <div class="section-title">קבצים</div>
+
+        <!-- קבצים קיימים — קורות חיים ותעודות שכבר הועלו -->
+        <div class="files-section">
+          <h4 class="files-section-title">קבצים קיימים</h4>
+          @if (existingFiles.length === 0) {
+            <p class="no-files">אין קבצים להצגה.</p>
+          } @else {
+            <ul class="files-list">
+              @for (file of existingFiles; track file.url) {
+                <li>
+                  <mat-icon class="file-icon">
+                    {{ file.kind === 'Cv' ? 'description' : 'badge' }}
+                  </mat-icon>
+                  <span class="file-kind">{{
+                    file.kind === 'Cv' ? 'קורות חיים' : 'תעודה'
+                  }}</span>
+                  <a
+                    class="file-link"
+                    [href]="file.url"
+                    target="_blank"
+                    rel="noopener"
+                    title="פתיחת קובץ ה{{ file.kind === 'Cv' ? 'קורות חיים' : 'תעודה' }} בחלון חדש"
+                  >
+                    {{ file.fileName }}
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
         <div class="details-grid">
           <div class="detail-item">
             <span class="detail-label">קבצי תעודות</span>

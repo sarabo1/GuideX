@@ -42,7 +42,8 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', component: WelcomePageComponent },
+  { path: '**', component: HomePageComponent },
+  { path: 'welcome', component: HomePageComponent },
 ];
 
 
