@@ -1,8 +1,12 @@
 <div class="reka">
-  <button class="filterToFind_not_showSearch" (click)="newHostel()">הוספת מקום לינה</button>
-  <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
+  @if(this.authService.hasPermission('editHostels')) {
+    <div class="button-container">
+      <button class="filterToFind_not_showSearch" (click)="newHostel()">הוספת מקום לינה</button>
+    </div>
+  }
+  <!-- <div [class]="showSearch ? 'winSearch' : 'winSearch_not_ShowSearch'">
     
-  </div>
+  </div> -->
   <div class="filter-panel">
     <input
       type="text"

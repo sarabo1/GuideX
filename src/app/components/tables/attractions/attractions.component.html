@@ -1,7 +1,10 @@
 <div class="reka">
-  <div class="button-container">
-    <button class="filterToFind_not_showSearch" (click)="newAttraction()">הוספת אטרקציה</button>
-  </div>
+
+  @if(this.authService.hasPermission('editAttractions')) {
+    <div class="button-container">
+      <button class="filterToFind_not_showSearch" (click)="newAttraction()">הוספת אטרקציה</button>
+    </div>
+  }
 
   <div class="filter-panel">
     <input

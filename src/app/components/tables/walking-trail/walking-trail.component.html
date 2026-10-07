@@ -1,4 +1,9 @@
 <div class="reka">
+  @if(this.authService.hasPermission('editRoutes')) {
+    <div class="button-container">
+      <button class="filterToFind_not_showSearch" (click)="newWalkingTrail()">הוספת מסלול</button>
+    </div>
+  }
   <div class="button-container">
     <button class="filterToFind_not_showSearch" (click)="newWalkingTrail()">הוספת מסלול</button>
   </div>
