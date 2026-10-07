@@ -32,6 +32,18 @@ export class EditUserDetailComponent {
   saving = false;
   error = '';
 
+  /**
+   * מצב צפייה בלבד. נקבע על ידי הפותח דרך `data.readOnly`.
+   * כשמופעל — הטופס מוצג לקריאה בלבד, אין כפתור שמירה,
+   * וכל שליחה לשרת נחסמת (הגנה כפולה מעבר ל-disabled בתבנית).
+   */
+  readOnly = false;
+
+  /** כותרת החלון: "עריכת הפרטים שלך" למשתמש עצמו, אחרת "פרטי משתמש". */
+  get dialogTitle(): string {
+    return this.readOnly ? 'פרטי משתמש' : 'עריכת הפרטים שלך';
+  }
+
   regionBegin: any[] = [];
 
   // ── רשימות מילוי ──
@@ -70,6 +82,7 @@ export class EditUserDetailComponent {
     const saved = localStorage.getItem('user_data');
     const savedUser = saved ? JSON.parse(saved) : null;
     this.userId = this.data?.userId ?? savedUser?.userId ?? null;
+    this.readOnly = this.data?.readOnly ?? false;
     console.log('EditUserDetailComponent initialized with userId:', this.userId);
   }
 
@@ -195,14 +208,34 @@ export class EditUserDetailComponent {
       }
 
       this.profile = profile;
-      if (this.authService.hasPermission('superAdmin')) {
-        this.profileType = 'admin';
-      }
-      else {
-        this.profileType = profile.type;
-      }
+      // סוג הטופס נקבע תמיד לפי סוג הפרופיל שנטען בפועל
+      // (guide / coordinator) — גם כשהמנהל הראשי צופה במשתמש אחר,
+      // כך שמוצגים כל הנתונים של אותו משתמש.
+      this.profileType = profile.type;
       this.fillForm();
+      // כשנפתח הצגה מהמנהל (readOnly) — כל השדות לא ניתנים לעריכה.
+      if (this.readOnly) {
+        this.disableCurrentForm();
+      }
     });
+  }
+
+  /**
+   * משבית את כל שדות הטופס הנוכחי (קלטים, רשימות, תיבות סימון)
+   * כך שלא ניתן יהיה לשנות דבר בזמן צפייה במנהל הראשי.
+   */
+  private disableCurrentForm() {
+    switch (this.profileType) {
+      case 'guide':
+        this.formGuide.disable();
+        break;
+      case 'coordinator':
+        this.formCoordinator.disable();
+        break;
+      default:
+        this.formUser.disable();
+        break;
+    }
   }
 
   /** ממלא את הטופס לפי הסוג בנתוני הפרופיל. */
@@ -308,6 +341,7 @@ export class EditUserDetailComponent {
   // ── שליחה ושמירה ──
   onSubmit() {
     if (this.saving) return;
+    if (this.readOnly) return; // מצב צפייה בלבד — לא מאפשרים שמירה.
 
     if (this.profileType === 'guide') {
       console.log("this.formGuide.value.selectedAreasOfExpertises:  ", this.formGuide.value.selectedAreasOfExpertises);

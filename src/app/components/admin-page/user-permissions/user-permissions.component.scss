@@ -110,10 +110,47 @@
   text-align: right !important;
 }
 
-.col-user .name {
+/* שם המשתמש — כפתור שפותח את פרטי המשתמש בחלון צפייה */
+.name-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  padding: 4px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: heebo, sans-serif;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.name-link .name {
   color: #3c3c3c;
   font-size: 15px;
   font-weight: 600;
+}
+
+.name-link .view-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+  color: #a78fd6;
+  transition: color 0.15s;
+}
+
+.name-link:hover .name {
+  color: #6f2fe0;
+  text-decoration: underline;
+}
+
+.name-link:hover .view-icon,
+.name-link:focus-visible .view-icon {
+  color: #6f2fe0;
+}
+
+.name-link:focus-visible {
+  outline: 2px solid rgba(111, 47, 224, 0.4);
+  outline-offset: 2px;
 }
 
 .col-id {

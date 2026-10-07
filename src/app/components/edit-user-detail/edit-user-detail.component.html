@@ -1,6 +1,6 @@
 <div class="hostel-dialog">
   <div class="dialog-header">
-    <h3 class="add-title">עריכת הפרטים שלך</h3>
+    <h3 class="add-title">{{ dialogTitle }}</h3>
     <button (click)="onClose()" class="action-btn cancel">
       <mat-icon>close</mat-icon>
     </button>
@@ -108,6 +108,7 @@
                     [value]="item.regionId"
                     (change)="onCheckboxChange($event)"
                     [checked]="isChecked(item.regionId)"
+                    [disabled]="readOnly"
                   />
                   {{ item.regionName }}
                 </label>
@@ -121,12 +122,12 @@
         <div class="details-grid">
           <div class="detail-item">
             <span class="detail-label">קבצי תעודות</span>
-            <input inputToEdit type="file" multiple (change)="onFileSelected($event)" />
+            <input inputToEdit type="file" multiple (change)="onFileSelected($event)" [disabled]="readOnly" />
           </div>
 
           <div class="detail-item">
             <span class="detail-label">קורות חיים</span>
-            <input inputToEdit type="file" (change)="onOneFileSelected($event)" />
+            <input inputToEdit type="file" (change)="onOneFileSelected($event)" [disabled]="readOnly" />
           </div>
         </div>
       </form>
@@ -176,11 +177,11 @@
             }
           </div>
 
-          <div class="detail-item">
+          <!-- <div class="detail-item">
             <span class="detail-label">סיסמה</span>
             <input class="inputToEdit" type="password" formControlName="UserPassword" [disabled]="true" />
             <span class="note">הסיסמה אינה ניתנת לשינוי כאן</span>
-          </div>
+          </div> -->
         </div>
 
         <!-- ─── פרטי המוסד ─── -->
@@ -350,7 +351,7 @@
     }
   </div>
 
-  @if (!loading && !error) {
+  @if (!loading && !error && !readOnly) {
     <div class="dialog-footer">
       <button (click)="onSubmit()" class="action-btn save" [disabled]="saving">
         <mat-icon>check</mat-icon>

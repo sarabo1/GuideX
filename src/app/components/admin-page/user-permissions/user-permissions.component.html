@@ -28,7 +28,14 @@
           @for (user of visibleUsers; track user.userId) {
             <tr>
               <td class="col-user">
-                <span class="name">{{ fullName(user) }}</span>
+                <button
+                  class="name-link"
+                  (click)="openUser(user)"
+                  title="לצפייה בפרטי המשתמש"
+                >
+                  <span class="name">{{ fullName(user) }}</span>
+                  <mat-icon class="view-icon">visibility</mat-icon>
+                </button>
               </td>
               @for (perm of permissions; track perm.key) {
                 @if (showUserManagementColumn || perm.key !== 'userManagement') {

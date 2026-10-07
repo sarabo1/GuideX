@@ -25,6 +25,7 @@ export interface AdminUser {
   editHostels: boolean;
   respondInGeneralForum: boolean;
   respondInSafetyForum: boolean;
+  isCoordinator: boolean;
 }
 
 /** תיאור של הרשאה אחת — לתצוגה ולעדכון. */
@@ -46,4 +47,5 @@ export interface Permissions {
   editHostels: boolean;
   respondInGeneralForum: boolean;
   respondInSafetyForum: boolean;
+  isCoordinator: boolean;
 }

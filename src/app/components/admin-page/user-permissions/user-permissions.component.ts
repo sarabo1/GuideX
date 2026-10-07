@@ -1,10 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ServiceUsersService } from '../../../Services/srv-users';
 import { AuthService } from '../../../Services/auth-service.service';
 import { AdminUser, PermissionDef } from '../../../Interfaces/interface-users';
+import { EditUserDetailComponent } from '../../edit-user-detail/edit-user-detail.component';
 
 /**
  * דף ניהול — ניהול הרשאות משתמשים.
@@ -41,6 +43,7 @@ export class UserPermissionsComponent implements OnDestroy {
     { key: 'editHostels', label: 'ניהול מקומות לינה', icon: 'hotel' },
     { key: 'respondInGeneralForum', label: 'הגבה בפורום כללי', icon: 'forum' },
     { key: 'respondInSafetyForum', label: 'הגבה בפורום בטיחות', icon: 'shield' },
+    { key: 'isCoordinator', label: 'רכזת פעילה', icon: 'supervisor_account' },
   ];
 
   /**
@@ -53,10 +56,23 @@ export class UserPermissionsComponent implements OnDestroy {
   constructor(
     public serviceUsers: ServiceUsersService,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {
     // העמודה "ניהול משתמשים" מוצגת רק למנהל ראשי (superAdmin).
     this.showUserManagementColumn = this.authService.hasPermission('superAdmin');
     this.loadData();
+  }
+
+  /**
+   * פותח את פרטי המשתמש בחלון (דיאלוג), במצב צפייה בלבד —
+   * מנהל יראה את הפרופיל המלא של המשתמש אבל לא יוכל לשנות אותו כאן.
+   */
+  openUser(user: AdminUser) {
+    this.dialog.open(EditUserDetailComponent, {
+      width: '950px',
+      height: '850px',
+      data: { userId: user.userId, readOnly: true },
+    });
   }
 
   /** טוען את כל המשתמשים מהשרת ומסנן אותם לפי הרשאת המשתמש המחובר. */

@@ -43,19 +43,29 @@
   padding: 18px;
 }
 
+/* ── רשת הכרטיסים: 2 בעמוד ── */
 .cards {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+/* מסך צר — עמודה אחת. */
+@media (max-width: 760px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── כרטיס מדריכה ── */
 .guide-card {
   border: 1.5px solid #dccdf5;
-  border-radius: 14px;
+  border-radius: 12px;
   background-color: #ffffff;
   box-shadow: 0 3px 12px rgba(111, 47, 224, 0.08);
   overflow: hidden;
+  min-width: 0; /* מאפשר כיווץ תקין בתוך עמודת grid */
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 
@@ -67,37 +77,41 @@
 .card-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 16px 18px;
+  gap: 8px;
+  padding: 10px 14px;
   background-color: #f5f0ff;
   border-bottom: 1px solid #e3d8f8;
 }
 
 .avatar-icon {
   color: #6f2fe0;
-  font-size: 26px;
-  width: 26px;
-  height: 26px;
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 .name {
   margin: 0;
   color: #3c3c3c;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-body {
-  padding: 14px 18px 6px;
+  padding: 10px 14px 4px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 8px 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
 }
 
 .field {
   display: flex;
   gap: 6px;
-  font-size: 15px;
+  font-size: 13.5px;
+  min-width: 0;
 }
 
 .label {
@@ -114,22 +128,23 @@
 
 /* ── קבצים (קורות חיים ותעודות) ── */
 .files-section {
-  padding: 6px 18px 12px;
+  padding: 4px 14px 10px;
 }
 
 .files-section h4 {
-  margin: 12px 0 8px;
+  margin: 8px 0 6px;
   color: #6f2fe0;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   border-bottom: 1px dashed #dccdf5;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .no-files {
   color: #a99;
   font-style: italic;
   margin: 4px 0;
+  font-size: 13px;
 }
 
 .files-list {
@@ -138,39 +153,45 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .files-list li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .file-icon {
   color: #6f2fe0;
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
 .file-kind {
   color: #6f2fe0;
-  font-size: 13px;
+  font-size: 11.5px;
   background-color: #f5f0ff;
   border: 1px solid #dccdf5;
-  border-radius: 14px;
-  padding: 1px 10px;
+  border-radius: 12px;
+  padding: 1px 8px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .file-link {
   color: #3c3c3c;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom: 1px solid #cfbaf0;
   transition: color 0.15s, border-color 0.15s;
-  word-break: break-all;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-link:hover {
@@ -180,20 +201,20 @@
 
 /* ── כפתור אישור ── */
 .card-actions {
-  padding: 6px 18px 16px;
+  padding: 4px 14px 12px;
 }
 
 .approve-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: 1px solid #2e9e5b;
   background-color: #e8f7ee;
   color: #1d7a44;
-  border-radius: 22px;
-  padding: 8px 20px;
+  border-radius: 18px;
+  padding: 6px 16px;
   font-family: heebo, sans-serif;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
@@ -211,9 +232,9 @@
 }
 
 .approve-btn mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 /* ── מקטע המדריכות המאושרות ── */
@@ -229,36 +250,37 @@
 .approved-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   margin-inline-start: auto;
   background-color: #e8f7ee;
   border: 1px solid #2e9e5b;
   color: #1d7a44;
-  border-radius: 14px;
-  padding: 2px 12px;
-  font-size: 13px;
+  border-radius: 12px;
+  padding: 1px 9px;
+  font-size: 11.5px;
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .badge-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 /* ── כפתור ביטול אישור ── */
 .disapprove-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: 1px solid #e05a5a;
   background-color: #fff0f1;
   color: #c33a3a;
-  border-radius: 22px;
-  padding: 8px 20px;
+  border-radius: 18px;
+  padding: 6px 16px;
   font-family: heebo, sans-serif;
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
@@ -276,7 +298,7 @@
 }
 
 .disapprove-btn mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
