@@ -253,9 +253,9 @@ export class EditUserDetailComponent {
         ReligiousId: g.religiousId ? String(g.religiousId) : '',
         selectedAreasOfExpertises: g.regionId ?? [],
       });
-      if(this.formGuide.value.selectedAreasOfExpertises){
-           this.regionBegin = this.formGuide.value.selectedAreasOfExpertises;
-           }
+      // שומרים את רשימת התחומים המקורית (כפי שנטענה מהשרת) —
+      // כדי שבשמירה נדע אם המשתמש שינה בפועל את התחומים.
+      this.regionBegin = g.regionId ?? [];
 
     } else if (this.profileType === 'coordinator') {
       const u = this.profile.user;
@@ -346,7 +346,7 @@ export class EditUserDetailComponent {
     if (this.profileType === 'guide') {
       console.log("this.formGuide.value.selectedAreasOfExpertises:  ", this.formGuide.value.selectedAreasOfExpertises);
         console.log("this.regionBegin:  ", this.regionBegin);
-      
+      // if(this.formGuide.value.selectedAreasOfExpertises ==this.regionBegin)
       if (this.formGuide.invalid) {
         
         this.formGuide.markAllAsTouched();
@@ -415,7 +415,23 @@ export class EditUserDetailComponent {
         this.error = 'אירעה שגיאה בשמירת הפרטים. נא לנסות שוב.';
         return;
       }
-      this.dialogRef.close(true);
+      // השוואת תוכן בין התחומים שנבחרו עכשיו לבין אלו שהיו במקור (אחרי מיון)
+      // — נכנס ל-if רק אם המשתמש באמת הוסיף או הסיר תחום התמחות.
+      const selected = [...((v.selectedAreasOfExpertises as number[]) ?? [])]
+        .sort((a, b) => a - b)
+        .join(',');
+      const original = [...this.regionBegin]
+        .sort((a, b) => a - b)
+        .join(',');
+
+      if (selected !== original) {
+        // התחומים השתנו — מבטלים את אישורה של המדריכה (isApproved → false).
+        this.srv_guide
+          .disapproveGuide(this.profile.guide.guideId)
+          .subscribe(() => this.dialogRef.close(true));
+      } else {
+        this.dialogRef.close(true);
+      }
     });
   }
 

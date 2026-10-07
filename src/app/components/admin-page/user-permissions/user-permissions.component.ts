@@ -43,7 +43,7 @@ export class UserPermissionsComponent implements OnDestroy {
     { key: 'editHostels', label: 'ניהול מקומות לינה', icon: 'hotel' },
     { key: 'respondInGeneralForum', label: 'הגבה בפורום כללי', icon: 'forum' },
     { key: 'respondInSafetyForum', label: 'הגבה בפורום בטיחות', icon: 'shield' },
-    { key: 'isCoordinator', label: 'רכזת פעילה', icon: 'supervisor_account' },
+    { key: 'canRate', label: 'הרשאת דירוג', icon: 'supervisor_account' },
   ];
 
   /**

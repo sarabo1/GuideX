@@ -13,6 +13,10 @@
       <button class="like-btn" (click)="toggleFavorite()" aria-label="הוספה למועדפים">
         <img class="like-img" [src]="isLiked ? 'heart_full_blue.png' : 'heart_blue.png'" />
       </button>
+      <button class="rating-btn" (click)="openRatingDialog()" aria-label="דירוגים">
+        <mat-icon>star</mat-icon>
+        <span>דירוגים</span>
+      </button>
     </div>
     } @else {
     <h3 class="add-title">הוספת אטרקציה</h3>

@@ -1,7 +1,7 @@
 .admin-page {
   direction: rtl;
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width: 1500px;
+  margin: 50px auto;
   padding: 24px 20px;
   font-family: heebo, sans-serif;
   color: #444;
@@ -46,17 +46,17 @@
 /* ── רשת הכרטיסים: 2 בעמוד ── */
 .cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
   align-items: start;
 }
 
 /* מסך צר — עמודה אחת. */
-@media (max-width: 760px) {
-  .cards {
-    grid-template-columns: 1fr;
-  }
-}
+// @media (max-width: 760px) {
+//   .cards {
+//     grid-template-columns: 1fr;
+//   }
+// }
 
 /* ── כרטיס מדריכה ── */
 .guide-card {

@@ -16,6 +16,11 @@ import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
 import { KashrutNamePipe } from "../../../Pipes/kashrutName";
 import { AuthService } from '../../../Services/auth-service.service';
+import {
+  RatingDialogComponent,
+  RatingDialogData,
+} from '../../rating/rating-dialog/rating-dialog.component';
+import { RatingEntityType } from '../../../Interfaces/int-rating';
 
 @Component({
   selector: 'app-show-hostels',
@@ -146,6 +151,16 @@ export class ShowHostelsComponent {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  /** פותח את דיאלוג הדירוגים של מקום הלינה (גנריק, לפי Hostel). */
+  openRatingDialog(): void {
+    const data: RatingDialogData = {
+      entityType: RatingEntityType.HOSTEL,
+      entityId: this.data.HostelsId,
+      entityName: this.data.HostelsName ?? undefined,
+    };
+    this.dialog.open(RatingDialogComponent, { width: '500px', data });
   }
 
   canEdit() {

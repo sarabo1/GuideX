@@ -35,13 +35,16 @@
                 getReligiousName(entry.guide.religiousId)
               }}</span>
             </div>
-            <div class="field">
-              <span class="label">אזורי התמחות:</span>
+             </div>
+            <div class="card-body">
+              <div>
+              <span class="label">אזורי התמחות: </span>
               <span class="value">{{
                 getRegionsNames(entry.guide.regionId) || 'לא צוין'
               }}</span>
+              </div>
             </div>
-          </div>
+         
 
           <!-- קורות חיים ותעודות הכשרה -->
           <div class="files-section">
@@ -133,13 +136,21 @@
                 getReligiousName(entry.guide.religiousId)
               }}</span>
             </div>
-            <div class="field">
+            <!-- <div class="field">
               <span class="label">אזורי התמחות:</span>
               <span class="value">{{
                 getRegionsNames(entry.guide.regionId) || 'לא צוין'
               }}</span>
-            </div>
+            </div> -->
           </div>
+           <div class="card-body">
+              <div>
+              <span class="label">אזורי התמחות: </span>
+              <span class="value">{{
+                getRegionsNames(entry.guide.regionId) || 'לא צוין'
+              }}</span>
+              </div>
+            </div>
 
           <!-- קורות חיים ותעודות הכשרה -->
           <div class="files-section">

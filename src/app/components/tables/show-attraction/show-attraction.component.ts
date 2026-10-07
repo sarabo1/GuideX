@@ -17,6 +17,11 @@ import { AttractionTypeNamePipe } from '../../../Pipes/attractionTypeName';
 import { regionNamePipe } from '../../../Pipes/regionName';
 import { RefreshService } from '../../../Services/RefreshService';
 import { AuthService } from '../../../Services/auth-service.service';
+import {
+  RatingDialogComponent,
+  RatingDialogData,
+} from '../../rating/rating-dialog/rating-dialog.component';
+import { RatingEntityType } from '../../../Interfaces/int-rating';
 
 @Component({
   selector: 'app-show-attraction',
@@ -162,6 +167,17 @@ export class ShowAttractionComponent {
   onClose(): void {
     this.dialogRef.close();
   }
+
+  /** פותח את דיאלוג הדירוגים של האטרקציה (גנריק, לפי Attraction). */
+  openRatingDialog(): void {
+    const data: RatingDialogData = {
+      entityType: RatingEntityType.ATTRACTION,
+      entityId: this.data.attractionId,
+      entityName: this.data.attractionsName ?? undefined,
+    };
+    this.dialog.open(RatingDialogComponent, { width: '500px', data });
+  }
+
   canEdit() {
     this.userCanEdit = true;
   }

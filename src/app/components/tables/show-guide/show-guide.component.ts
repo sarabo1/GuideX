@@ -1,12 +1,18 @@
 import { Component, Inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Int_Guide } from '../../../Interfaces/int-guide';
 import { ServiceAllService } from '../../../Services/service-all.service';
+import {
+  RatingDialogComponent,
+  RatingDialogData,
+} from '../../rating/rating-dialog/rating-dialog.component';
+import { RatingEntityType } from '../../../Interfaces/int-rating';
 
 @Component({
   selector: 'app-show-guide',
@@ -21,6 +27,7 @@ export class ShowGuideComponent {
   private religiousNames = new Map<number, string>();
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<ShowGuideComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Int_Guide,
     public srv_all: ServiceAllService,
@@ -58,6 +65,16 @@ export class ShowGuideComponent {
     }
 
     return this.religiousNames.get(religiousId) ?? 'בטעינה…';
+  }
+
+  /** פותח את דיאלוג הדירוגים של המדריכה (גנריק, לפי Guide). */
+  openRatingDialog(): void {
+    const data: RatingDialogData = {
+      entityType: RatingEntityType.GUIDE,
+      entityId: this.data.guideId,
+      entityName: this.fullName(this.data),
+    };
+    this.dialog.open(RatingDialogComponent, { width: '500px', data });
   }
 
   onClose(): void {

@@ -15,6 +15,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
 import { AuthService } from '../../../Services/auth-service.service';
+import {
+  RatingDialogComponent,
+  RatingDialogData,
+} from '../../rating/rating-dialog/rating-dialog.component';
+import { RatingEntityType } from '../../../Interfaces/int-rating';
 
 @Component({
   selector: 'app-show-walking-trail',
@@ -125,6 +130,16 @@ export class ShowWalkingTrailComponent {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  /** פותח את דיאלוג הדירוגים של מסלול ההליכה (גנריק, לפי WalkingTrail). */
+  openRatingDialog(): void {
+    const data: RatingDialogData = {
+      entityType: RatingEntityType.WALKING_TRAIL,
+      entityId: this.data.WalkingTrailId,
+      entityName: this.data.WalkingTrailName ?? undefined,
+    };
+    this.dialog.open(RatingDialogComponent, { width: '500px', data });
   }
 
   canEdit() {
