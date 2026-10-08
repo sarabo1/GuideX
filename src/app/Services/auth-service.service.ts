@@ -18,7 +18,6 @@ export class AuthService {
 
   login(token: string) {
     const decoded: any = jwtDecode(token);
- console.log("decoded: ", decoded)
 
  
     // ✅ parse את ה-Permission — זה יכול לבוא מהשרת באחד מהפורמטים:
@@ -67,7 +66,6 @@ export class AuthService {
           normalized[firstLower] = val;
         }
         permissionObj = normalized;
-        console.log('permissionObj מנורמל ל-camelCase:', permissionObj);
       }
     } else {
       console.warn('אין שדה Permissions ב-JWT! מפתחות ה-decoded:', Object.keys(decoded));
@@ -80,7 +78,6 @@ export class AuthService {
       firstName: decoded.FirstName,  // תיקנתי מ-FirstName ל-firstName
       permission : permissionObj,  // הוספתי את ההרשאות
     };
-     console.log("userObj: ", userObj)
 
 
     localStorage.setItem('token', token);        // שמירת הטוקן לשימוש עתידי

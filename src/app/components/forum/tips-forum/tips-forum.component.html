@@ -51,19 +51,8 @@
     <!-- רשימת ההודעות -->
     <div class="messages">
       @for (message of allTheMessage; track message.forumId) {
-      <div class="card" [class.reply]="isReply(message)">
-        @if (message.parentForumId) {
-        <div class="card-header">
-          <mat-icon class="rotate-90">u_turn_right</mat-icon>
-          @if(forumMessageStore.getTitleByForumId(message.parentForumId)){
-          <span class="reply-to">בתגובה ל:</span>
-          <i>{{ forumMessageStore.getTitleByForumId(message.parentForumId) }}</i>
-          } @else{
-          ______________
-          }
-        </div>
-        }
-
+      @if(!isReply(message)){
+      <div class="card">
         <div class="card-body">
           <div class="titleAndHeader">
             <h5>{{ message.title }}</h5>
@@ -73,15 +62,12 @@
                 <p>
                   {{ maskEmail(message.userEmail) }}
                 </p>
-                <!-- <p>{{message.userId }}</p> -->
-
               </div>
               <p class="marginDate">{{ message.date | hebrewDateConverter | async }}</p>
             </div>
           </div>
 
           <p class="message-text">{{ message.message }}</p>
-          <!-- <p class="message-text">{{ message.forumTypeId }}</p> -->
 
           @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
           ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
@@ -99,11 +85,62 @@
           </div>
           }
         </div>
+
+        <!-- התגובות להודעה זו — מופיעות בתוך כרטיס האב -->
+        <div class="card-replies">
+          <div class="replies-title">
+            <mat-icon>forum</mat-icon>
+            <span>תגובות</span>
+          </div>
+          @for (reply of allTheMessage; track reply.forumId) {
+          @if(isReply(reply) && reply.parentForumId == message.forumId){
+          <div class="card reply-card">
+            <div class="card-header">
+              <mat-icon class="rotate-90">u_turn_right</mat-icon>
+              @if(forumMessageStore.getTitleByForumId(reply.parentForumId)){
+              <span class="reply-to">בתגובה ל:</span>
+              <i>{{ forumMessageStore.getTitleByForumId(reply.parentForumId) }}</i>
+              } @else{
+              ______________
+              }
+            </div>
+
+            <div class="card-body">
+              <div class="titleAndHeader">
+                <h5>{{ reply.title }}</h5>
+                <div class="toDateAndUserEmail">
+                  <div class="author">
+                    <mat-icon class="person">person</mat-icon>
+                    <p>
+                      {{ maskEmail(reply.userEmail) }}
+                    </p>
+                  </div>
+                  <p class="marginDate">{{ reply.date | hebrewDateConverter | async }}</p>
+                </div>
+              </div>
+
+              <p class="message-text">{{ reply.message }}</p>
+
+              @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
+              ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+              || (forumType == 1)){
+              <div class="newPostAndGarbage">
+                <button class="garbage" (click)="DeletePost(reply.forumId)" title="מחיקת ההודעה">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+              }
+            </div>
+          </div>
+          }
+          }
+        </div>
       </div>
+      }
       }
     </div>
 
-    @if((forumType==2)
+    <!-- @if((forumType==2)
     ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
     || (forumType == 1)){
     <div class="titleOfForum">
@@ -112,6 +149,17 @@
         כתיבת הודעה חדשה
       </button>
     </div>
-    }
+    } -->
   </div>
+
+  <!-- כפתור צף ליצירת הודעה חדשה — תמיד בפינה הימנית התחתונה של המסך -->
+  @if((forumType==2)
+  ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+  || (forumType == 1)){
+  <button class="fab aadMessage" (click)="openDialogAddMessage(0, forumType)"
+    title="כתיבת הודעה חדשה">
+    <mat-icon>edit</mat-icon>
+    <span>הודעה חדשה</span>
+  </button>
+  }
 </div>

@@ -94,14 +94,14 @@ export class ResetPasswordComponent {
       if (request?.subscribe) {
         request.subscribe(
           (response: any) => {
-            console.log('User found:', response);
-
             if (response) {
-              this.findUserInList = true; // משתמש נמצא
-              this.findUser = response; // שמור את התגובה
-            } else {
+              console.log('User found: 111111: ', response);
               this.notExistsUser = true; // משתמש לא נמצא
               this.findUser = null;
+            } else {
+              this.findUserInList = true; // משתמש נמצא
+              this.findUser = response; // שמור את התגובה
+              this.findUser = true;
             }
           },
           (error: unknown) => {
@@ -132,6 +132,7 @@ export class ResetPasswordComponent {
 
 resetUserPassword() {
     if (this.findUser) {
+      console.log('User found: asdsfadsf: ', this.findUser);
         const userEmail = this.findUser.email;
         const userId = this.findUser.userId;
         const userPassword = this.ResetPassword.get('UserPassword')?.value; 

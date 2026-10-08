@@ -10,11 +10,13 @@ export class HebrewDateConverterPipe implements PipeTransform {
 
   constructor(private http: HttpClient) {}
 
-  transform(date: Date): Observable<string> {
+  transform(date: string | Date): Observable<string> {
+     // המרה מותנית: אם התקבלה מחרוזת - ממירים ל-Date, אחרת שומרים את ה-Date המקורי
+       const d = date instanceof Date ? date : new Date(date);
      // המרת תאריך לפורמט YYYY-MM-DD
-       const year = date.getFullYear();
-       const month = String(date.getMonth() + 1).padStart(2, '0'); // מתקן את החודש מאינדקס 0
-       const day = String(date.getDate()).padStart(2, '0');
+       const year = d.getFullYear();
+       const month = String(d.getMonth() + 1).padStart(2, '0'); // מתקן את החודש מאינדקס 0
+       const day = String(d.getDate()).padStart(2, '0');
        const formattedDate = `${year}-${month}-${day}`;
     const url = `https://www.hebcal.com/converter?cfg=json&date=${formattedDate}&g2h=1&strict=1`;
     return this.http.get<any>(url).pipe(

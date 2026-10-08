@@ -33,9 +33,7 @@ export class ShowWalkingTrailComponent {
   isLiked: boolean = false;
   isAddNew = false;
 
-  /** תמונות שכבר נשמרו בשרת עבור מסלול ההליכה (לתצוגה ולמחיקה). */
   images: Int_WalkingTrailFile[] = [];
-  /** קבצי תמונה שנבחרו אך טרם הועלו (למסלול חדש שעדיין אין לו ID). */
   pendingImages: File[] = [];
 
   userDetails: any = JSON.parse(localStorage.getItem('user_data') || '{}');
@@ -96,8 +94,7 @@ export class ShowWalkingTrailComponent {
       );
     }
 
-    // טעינת התמונות של המסלול שנפתח — שליפה לפי ה-ID שלו מהשרת.
-    // (רק אם הוא כבר שמור בשרת; למסלול חדש עדיין אין ID).
+   
     if (this.data?.WalkingTrailId && this.data.WalkingTrailId > 0) {
       this.walkingTrails.GetImages(this.data.WalkingTrailId).subscribe((imgs) => {
         this.images = imgs ?? [];
@@ -132,7 +129,6 @@ export class ShowWalkingTrailComponent {
     this.dialogRef.close();
   }
 
-  /** פותח את דיאלוג הדירוגים של מסלול ההליכה (גנריק, לפי WalkingTrail). */
   openRatingDialog(): void {
     const data: RatingDialogData = {
       entityType: RatingEntityType.WALKING_TRAIL,
@@ -146,39 +142,31 @@ export class ShowWalkingTrailComponent {
     this.userCanEdit = true;
   }
 
-  // ─────────── תמונות ───────────
 
-  /** כתובת התמונה הפתוחה בתצוגה גדולה (null = פתוחה אין). */
   previewImageUrl: string | null = null;
 
-  /** פותח את התמונה בתצוגה גדולה (lightbox). */
   openImagePreview(url: string) {
     this.previewImageUrl = url;
   }
 
-  /** סוגר את תצוגת התמונה הגדולה. */
   closeImagePreview() {
     this.previewImageUrl = null;
   }
 
-  /** כתובת URL לתצוגת תמונה שמורה לפי ה-FileId שלה בשרת. */
   imageUrl(fileId: number): string {
     return this.walkingTrails.ImageUrl(fileId);
   }
 
-  /** כתובת URL זמנית לתצוגת קובץ מקומי שנבחר (טרם הועלה). */
   pendingImageUrl(file: File): string {
     return URL.createObjectURL(file);
   }
 
-  /** בחירת קבצי תמונה חדשים. */
   onImagesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
     const files = Array.from(input.files);
 
-    // מסלול קיים — מעלים מיד לשרת.
     if (this.data?.WalkingTrailId && this.data.WalkingTrailId > 0) {
       this.walkingTrails.AddImages(this.data.WalkingTrailId, files).subscribe(
         (imgs) => {
@@ -186,27 +174,22 @@ export class ShowWalkingTrailComponent {
         },
       );
     } else {
-      // מסלול חדש (אין עדיין ID) — שומרים את הקבצים להעלאה אחרי השמירה.
       this.pendingImages.push(...files);
     }
 
-    // איפוס שדה הבחירה כדי שאפשר יהיה לבחור שוב את אותו קובץ.
     input.value = '';
   }
 
-  /** מחיקת קובץ חדש שטרם הועלה (למסלול חדש). */
   removePendingImage(index: number) {
     this.pendingImages.splice(index, 1);
   }
 
-  /** מחיקת תמונה שמורה מהשרת ומהתצוגה. */
   deleteImage(fileId: number, index: number) {
     this.walkingTrails.DeleteImage(fileId).subscribe(() => {
       this.images.splice(index, 1);
     });
   }
 
-  /** מעלה את הקבצים שנבחרו למסלול חדש, אחרי שזה נשמר (יש כבר ID). */
   uploadPendingImages(newTrailId: number) {
     if (!this.pendingImages.length) return;
     const files = [...this.pendingImages];
@@ -236,20 +219,17 @@ export class ShowWalkingTrailComponent {
     this.data.SeasonWinter = seasons[1].checked;
     this.data.SeasonSpring = seasons[2].checked;
     this.data.SeasonAutumn = seasons[3].checked;
-    // שמירה של הערכים מה-inputים אל האובייקט data
     this.data.WalkingTrailName = (
       document.getElementById('WalkingTrailName') as HTMLInputElement
     ).value;
     this.data.Description = (
       document.getElementById('Description') as HTMLInputElement
     ).value;
-    // this.data.regionId = Number(
-    //   (document.getElementById('regionId') as HTMLInputElement).value,
-    // );
+   
     this.data.regionId = this.data.regionId;
-    this.data.Difficulty = Number(
-      (document.getElementById('Difficulty') as HTMLInputElement).value,
-    );
+  
+         this.data.Difficulty = this.data.Difficulty,
+
     this.data.MinAge = Number(
       (document.getElementById('MinAge') as HTMLInputElement).value,
     );
@@ -262,9 +242,7 @@ export class ShowWalkingTrailComponent {
       (this.data.LengthInKm = Number(
         (document.getElementById('LengthInKm') as HTMLInputElement).value,
       )),
-      // (this.data.RouteDuration = Number(
-      //   (document.getElementById('RouteDuration') as HTMLInputElement).value,
-      // )));
+    
      this.data.RouteDuration = this.data.RouteDuration,
 
     this.data.IsWet = (
@@ -281,14 +259,7 @@ export class ShowWalkingTrailComponent {
     this.data.MaxAge = Number(this.data.MaxAge) || 0;
     this.data.LengthInKm = Number(this.data.LengthInKm) || 0;
     this.data.RouteDuration = Number(this.data.RouteDuration) || 0;
-    // this.data.SeasonAutumn = this
-    //     this.data.SeasonSpring = this.data.SeasonSpring;
-    // this.data.SeasonSummer = this.data.SeasonSummer;
-    // this.data.SeasonWinter = this.data.SeasonWinter;
-
-
-    console.log('data walking trail: ', this.data);
-
+   
     if (this.isAddNew) {
       if (
         this.data.WalkingTrailName.trim() == '' ||

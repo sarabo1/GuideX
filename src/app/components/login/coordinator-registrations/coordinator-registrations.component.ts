@@ -223,14 +223,9 @@ export class CoordinatorRegistrationsComponent {
           console.log('User found:', response);
 
           if (response) {
-            const userObj = {
-              token: response.token // אם הטוקן הגיע כאן בתגובה
-            };
-            console.log("הני: ", userObj);
-            localStorage.setItem('user_data', JSON.stringify(userObj));
-
-            // שמור גם ב-AuthService
-            this.authService.login(userObj.token);
+            // מפענח את ה-JWT ושומר את מלא פרטי המשתמש
+            // (firstName, userId, email, permission) ב-LOCAL STORAGE
+            this.authService.login(response.token);
 
 
             this.router.navigate(['welcome/Home_Page']);
@@ -246,9 +241,8 @@ export class CoordinatorRegistrationsComponent {
       );
       this.formCoordinator.reset();
       this.dialogRef.close();
-      this.router.navigate(['welcome/Home_Page']);
     });
-       
+
     } else {
       console.error('טופס לא תקין:', this.formCoordinator.errors);
     }

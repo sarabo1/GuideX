@@ -51,14 +51,12 @@
       } @else {
         <section id="cat-attractions" class="category">
           <h4>
-            <span>אטרקציות ({{ filteredAttractions.length }})</span>
-            <!-- <a class="go-to" (click)="jumpTo('cat-attractions')" title="קפיצה למדור האטרקציות">
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </a> -->
+            <span><mat-icon class="cat-icon">place</mat-icon> אטרקציות ({{ filteredAttractions.length }})</span>
           </h4>
           @if (filteredAttractions.length === 0) {
             <p class="empty">אין אטרקציות שידועות לנו באזורים שנבחרו</p>
           }
+          <div class="results-list">
           @for (a of filteredAttractions; track a.attractionId) {
             <div class="row">
               <span class="name">{{ a.attractionsName }}</span>
@@ -74,18 +72,17 @@
               </span>
             </div>
           }
+          </div>
         </section>
 
         <section id="cat-hostels" class="category">
           <h4>
-            <span>מקומות לינה ({{ filteredHostels.length }})</span>
-            <!-- <a class="go-to" (click)="jumpTo('cat-hostels')" title="קפיצה למדור מקומות הלינה">
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </a> -->
+            <span><mat-icon class="cat-icon">hotel</mat-icon> מקומות לינה ({{ filteredHostels.length }})</span>
           </h4>
           @if (filteredHostels.length === 0) {
             <p class="empty">אין מקומות לינה שידועים לנו באזורים שנבחרו</p>
           }
+          <div class="results-list">
           @for (h of filteredHostels; track h.HostelsId) {
             <div class="row">
               <span class="name">{{ h.HostelsName }}</span>
@@ -97,18 +94,17 @@
               </span>
             </div>
           }
+          </div>
         </section>
 
         <section id="cat-trails" class="category">
           <h4>
-            <span>מסלולי הליכה ({{ filteredTrails.length }})</span>
-            <!-- <a class="go-to" (click)="jumpTo('cat-trails')" title="קפיצה למדור מסלולי ההליכה">
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </a> -->
+            <span><mat-icon class="cat-icon">directions_walk</mat-icon> מסלולי הליכה ({{ filteredTrails.length }})</span>
           </h4>
           @if (filteredTrails.length === 0) {
             <p class="empty">אין מסלולי הליכה שידועים לנו באזורים שנבחרו</p>
           }
+          <div class="results-list">
           @for (t of filteredTrails; track t.WalkingTrailId) {
             <div class="row">
               <span class="name">{{ t.WalkingTrailName }}</span>
@@ -120,18 +116,17 @@
               </span>
             </div>
           }
+          </div>
         </section>
 
         <section id="cat-guides" class="category">
           <h4>
-            <span>מדריכות ({{ filteredGuides.length }})</span>
-            <!-- <a class="go-to" (click)="jumpTo('cat-guides')" title="קפיצה למדור המדריכות">
-              <mat-icon>keyboard_arrow_down</mat-icon>
-            </a> -->
+            <span><mat-icon class="cat-icon">person</mat-icon> מדריכות ({{ filteredGuides.length }})</span>
           </h4>
           @if (filteredGuides.length === 0) {
             <p class="empty">אין מדריכות שידועות לנו באזורים שנבחרו</p>
           }
+          <div class="results-list">
           @for (g of filteredGuides; track g.guideId) {
             <div class="row">
               <span class="name">{{ g.firstName }} {{ g.lastName }}</span>
@@ -143,6 +138,7 @@
               </span>
             </div>
           }
+          </div>
         </section>
       }
     </div>

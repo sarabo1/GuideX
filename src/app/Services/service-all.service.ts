@@ -61,7 +61,6 @@ getReligiousName(religiousId: number): Observable<string | undefined> {
 
 
      return this.http.get<any>(baseUrl).pipe(
-      tap((data: any) => console.log('סוגי האזורים: ', data)), 
     );
 
     

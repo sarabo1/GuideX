@@ -133,24 +133,24 @@ export class AttractionsComponent implements AfterViewInit {
     return item?.regionName ?? '';
   }
 
-  // אתחול לייקים מהשרת (mock)
+  // אתחול לייקים מהשרת (DB)
   initLikedState() {
     const userId = this.userDetails?.userId;
 
     if (!userId) return;
 
-    const favs = this.srv_favorite.getFavoriteByUserId(userId);
-
-    favs.forEach((f) => {
-      if (f.AttractionsId) {
-        this.isLiked[this.getKey('attraction', f.AttractionsId)] = true;
-      }
-      if (f.HostelsId) {
-        this.isLiked[this.getKey('hostel', f.HostelsId)] = true;
-      }
-      if (f.WalkingTrailId) {
-        this.isLiked[this.getKey('trail', f.WalkingTrailId)] = true;
-      }
+    this.srv_favorite.getFavoritesByUserId(userId).subscribe((favs) => {
+      favs.forEach((f) => {
+        if (f.attractionsId) {
+          this.isLiked[this.getKey('attraction', f.attractionsId)] = true;
+        }
+        if (f.hostelsId) {
+          this.isLiked[this.getKey('hostel', f.hostelsId)] = true;
+        }
+        if (f.walkingTrailId) {
+          this.isLiked[this.getKey('trail', f.walkingTrailId)] = true;
+        }
+      });
     });
   }
 

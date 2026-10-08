@@ -38,7 +38,7 @@
                   </ng-container>
                 </span>
                 @if (r.date) {
-                  <span class="date">{{ r.date | hebrewDateConverter }}</span>
+                  <span class="date">{{ r.date | hebrewDateConverter | async }}</span>
                 }
               </div>
               @if (r.note) {

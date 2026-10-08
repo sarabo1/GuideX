@@ -184,20 +184,82 @@ div:has(> .icon-background) {
     margin: 2rem 0;
   }
 
-  // תגובה: מוזחת פנימה מצד ימין
-  .card.reply {
-    margin-right: 2.5rem;
-    background-color: #fdfcff;
-    border-color: #eee8fb;
-    box-shadow:
-      0 2px 6px -2px rgba(95, 22, 235, 0.06),
-      0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  // ── שרשור התגובות בתוך כרטיס ההודעה הראשית ─────────────
+  // מופרד מההודעה הראשית בגבול צדדי רך + רקע עדין, בלי "קופסה בתוך קופסה"
+  .card-replies {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    // כותרת קבוצתית עדינה שמבהירה שזו יחידת שרשור
+    .replies-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.6rem;
+      color: $text-muted;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-top: 1px dashed $border-purple-2;
+      border-bottom: 1px dashed $border-purple-2;
+      background: linear-gradient(180deg, transparent, $soft-bg);
+
+      mat-icon {
+        font-size: 1.05rem;
+        width: auto;
+        height: auto;
+        color: $primary;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  // תגובה בודדת — שורה רציפה בתוך השרשור, עם גבול צדדי שמסמן "חוט שיחה"
+  .card.reply-card {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    // קו צדדי שמדגיש את זרם השיחה
+    border-right: 3px solid $border-purple-2;
+    margin-right: 0.5rem;
 
     &:hover {
-      box-shadow:
-        0 8px 16px -6px rgba(95, 22, 235, 0.12),
-        0 2px 6px -3px rgba(0, 0, 0, 0.04);
-      transform: translateY(-1px);
+      border-right-color: $primary;
+      background-color: $soft-bg-3;
+      box-shadow: none;
+      transform: none;
+    }
+
+    // שורת "בתגובה ל:" — מוטעמת כדי לזהות שזו הודעת בת
+    .card-header {
+      background-color: transparent;
+      padding: 0.7rem 1.4rem 0;
+      border-bottom: none;
+
+      .reply-to {
+        color: $primary;
+        font-weight: 600;
+      }
+    }
+
+    .card-body {
+      padding: 0.4rem 1.4rem 1.1rem;
+
+      .titleAndHeader {
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.8rem;
+        border-bottom-color: $soft-bg;
+
+        h5 {
+          font-size: 1.02rem;
+        }
+      }
+
+      .message-text {
+        margin-bottom: 0.9rem;
+        font-size: 0.95rem;
+      }
     }
   }
 
@@ -383,5 +445,53 @@ div:has(> .icon-background) {
     flex-direction: row-reverse
 
 
+  }
+}
+
+// ── כפתור צף ליצירת הודעה חדשה ─────────────────────
+// קבוע בפינה הימנית התחתונה של המסך, מעל כל התוכן
+.fab {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1000;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  background: $primary;
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: heebo, sans-serif;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    0 8px 20px -4px rgba(95, 22, 235, 0.5),
+    0 4px 8px -4px rgba(0, 0, 0, 0.25);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  mat-icon {
+    font-size: 1.2rem;
+    width: auto;
+    height: auto;
+  }
+
+  &:hover {
+    background: $primary-hover;
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 26px -6px rgba(95, 22, 235, 0.55),
+      0 6px 10px -6px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow:
+      0 4px 10px -4px rgba(95, 22, 235, 0.45),
+      0 2px 4px -2px rgba(0, 0, 0, 0.2);
   }
 }

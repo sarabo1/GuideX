@@ -12,6 +12,7 @@ import { ShowHostelsComponent } from '../tables/show-hostels/show-hostels.compon
 import { Int_Hostels } from '../../Interfaces/Int_Hostels';
 import { ShowWalkingTrailComponent } from '../tables/show-walking-trail/show-walking-trail.component';
 import { Int_WalkingTrail } from '../../Interfaces/Int_WalkingTrail';
+import { int_Favorite } from '../../Interfaces/int_Favorite';
 
 @Component({
   selector: 'app-fevorite',
@@ -21,14 +22,13 @@ import { Int_WalkingTrail } from '../../Interfaces/Int_WalkingTrail';
   styleUrl: './fevorite.component.scss',
 })
 export class FevoriteComponent {
+  /** הרשימה שמגיעה מהשרת (כולל שמות הפריטים). */
+  allTheFavorite: int_Favorite[] = [];
+
+  /** מצב הלב של כל מועדף — true = מסומן. */
   isLiked: boolean[] = [];
+
   userDetails: any;
-
-  allTheFavorite: any[] = [];
-
-  numberId: number[] = [];
-
-  typeName: ('attraction' | 'hostel' | 'trail')[] = [];
 
   constructor(
     public authService: AuthService,
@@ -39,16 +39,18 @@ export class FevoriteComponent {
     public dialog: MatDialog,
   ) {
     this.userDetails = this.authService.getUserData();
+    const userId = Number(this.userDetails?.userId);
 
-    this.allTheFavorite = this.srv_favorite.getFavoriteByUserId(
-      this.userDetails.userId,
-    );
-
-    this.setData();
+    if (userId) {
+      this.srv_favorite.getFavoritesByUserId(userId).subscribe((favorites) => {
+        this.allTheFavorite = favorites;
+        this.isLiked = favorites.map(() => true);
+      });
+    }
   }
 
   openDialogShowAttraction(element: int_Attractions) {
-    console.log("אטרקציה")
+    console.log('אטרקציה');
     this.dialog.open(ShowAttractionComponent, {
       width: '850px',
       data: element,
@@ -56,8 +58,7 @@ export class FevoriteComponent {
   }
 
   openDialogShowHostels(element: Int_Hostels) {
-        console.log("מקום לינה")
-
+    console.log('מקום לינה');
     this.dialog.open(ShowHostelsComponent, {
       width: '850px',
       data: element,
@@ -65,46 +66,66 @@ export class FevoriteComponent {
   }
 
   openDialogWalkingTrail(element: Int_WalkingTrail) {
-        console.log("מסלול הליכה")
-
+    console.log('מסלול הליכה');
     this.dialog.open(ShowWalkingTrailComponent, {
       width: '850px',
       data: element,
     });
   }
 
-  setData() {
-    this.allTheFavorite.forEach((item) => {
-      this.isLiked.push(true);
-
-      if (item.attractionId != null) {
-        this.numberId.push(item.attractionId);
-        this.typeName.push('attraction');
-      } else if (item.HostelsId != null) {
-        this.numberId.push(item.HostelsId);
-        this.typeName.push('hostel');
-      } else if (item.WalkingTrailId != null) {
-        this.numberId.push(item.WalkingTrailId);
-        this.typeName.push('trail');
-      }
-    });
+  
+  openDialogForItem(item: int_Favorite) {
+    if (item.itemType === 'attraction' && item.attractionsId != null) {
+      this.srv_attractions.GetAttractions().subscribe((list) => {
+        const found = list.find((a) => a.attractionId === item.attractionsId);
+        if (found) this.openDialogShowAttraction(found);
+      });
+    } else if (item.itemType === 'hostel' && item.hostelsId != null) {
+      this.srv_hostels.GetHostels().subscribe((list) => {
+        const found = list.find((h) => h.HostelsId === item.hostelsId);
+        if (found) this.openDialogShowHostels(found);
+      });
+    } else if (item.itemType === 'trail' && item.walkingTrailId != null) {
+      this.srv_walkingTrail.GetWalkingTrails().subscribe((list) => {
+        const found = list.find(
+          (t) => t.WalkingTrailId === item.walkingTrailId,
+        );
+        if (found) this.openDialogWalkingTrail(found);
+      });
+    }
   }
 
-  changeLikeStatus(item: any) {
+  /** מוריד/מוסיף מועדף לפי מצב הלב. */
+  changeLikeStatus(item: int_Favorite) {
     const index = this.allTheFavorite.indexOf(item);
-console.log("vvvv")
+    const userId = Number(this.userDetails?.userId);
+
+    const type: 'attraction' | 'hostel' | 'trail' | null =
+      item.itemType === 'attraction' || item.itemType === 'hostel' || item.itemType === 'trail'
+        ? item.itemType
+        : null;
+
+    if (!type) return;
+
+    const id =
+      type === 'attraction'
+        ? item.attractionsId
+        : type === 'hostel'
+          ? item.hostelsId
+          : item.walkingTrailId;
+
+    if (id == null) return;
+
     if (this.isLiked[index]) {
-      this.srv_favorite.removeByFavoriteId(item.FavoriteId);
-
-      this.isLiked[index] = false;
+      // מסירים מהשרת (לפי ה-favoriteId — בטוח יותר).
+      this.srv_favorite.removeByFavoriteId(item.favoriteId);
     } else {
-      this.srv_favorite.addFavorite(
-        this.userDetails.userId,
-        this.numberId[index],
-        this.typeName[index],
-      );
-
-      this.isLiked[index] = true;
+      // מוסיפים.
+      this.srv_favorite.addFavorite(userId, id, type);
     }
+
+    this.isLiked[index] = !this.isLiked[index];
+    // עדכון התייחסות כדי ש-render יראה את השינוי (אם צריך).
+    this.allTheFavorite = [...this.allTheFavorite];
   }
 }

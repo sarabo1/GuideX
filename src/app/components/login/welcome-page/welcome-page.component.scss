@@ -26,7 +26,13 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(16, 100, 210, 0.58); /* כחול עם שקיפות */
+  /* שכבת כחול משופעת עם שקיפות רכה — במקום צבע אחיד */
+  background: linear-gradient(
+    160deg,
+    rgba(16, 100, 210, 0.72) 0%,
+    rgba(16, 100, 210, 0.55) 55%,
+    rgba(0, 74, 173, 0.68) 100%
+  );
   z-index: 1;
 }
 
@@ -38,13 +44,14 @@
   align-items: stretch; /* גובה שווה לשני הכפתורים */
   justify-content: center;
   gap: 16px;
-  max-width: 520px;
+  max-width: 540px;
   width: 100%;
 }
 
 .logo_dark {
   position: relative;
   z-index: 2;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
 }
 
 .logo {
@@ -62,22 +69,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 12px 28px;
+  gap: 8px;
+  padding: 14px 30px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 50px; /* כפתורים קפסוליים ומודרניים */
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   background-color: #ff5c67;
   color: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgba(255, 92, 103, 0.35);
 }
 
 .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 92, 103, 0.45);
 }
 
 .mat-icon-btn {
@@ -88,21 +96,21 @@
 /* הכפתורים במסך הפתיחה — אחידים ושווי רוחב */
 .container .btn {
   flex: 1 1 auto;
-  min-width: 200px;
+  min-width: 210px;
 }
 
 /* הכפתור השני — "אנחנו כבר מכירות!" */
 .container .btn:nth-child(2) {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.92);
   color: #004aad;
   border: 2px solid #ffffff;
-  box-shadow: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .container .btn:nth-child(2):hover {
   background-color: #ffffff;
   color: #004aad;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
 }
 
 /* ---------- טקסט הפתיחה ---------- */
@@ -114,9 +122,48 @@
   line-height: 1.8;
   margin: 60px auto 20px;
   padding: 0 20px;
+  position: relative;
+}
+
+/* קווי-עיטור עדינים מסביב לטקסט הפתיחה */
+.welcome-text::before,
+.welcome-text::after {
+  content: "";
+  display: inline-block;
+  width: 48px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff5c67, #004aad);
+  vertical-align: middle;
+  margin: 0 14px 6px;
 }
 
 /* ---------- מדור עדויות ---------- */
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 40px auto 16px;
+}
+
+.heading-icon {
+  width: 46px;
+  height: 46px;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: linear-gradient(135deg, #004aad, #0f6fdb);
+  box-shadow: 0 6px 16px rgba(0, 74, 173, 0.35);
+}
+
+.heading-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #004aad;
+}
+
 .messages {
   margin: 24px 0 10px;
 }
@@ -129,9 +176,10 @@
 }
 
 .message-container p {
-  background-color: #f9f9f9; /* כפי שהיה בכרטיסים המקוריים */
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 74, 173, 0.12);
+  border: 1px solid rgba(0, 74, 173, 0.08);
   padding: 26px 44px;
   max-width: 780px;
   font-size: 19px;
@@ -154,13 +202,15 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 20px;
   max-width: 1180px;
   margin: 50px auto 40px;
   padding: 36px 20px;
-  background-color: #f9f9f9; /* אותו רקע כמו הכרטיסים הקיימים */
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  /* רקע בגרדיאנט עדין מעניין יותר */
+  background: linear-gradient(135deg, #f0f5ff 0%, #f9f9f9 60%, #fff5f6 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 74, 173, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .stat-item {
@@ -168,12 +218,24 @@
   flex-direction: column;
   align-items: center;
   flex: 1 1 160px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .stat-number {
   font-size: 40px;
   font-weight: 800;
-  color: #004aad;
+  /* מספר עם הדרגת צבע עדינה */
+  background: linear-gradient(135deg, #004aad, #0f6fdb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   line-height: 1.1;
 }
 
@@ -181,6 +243,7 @@
   font-size: 16px;
   color: #555;
   margin-top: 6px;
+  font-weight: 500;
 }
 
 /* ---------- כרטיסים / יתרונות ---------- */
@@ -196,22 +259,23 @@
 .card {
   flex: 1 1 240px; /* מכוון רוחב בסיסי וסביר */
   max-width: 300px;
-  background-color: #f9f9f9; /* צבע רקע לכרטיס */
-  border-radius: 12px; /* פינות מעוגלות */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* הצללה */
-  padding: 28px 24px;
-  transition: transform 0.3s; /* אנימציה בכניסה */
+  background-color: #ffffff;
+  border-radius: 18px; /* פינות מעוגלות יותר */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 74, 173, 0.06);
+  padding: 30px 24px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 74, 173, 0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0, 74, 173, 0.18);
 }
 
 .card h2 {
   color: #004aad; /* צבע כותרת */
   font-size: 20px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .card p {
@@ -222,10 +286,12 @@
 }
 
 .picCard {
-  max-height: 52px;
-  max-width: 52px;
+  max-height: 56px;
+  max-width: 56px;
   object-fit: contain;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  /* עיגול עדין ומסגרת דרך סמנת פילטר רך */
+  filter: drop-shadow(0 4px 8px rgba(0, 74, 173, 0.18));
 }
 
 /* ---------- מדור "איך זה עובד" ---------- */
@@ -259,16 +325,17 @@
   position: relative;
   flex: 1 1 210px;
   max-width: 260px;
-  background-color: #f9f9f9; /* אותו רקע כמו הכרטיסים הקיימים */
-  border-radius: 12px;
-  padding: 30px 22px 24px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 34px 22px 26px;
+  border: 1px solid rgba(0, 74, 173, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .step:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 74, 173, 0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0, 74, 173, 0.18);
 }
 
 .step-number {
@@ -276,25 +343,27 @@
   top: -16px;
   right: 50%;
   transform: translateX(50%);
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background-color: #ff5c67;
+  /* עיגול עם הדרגה */
+  background: linear-gradient(135deg, #ff5c67, #ff7a83);
   color: #ffffff;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 14px rgba(255, 92, 103, 0.4);
 }
 
 .step-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
+  font-size: 44px;
+  width: 44px;
+  height: 44px;
   color: #004aad;
-  margin: 12px 0 8px;
+  margin: 14px 0 8px;
+  filter: drop-shadow(0 3px 6px rgba(0, 74, 173, 0.2));
 }
 
 .step h3 {
@@ -313,10 +382,12 @@
 .cta-section {
   max-width: 1100px;
   margin: 50px auto 80px;
-  padding: 40px 20px;
-  background-color: #f9f9f9; /* אותו רקע כמו הכרטיסים הקיימים */
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 46px 20px;
+  /* רקע CTA בגרדיאנט עדין ומושך */
+  background: linear-gradient(135deg, #f0f5ff 0%, #f9f9f9 55%, #fff5f6 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 74, 173, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .cta-section h2 {
@@ -330,24 +401,24 @@
   font-size: 16px;
   color: #555;
   max-width: 640px;
-  margin: 0 auto 24px;
+  margin: 0 auto 26px;
   line-height: 1.7;
 }
 
 .cta-btn {
   font-size: 16px;
-  padding: 12px 28px;
+  padding: 14px 32px;
   background-color: #ff5c67; /* אותו ורוד כמו כפתורי הרשמה */
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 50px;
   font-weight: 700;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgba(255, 92, 103, 0.35);
 }
 
 .cta-btn:hover {
   color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255, 92, 103, 0.45);
 }
 
 /* ---------- אנימציות ---------- */
@@ -377,6 +448,12 @@
   .welcome-text {
     font-size: 18px;
     margin: 44px auto 20px;
+  }
+
+  /* מוסיפים את העיטורים גם במובייל — קטנים יותר */
+  .welcome-text::before,
+  .welcome-text::after {
+    width: 26px;
   }
 
   .btn {

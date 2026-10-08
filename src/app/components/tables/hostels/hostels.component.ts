@@ -165,18 +165,18 @@ export class HostelsComponent implements AfterViewInit {
     const userId = this.userDetails?.userId;
     if (!userId) return;
 
-    const favs = this.srv_favorite.getFavoriteByUserId(userId);
-
-    favs.forEach((f) => {
-      if (f.HostelsId) {
-        this.isLiked[this.getKey('hostel', f.HostelsId)] = true;
-      }
-      if (f.AttractionsId) {
-        this.isLiked[this.getKey('attraction', f.AttractionsId)] = true;
-      }
-      if (f.WalkingTrailId) {
-        this.isLiked[this.getKey('trail', f.WalkingTrailId)] = true;
-      }
+    this.srv_favorite.getFavoritesByUserId(userId).subscribe((favs) => {
+      favs.forEach((f) => {
+        if (f.hostelsId) {
+          this.isLiked[this.getKey('hostel', f.hostelsId)] = true;
+        }
+        if (f.attractionsId) {
+          this.isLiked[this.getKey('attraction', f.attractionsId)] = true;
+        }
+        if (f.walkingTrailId) {
+          this.isLiked[this.getKey('trail', f.walkingTrailId)] = true;
+        }
+      });
     });
   }
 
@@ -261,22 +261,6 @@ export class HostelsComponent implements AfterViewInit {
       width: '850px',
       data: element,
     });
-  }
-
-  sortByPlaces: boolean = false;
-
-  sortByNumOFPlaces() {
-    this.sortByPlaces = !this.sortByPlaces;
-
-    if (!this.dataSource?.data) return [];
-
-    this.dataSource.data = this.dataSource.data.sort((a, b) =>
-      this.sortByPlaces
-        ? b.NumberOfPlaces - a.NumberOfPlaces
-        : a.NumberOfPlaces - b.NumberOfPlaces,
-    );
-
-    return this.dataSource;
   }
 
   ToShowSearch() {

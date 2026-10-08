@@ -2,9 +2,14 @@
 <div class="container mt-4">
   <br/><br/>
   <h5 class="display-6 text-center mb-4">המועדפים שלי</h5>
-<br/>
+  <br/>
+
+  @if (allTheFavorite.length === 0) {
+    <p class="text-center text-muted">אין עדיין מועדפים.</p>
+  }
+
   <div class="row">
-    @for (item of allTheFavorite; track $index) {
+    @for (item of allTheFavorite; track item.favoriteId) {
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
@@ -13,56 +18,32 @@
                 <img
                   class="img_like"
                   [src]="
-                    isLiked[allTheFavorite.indexOf(item)]
+                    isLiked[$index]
                       ? 'heart_full_rose.png'
                       : 'heart_blue.png'
                   "
                 />
               </button>
             </div>
-            <div class="details">
-              <!-- {{ item | json  }} -->
-              @if (item.AttractionsId != undefined) {
-                
-                @let attraction =
-                  srv_attractions.getAttractionById(item.AttractionsId);
-                
-                <h6
-                  class="card-title showDetails"
-                  (click)="attraction && openDialogShowAttraction(attraction)"
-                >
-                  אטרקציה:
-                  {{ attraction?.attractionsName }}
-                </h6>
-              }
-              <!-- הצגת שם ההוסטל -->
-              @if (item.HostelsId != undefined) {
-                @let hostel = srv_hostels.getHostelById(item.HostelsId);
-                <h6
-                  class="card-title showDetails"
-                  (click)="hostel && openDialogShowHostels(hostel)"
-                >
-                  אכסניית:
-                  {{ hostel?.HostelsName }}
-                </h6>
-              }
-
-              <!-- הצגת שם המסלול -->
-              @if (item.WalkingTrailId != undefined) {
-                @let walkingTrail =
-                  srv_walkingTrail.getWalkingTrailById(item.WalkingTrailId);
-                <h6
-                  class="card-text showDetails"
-                  (click)="walkingTrail && openDialogWalkingTrail(walkingTrail)"
-                >
-                  מסלול:
-                  {{
-                    this.srv_walkingTrail.getWalkingTrailById(
-                      item.WalkingTrailId
-                    )?.WalkingTrailName
-                  }}
-                </h6>
-              }
+            <div class="details" (click)="openDialogForItem(item)">
+              <h6
+                class="card-title showDetails"
+              >
+                @switch (item.itemType) {
+                  @case ('attraction') {
+                    אטרקציה: {{ item.itemName }}
+                  }
+                  @case ('hostel') {
+                    אכסניית: {{ item.itemName }}
+                  }
+                  @case ('trail') {
+                    מסלול: {{ item.itemName }}
+                  }
+                  @default {
+                    {{ item.itemName }}
+                  }
+                }
+              </h6>
             </div>
           </div>
         </div>

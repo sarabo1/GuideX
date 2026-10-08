@@ -114,18 +114,18 @@ export class WalkingTrailComponent implements AfterViewInit {
     const userId = this.userDetails?.userId;
     if (!userId) return;
 
-    const favs = this.srv_favorite.getFavoriteByUserId(userId);
-
-    favs.forEach((f) => {
-      if (f.WalkingTrailId) {
-        this.isLiked[this.getKey('trail', f.WalkingTrailId)] = true;
-      }
-      if (f.HostelsId) {
-        this.isLiked[this.getKey('hostel', f.HostelsId)] = true;
-      }
-      if (f.AttractionsId) {
-        this.isLiked[this.getKey('attraction', f.AttractionsId)] = true;
-      }
+    this.srv_favorite.getFavoritesByUserId(userId).subscribe((favs) => {
+      favs.forEach((f) => {
+        if (f.walkingTrailId) {
+          this.isLiked[this.getKey('trail', f.walkingTrailId)] = true;
+        }
+        if (f.hostelsId) {
+          this.isLiked[this.getKey('hostel', f.hostelsId)] = true;
+        }
+        if (f.attractionsId) {
+          this.isLiked[this.getKey('attraction', f.attractionsId)] = true;
+        }
+      });
     });
   }
 
@@ -133,7 +133,6 @@ export class WalkingTrailComponent implements AfterViewInit {
     this.isLoading = true;
     this.walkingTrail.GetWalkingTrails().subscribe({
       next: (rawData: Int_WalkingTrail[]) => {
-        console.log('נתוני מסלולים גולמיים:', rawData);
         this.areasofexpertisealData = rawData;
 
         const ELEMENT_DATA: Int_WalkingTrail[] = rawData.map((trail) => ({
@@ -325,19 +324,19 @@ export class WalkingTrailComponent implements AfterViewInit {
     this.paginator?.firstPage();
   }
 
-  sortByTime: boolean = false;
+  // sortByTime: boolean = false;
 
-  sortByNumOFPlaces() {
-    this.sortByTime = !this.sortByTime;
+  // sortByNumOFPlaces() {
+  //   this.sortByTime = !this.sortByTime;
 
-    if (!this.dataSource?.data) return [];
+  //   if (!this.dataSource?.data) return [];
 
-    this.dataSource.data = this.dataSource.data.sort((a, b) =>
-      this.sortByTime
-        ? b.RouteDuration - a.RouteDuration
-        : a.RouteDuration - b.RouteDuration,
-    );
+  //   this.dataSource.data = this.dataSource.data.sort((a, b) =>
+  //     this.sortByTime
+  //       ? b.RouteDuration - a.RouteDuration
+  //       : a.RouteDuration - b.RouteDuration,
+  //   );
 
-    return this.dataSource;
-  }
+  //   return this.dataSource;
+  // }
 }
