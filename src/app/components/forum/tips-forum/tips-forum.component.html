@@ -86,51 +86,28 @@
           }
         </div>
 
-        <!-- התגובות להודעה זו — מופיעות בתוך כרטיס האב -->
+        <!-- התגובות להודעה זו — שרשור/צ'אט, מופיעות בתוך כרטיס האב -->
         <div class="card-replies">
-          <div class="replies-title">
-            <mat-icon>forum</mat-icon>
-            <span>תגובות</span>
-          </div>
           @for (reply of allTheMessage; track reply.forumId) {
           @if(isReply(reply) && reply.parentForumId == message.forumId){
-          <div class="card reply-card">
-            <div class="card-header">
-              <mat-icon class="rotate-90">u_turn_right</mat-icon>
-              @if(forumMessageStore.getTitleByForumId(reply.parentForumId)){
-              <span class="reply-to">בתגובה ל:</span>
-              <i>{{ forumMessageStore.getTitleByForumId(reply.parentForumId) }}</i>
-              } @else{
-              ______________
-              }
-            </div>
-
-            <div class="card-body">
-              <div class="titleAndHeader">
-                <h5>{{ reply.title }}</h5>
-                <div class="toDateAndUserEmail">
-                  <div class="author">
-                    <mat-icon class="person">person</mat-icon>
-                    <p>
-                      {{ maskEmail(reply.userEmail) }}
-                    </p>
-                  </div>
-                  <p class="marginDate">{{ reply.date | hebrewDateConverter | async }}</p>
-                </div>
+          <div class="reply">
+            <div class="reply-head">
+              <div class="author">
+                <mat-icon class="person">person</mat-icon>
+                <p>{{ maskEmail(reply.userEmail) }}</p>
               </div>
-
-              <p class="message-text">{{ reply.message }}</p>
-
-              @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
-              ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
-              || (forumType == 1)){
-              <div class="newPostAndGarbage">
-                <button class="garbage" (click)="DeletePost(reply.forumId)" title="מחיקת ההודעה">
+              <div class="reply-meta">
+                <p class="reply-date">{{ reply.date | hebrewDateConverter | async }}</p>
+                @if((this.authService.hasPermission('respondInGeneralForum') && forumType==2)
+                ||(this.authService.hasPermission('respondInSafetyForum') && forumType==3)
+                || (forumType == 1)){
+                <button class="garbage" (click)="DeletePost(reply.forumId)" title="מחיקת התגובה">
                   <mat-icon>delete_outline</mat-icon>
                 </button>
+                }
               </div>
-              }
             </div>
+            <p class="reply-text">{{ reply.message }}</p>
           </div>
           }
           }

@@ -14,4 +14,5 @@ export class NotFoundComponent {
   goHome(): void {
     this.router.navigate(['/welcome/Home_Page']);
   }
+
 }

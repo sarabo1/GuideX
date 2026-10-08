@@ -13,6 +13,7 @@ import { RegionSearchComponent } from './components/region-search/region-search.
 import { AdminGuidePermissionComponent } from './components/admin-page/admin-guide-permission.component/admin-guide-permission.component';
 import { UserPermissionsComponent } from './components/admin-page/user-permissions/user-permissions.component';
 import { permissionGuard } from './guards/permission-guard.guard';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomePageComponent },
@@ -30,6 +31,7 @@ export const routes: Routes = [
       { path: 'Attractions', component: AttractionsComponent },
       { path: 'Guides', component: TableGuideComponent },
       { path: 'RegionSearch', component: RegionSearchComponent },
+
       {
         path: 'AdminGuide', component: AdminGuidePermissionComponent,
         canActivate: [permissionGuard('userManagement')],
@@ -42,7 +44,7 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', component: HomePageComponent },
+  { path: '**', component: NotFoundComponent },
   { path: 'welcome', component: HomePageComponent },
 ];
 
