@@ -2,6 +2,7 @@
 .home-page-container {
      max-height: calc(100% - 80px);
     overflow-y: auto;  
+    margin: 110px  auto;
 }
 
 mat-icon{
@@ -21,6 +22,7 @@ mat-icon{
     align-items: center;
     flex-direction: column;
     width: 94%;
+    height: 190px;
     
 }
 .btnToTable{
@@ -64,6 +66,8 @@ border-top-left-radius: 0px;   border-top-right-radius: 0px;
 .buttonShow{
     width: 400px;
     
+    
+    
 }
 .footer{
     display: flex;
@@ -78,4 +82,21 @@ border-top-left-radius: 0px;   border-top-right-radius: 0px;
 .arrow{
     display: flex;
     justify-content: center;
+}
+
+
+.hover-text {
+  display: none; /* מסתיר את המלל האחר */
+}
+
+.buttonShow:hover .default-text {
+  display: none; /* מסתיר את הטקסט הרגיל כאשר ריחופים על הכפתור */
+}
+
+.buttonShow:hover .hover-text {
+  display: block; /* מציג את המלל האחר כאשר ריחופים על הכפתור */
+}
+
+.button-content{
+   margin:auto;
 }

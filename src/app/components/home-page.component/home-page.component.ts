@@ -113,4 +113,10 @@ export class HomePageComponent {
     section?.scrollIntoView({ behavior: 'smooth' });
 
   }
+
+
+  openHalls(){
+    console.log("Halls")
+    alert("אנו עובדים על הוספת טבלת אולמות, בקרוב תוכל למצוא כאן מידע על אולמות ואולמות אודטוריום")
+  }
 }

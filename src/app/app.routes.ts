@@ -14,6 +14,7 @@ import { AdminGuidePermissionComponent } from './components/admin-page/admin-gui
 import { UserPermissionsComponent } from './components/admin-page/user-permissions/user-permissions.component';
 import { permissionGuard } from './guards/permission-guard.guard';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { homePageGuard } from './guards/home-page-guard.guard';
 
 export const routes: Routes = [
   { path: '', component: WelcomePageComponent },
@@ -22,6 +23,7 @@ export const routes: Routes = [
   {
     path: 'welcome',
     component: HomeComponent,
+    canActivate: [homePageGuard],
     children: [
       { path: 'forum', component: TipsForumComponent },
       { path: 'Favorites', component: FevoriteComponent },

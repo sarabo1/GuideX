@@ -26,6 +26,12 @@
       <label><p>כותרת ההודעה: </p> </label><br />
       <input id="titleName" class="erere" formControlName="titleName" />
     </p>
+@if (data.parent) {
+        <p>
+          שימו לב כי לא תוצג כותרת ההודעה. 
+        </p>
+      }
+
     <p>
       <label><p>תוכן ההודעה: </p></label> <br /><textarea
         id="message"
@@ -34,6 +40,7 @@
       >
       </textarea>
     </p>
+
     <button class="btn" type="submit" [disabled]="formNewMesagge.invalid">
       שליחת ההודעה
       <mat-icon class="mat-icon-btn">send</mat-icon>

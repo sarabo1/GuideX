@@ -1,14 +1,12 @@
 
 
-// הגדרת המיכל הראשי של המועדפים (ה-container הקיים ב-HTML)
 .container.mt-4 {
   margin-top: 100px !important; // העמוד מתחיל 100px מלמעלה
   
-    // margin-top: 0 !important; // ה-header כבר sticky ומקדים את התוכן
-  // min-height: calc(100vh - 100px); 
   direction: rtl;
   position: relative;
   padding-bottom: 3rem;
+  margin: auto;
 
   // הזרקת הרקע עם הנקודות (קבוע מאחורי הכול, בלי לגעת בזרימה)
   &::before {
