@@ -28,13 +28,6 @@ export class ForumMessageStoreService {
     return this.messagesSubject.asObservable();
   }
 
-  getCurrentMessages(): int_ForumMessage[] {
-    return this.messagesSubject.getValue();
-  }
-
-  setMessages(messages: int_ForumMessage[]): void {
-    this.messagesSubject.next(messages);
-  }
 
   fetchMessagesByForumType(forumType: number): void {
     this.srv_forum.getAllMessagesByForumType(forumType).subscribe({

@@ -44,6 +44,24 @@
             <span>לעריכת הפרטים שלך</span>
           </button>
           }
+          
+          @if(this.authService.hasPermission('userManagement')){
+          <div class="divider"></div>
+          <button class="option logout edit" (click)="openPermissions()" (click)="toggleMenu()">
+            <span>
+              <img class="img_like" src="Permissions.png" alt="permissions" />
+            </span>
+            <span>ניהול ההרשאות</span>
+          </button>
+
+          <button class="option logout edit" (click)="openGuidePermissions()" (click)="toggleMenu()">
+            <span>
+              <img class="img_like" src="Permissions.png" alt="permissions" />
+            </span>
+            <span>ניהול המדריכות</span>
+          </button>
+
+          }
           @if(listOfPermissions.length > 0) {
           <div class="divider"></div>
           <button class="option logout edit">
@@ -73,6 +91,8 @@
           <!-- <br /> -->
           }
           }
+
+
           <div class="divider"></div>
           <button (click)="logout()" class="option logout">
             <span>

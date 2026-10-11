@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Int_Guide } from '../../../Interfaces/int-guide';
 import { ServiceAllService } from '../../../Services/service-all.service';
+import { SrvRatingService } from '../../../Services/srv-rating.service';
 import {
   RatingDialogComponent,
   RatingDialogData,
@@ -26,11 +27,17 @@ export class ShowGuideComponent {
   availableAreas: { id: number; name: string }[] = [];
   private religiousNames = new Map<number, string>();
 
+  /** ממוצע הדירוג של המדריכה (מבחוץ, בלי לפתוח דיאלוג). */
+  ratingAverage = 0;
+  /** מספר הדירוגים של המדריכה. */
+  ratingCount = 0;
+
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ShowGuideComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Int_Guide,
     public srv_all: ServiceAllService,
+    private srvRating: SrvRatingService,
   ) {
     this.srv_all.getRegionsArray().subscribe((areas: any[]) => {
       this.availableAreas = (areas ?? []).map((a) => ({
@@ -38,6 +45,28 @@ export class ShowGuideComponent {
         name: a.regionName ?? '',
       }));
     });
+  }
+
+  ngOnInit(): void {
+    this.loadAverage();
+  }
+
+  /** שולף את ממוצע הדירוג ואת מספר הדירוגים של המדריכה. */
+  private loadAverage(): void {
+    if (!this.data?.guideId || this.data.guideId <= 0) {
+      this.ratingAverage = 0;
+      this.ratingCount = 0;
+      return;
+    }
+    this.srvRating.GetAverage(RatingEntityType.GUIDE, this.data.guideId).subscribe((res) => {
+      this.ratingAverage = res?.average ?? 0;
+      this.ratingCount = res?.count ?? 0;
+    });
+  }
+
+  /** הממוצע מעוגל לשלם — לצורך הצגת הכוכבים המלאים. */
+  get ratingAverageRounded(): number {
+    return Math.round(this.ratingAverage);
   }
 
   /** שם מלא: שם פרטי + שם משפחה. */

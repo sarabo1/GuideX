@@ -17,6 +17,15 @@
         <mat-icon>star</mat-icon>
         <span>דירוגים</span>
       </button>
+      <!-- ממוצע דירוג (מבחוץ) -->
+      @if (data.WalkingTrailId > 0 && (ratingAverage > 0 || ratingCount > 0)) {
+      <div class="rating-summary" title="לחיצה לפתיחת כל הדירוגים" (click)="openRatingDialog()">
+        @for (i of [1,2,3,4,5]; track i) {
+        <mat-icon [class.filled]="i <= ratingAverageRounded">star</mat-icon>
+        }
+        <span class="rating-score">{{ ratingAverage | number:'1.0-1' }}</span>
+      </div>
+      }
     </div>
     } @else {
     <h3 class="add-title">הוספת מסלול הליכה</h3>

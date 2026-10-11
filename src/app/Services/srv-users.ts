@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ServiceCoordinatorService } from './service-coordinator.service';
 import { InterfaceUsers } from '../Interfaces/interface-users';
-import { Srv_Guide } from './srv-guide.service';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +12,6 @@ export class ServiceUsersService {
 
   //   constructor(public serviceCoordinator: ServiceCoordinatorService, public serviceGuide: ServiceUsersService) {
   constructor(
-    public serviceCoordinator: ServiceCoordinatorService,
-    public srv_guide: Srv_Guide,
     public  http: HttpClient
   ) {
     this.mock_Users = [
@@ -30,10 +26,6 @@ export class ServiceUsersService {
         Email: 'haya.meir@gmail.com',
       },
   ]
-
-  }
-  GetUsers(): any[] {
-    return this.mock_Users;
 
   }
 
@@ -74,65 +66,8 @@ export class ServiceUsersService {
     return Math.max(...userIds);
   }
 
-  InsertUser(
-    UserId: number,
-    UserPassword: string,
-    FirstName: string,
-    LastName: string,
-    IdNumber: string,
-    CityId: number,
-    PhoneNumber: string,
-    Email: string,
-  ) {
-    const findUser =this.mock_Users.find(a => a.UserId == UserId)?.UserId
-    if(!findUser){
-    const newUser: InterfaceUsers = {
-      UserId: UserId,
-      UserPassword: UserPassword,
-      FirstName: FirstName,
-      LastName: LastName,
-      IdNumber: IdNumber,
-      CityId: CityId,
-      PhoneNumber: PhoneNumber,
-      Email: Email,
-    };
-  
-    this.mock_Users.push(newUser);
-  }else{
-    this.updateUserData(findUser,UserPassword,
-    FirstName,
-    LastName,
-    // IdNumber,
-    CityId,
-    PhoneNumber,
-    Email)
-    
-  }
 
-  }
 
-  updateUserData(userId : number, UserPassword: string,
-    FirstName: string,
-    LastName: string,
-    // IdNumber: string,
-    CityId: number,
-    PhoneNumber: string,
-    Email: string,){
-      const findUser = this.mock_Users.find(u => u.UserId==userId)
-      if(!findUser)return
-        findUser.CityId = CityId;
-      findUser.Email = Email;
-      findUser.FirstName = FirstName;
-      findUser.LastName = LastName;
-      findUser.PhoneNumber = PhoneNumber;
-      findUser.UserPassword = UserPassword
-
-  }
-
-  getNameByUserId(userId: number): string {
-    const user = this.mock_Users.find((u) => u.UserId === userId);
-    return user ? user.FirstName : '';
-  }
   // getEmailByUserId(userId: number): string {
   //   // const user = this.mock_Users.find((u) => u.UserId === userId);
   //   // return user ? user.Email : '';
@@ -155,20 +90,8 @@ export class ServiceUsersService {
 //   );
 // }
 
-  getUserById(userId: number) {
-    const user = this.mock_Users.find((u) => u.UserId === userId);
-    return user ? user : '';
-  }
   /** מחזיר (Observable) את המדריך שנמצא לפי מספר זהות — דרך השרת.
    *  מחפש את ה-UserId לפי ה-IdNumber ב-mock המשתמשים, ואז שולף את המדריך מהשרת. */
-  searchByIdNumber(idNumber: string): Observable<any> {
-    const findByIdNumber =
-      this.mock_Users.find((u) => u.IdNumber === idNumber) || null;
-    if (!findByIdNumber) {
-      return of(null);
-    }
-    return this.srv_guide.searchByUserId(findByIdNumber.UserId);
-  }
 
 getUserByEmailIdNumberPhone(EmPhId: JSON) {
     const baseUrl = 'https://localhost:7098/api/Login/resetFirst';

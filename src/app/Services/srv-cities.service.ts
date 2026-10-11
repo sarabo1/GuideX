@@ -34,24 +34,12 @@ export class SrvCities {
     },
   ];
 
-  GetLastCityId(): number {
-    const cityIds = this.mock_City.map((city) => city.cityId);
-    if (cityIds.length === 0) return 0;
-    return Math.max(...cityIds);
-  }
-
   ExistsCity(cityName: string): number {
     return (
       this.mock_City.find((city) => city.cityName === cityName)?.cityId || 0
     );
   }
 
-  AddCity(cityName: string) {
-    this.mock_City.push({
-      cityId: this.GetLastCityId() + 1,
-      cityName: cityName,
-    });
-  }
   getCityById(id : number){
     const cityExists = this.mock_City.find(c => c.cityId == id)?.cityName;
     return cityExists ? cityExists : "שגיאה האבאת העיר";

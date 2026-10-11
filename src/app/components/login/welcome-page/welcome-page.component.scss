@@ -36,16 +36,20 @@
   z-index: 1;
 }
 
-.container {
-  position: relative; /* כדי להחזיק את התוכן מעל לתמונה ושקיפות */
-  z-index: 2;
+/* כפתורים צפים קבועים בצד הדף — תמיד גלויים בזמן גלילה */
+.floating-buttons {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch; /* גובה שווה לשני הכפתורים */
-  justify-content: center;
-  gap: 16px;
-  max-width: 540px;
-  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* הסרת הצל/הסגנון שנועד למיקום במרכז התמונה */
+.container {
+  display: none;
 }
 
 .logo_dark {
@@ -78,14 +82,14 @@
     transform 0.2s ease,
     box-shadow 0.2s ease,
     background-color 0.2s ease;
-  background-color: #ff5c67;
+  background-color: #0f6fdb;
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(255, 92, 103, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 74, 173, 0.22);
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(255, 92, 103, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 74, 173, 0.3);
 }
 
 .mat-icon-btn {
@@ -93,24 +97,38 @@
   margin-top: 2px;
 }
 
-/* הכפתורים במסך הפתיחה — אחידים ושווי רוחב */
-.container .btn {
-  flex: 1 1 auto;
+/* הכפתורים הצפים — עיצוב שטוח ומודרני */
+.floating-btn {
+  padding: 12px 22px;
+  font-size: 15px;
   min-width: 210px;
+  flex: none;
 }
 
-/* הכפתור השני — "אנחנו כבר מכירות!" */
-.container .btn:nth-child(2) {
-  background-color: rgba(255, 255, 255, 0.92);
-  color: #004aad;
-  border: 2px solid #ffffff;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+/* כפתור ראשי — "רוצה להיצטרף אלינו?" */
+.floating-btn.primary {
+  background-color: #ff6670;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(251, 89, 86, 0.28);
 }
 
-.container .btn:nth-child(2):hover {
+.floating-btn.primary:hover {
+  background-color: #ff6670;
+  box-shadow: 0 10px 26px rgba(251, 89, 86, 0.4);
+}
+
+/* כפתור משני — "אנחנו כבר מכירות!" */
+.floating-btn.secondary {
   background-color: #ffffff;
-  color: #004aad;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+  color: #ff6670;
+  border: 2px solid #ff6670;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.floating-btn.secondary:hover {
+  background-color: #f0f5ff;
+  color: #ff6670;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
 /* ---------- טקסט הפתיחה ---------- */
@@ -461,8 +479,15 @@
     max-width: 320px;
   }
 
-  .container {
-    width: 100%;
+  .floating-buttons {
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+  }
+
+  .floating-btn {
+    min-width: 0;
+    width: auto;
   }
 
   .stat-number {

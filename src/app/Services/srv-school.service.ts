@@ -58,34 +58,6 @@ GetSchools(): InterfaceSchool[] {
     return Math.max(...schoolIds);
   }
 
-  InsertSchool(SchoolId: number, SchoolName: string, 
-    IsBoys: number, CityId: number, PrincipalName: string, 
-    PhoneSecretary: string, TypeSchoolId: number, AgeSchoolId: number) {
-    const newSchool: InterfaceSchool = {
-      SchoolId: SchoolId,
-      SchoolName: SchoolName,
-      IsBoys: IsBoys,
-      CityId: CityId,
-      PrincipalName: PrincipalName,
-      PhoneSecretary: PhoneSecretary,
-      TypeSchoolId: TypeSchoolId,
-      AgeSchoolId: AgeSchoolId
-    };
-    this.mock_Schools.push(newSchool);
-  }
-  AddSchool(school : InterfaceSchool) {
-    const newSchool: InterfaceSchool = {
-      SchoolId: school.SchoolId,
-      SchoolName: school.SchoolName,
-      IsBoys: school.IsBoys,
-      CityId: school.CityId,
-      PrincipalName: school.PrincipalName,
-      PhoneSecretary: school.PhoneSecretary,
-      TypeSchoolId: school.TypeSchoolId,
-      AgeSchoolId: school.AgeSchoolId
-    };
-    this.mock_Schools.push(newSchool);
-  }
     ExistsCity(SchoolName: string): number {
     return (
       this.mock_Schools.find((school) => school.SchoolName === SchoolName)?.SchoolId || 0

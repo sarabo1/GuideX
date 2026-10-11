@@ -101,8 +101,4 @@ export class srv_Favorite {
     });
   }
 
-  /** מחזיר את הרשימה המקומית (לצורכי תצוגה מהירה). */
-  getLocalFavorites(): int_Favorite[] {
-    return this.favorites;
-  }
 }
