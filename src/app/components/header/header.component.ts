@@ -38,6 +38,7 @@ export class HeaderComponent {
 
  
 listOfPermissions: string[] = [];
+  showPermissions: boolean = false;
   dateToHeader: Date = new Date();
   openMenu: boolean = false;
   username = 'אנונימית';
@@ -82,6 +83,10 @@ listOfPermissions: string[] = [];
       // בדוק אם menu לא null
       menu.classList.toggle('show'); // אם התפריט פתוח, הוא ייסגר ולהפך
     }
+  }
+
+  togglePermissions() {
+    this.showPermissions = !this.showPermissions;
   }
 
   openDialogEditD() {

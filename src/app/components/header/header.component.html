@@ -44,51 +44,59 @@
             <span>לעריכת הפרטים שלך</span>
           </button>
           }
-          
+
           @if(this.authService.hasPermission('userManagement')){
           <div class="divider"></div>
           <button class="option logout edit" (click)="openPermissions()" (click)="toggleMenu()">
             <span>
-              <img class="img_like" src="Permissions.png" alt="permissions" />
+              <mat-icon class="manage-icon" style="color: #fe585a;">manage_accounts_outlined</mat-icon>
+              <!-- <img class="img_like" src="Permissions.png" alt="permissions" /> -->
             </span>
-            <span>ניהול ההרשאות</span>
+            <span> ניהול ההרשאות</span>
           </button>
 
           <button class="option logout edit" (click)="openGuidePermissions()" (click)="toggleMenu()">
             <span>
-              <img class="img_like" src="Permissions.png" alt="permissions" />
+              <!-- <img class="img_like" src="Permissions.png" alt="permissions" /> -->
+              <mat-icon class="manage-icon" style="color: #fe585a;">admin_panel_settings_outlined</mat-icon>
             </span>
-            <span>ניהול המדריכות</span>
+            <span> ניהול המדריכות</span>
           </button>
 
           }
           @if(listOfPermissions.length > 0) {
           <div class="divider"></div>
-          <button class="option logout edit">
-            <img class="img_like" src="Permissions.png" alt="favorites" />
-            <span>ההרשאות שלך:</span>
+          <button class="option logout edit permissions-toggle" (click)="togglePermissions()">
+            <span>
+              <img class="img_like" src="Permissions.png" alt="permissions" />
+            </span>
+            <span class="permissions-toggle-text">ההרשאות שלך</span>
+            <mat-icon class="permissions-chevron">
+              {{ showPermissions ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
           </button>
 
-
-          @for (permission of listOfPermissions; track permission; let i = $index) {
-          <button class="option logout edit" style="padding: 4px; margin-right: 8px;">
-            <!-- <span style="margin-right: 10px;"> -->
-            <mat-icon class="mat-icon-btn icon">check</mat-icon>
-            <!-- </span> -->
-            @switch (permission) {
-            @case ('superAdmin') { מנהלת ראשית }
-            @case ('userManagement') { ניהול משתמשים }
-            @case ('editRoutes') { ניהול מסלולים }
-            @case ('editAttractions') { ניהול אטרקציות }
-            @case ('editHostels') { ניהול מקומות לינה }
-            @case ('respondInGeneralForum') { הגבה בפורום כללי }
-            @case ('respondInSafetyForum') { הגבה בפורום בטיחות }
-            @case ( 'canRate') { הרשאת דירוג }
-            @default { {{ permission }} }
+          @if(showPermissions) {
+          <div class="permissions-list">
+            @for (permission of listOfPermissions; track permission) {
+            <div class="permission-item">
+              <mat-icon class="permission-check">check</mat-icon>
+              <span class="permission-label">
+                @switch (permission) {
+                @case ('superAdmin') { מנהלת ראשית }
+                @case ('userManagement') { ניהול משתמשים }
+                @case ('editRoutes') { ניהול מסלולים }
+                @case ('editAttractions') { ניהול אטרקציות }
+                @case ('editHostels') { ניהול מקומות לינה }
+                @case ('respondInGeneralForum') { הגבה בפורום כללי }
+                @case ('respondInSafetyForum') { הגבה בפורום בטיחות }
+                @case ('canRate') { הרשאת דירוג }
+                @default { {{ permission }} }
+                }
+              </span>
+            </div>
             }
-            <!-- </span> -->
-          </button>
-          <!-- <br /> -->
+          </div>
           }
           }
 
