@@ -54,9 +54,7 @@
 
           @for (permission of listOfPermissions; track permission; let i = $index) {
           <button class="option logout edit" style="padding: 4px; margin-right: 8px;">
-            <!-- <span style="margin-right: 10px;"> -->
             <mat-icon class="mat-icon-btn icon">check</mat-icon>
-            <!-- </span> -->
             @switch (permission) {
             @case ('superAdmin') { מנהלת ראשית }
             @case ('userManagement') { ניהול משתמשים }
