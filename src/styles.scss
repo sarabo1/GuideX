@@ -221,3 +221,31 @@ option:hover {
   border-radius: 5px !important; /* קצוות מעוגלים של 5 פיקסלים */
   overflow: hidden; /* מוסיף כדי למנוע קצוות מעוגלים של אלמנטים בתוך הפופאפ */
 }
+
+/* ═══════════════════════════════════════════════════════════
+   פוטר תחתון (sticky footer):
+   - ה-div (router_outlet) בגובה מלא של המסך
+   - התוכן (הקומפוננטה שבתוך ה-router-outlet) ממלא את החלל
+   - הקומפוננטה ממורכזת בחלל הפנוי (בדף קצר)
+   - הפוטר נדחף לתחתית העמוד
+   ממוקם ב-global כדי לוודא שה-selectors תופסים את הקומפוננטה
+   שנטענת בתוך ה-router-outlet (יש לה view encapsulation משלה)
+═══════════════════════════════════════════════════════════ */
+.router_outlet {
+  display: flex;
+  flex-direction: column;
+  /* header בגובה 100px נמצא מחוץ ל-div, מחסירים אותו כדי שהפוטר יגיע לתחתית המסך */
+  min-height: calc(100vh - 100px);
+}
+
+/* תגית ה-router-outlet ממלאת את כל החלל הפנוי */
+.router_outlet router-outlet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* הקומפוננטה הנטענת מתמרכזת אנכית ואופקית בחלל הפנוי (בדף קצר) */
+.router_outlet router-outlet > * {
+  margin: auto;
+}

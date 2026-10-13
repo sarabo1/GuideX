@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
+import { ConfirmDeleteDialogComponent } from '../../confirm-delete-dialog/confirm-delete-dialog.component';
 import { int_Attractions, int_AttractionFile } from '../../../Interfaces/int_Attractions';
 import { ServiceAllService } from '../../../Services/service-all.service';
 import { srv_Attractions } from '../../../Services/srv_Attractions';
@@ -17,6 +18,7 @@ import { AttractionTypeNamePipe } from '../../../Pipes/attractionTypeName';
 import { regionNamePipe } from '../../../Pipes/regionName';
 import { RefreshService } from '../../../Services/RefreshService';
 import { AuthService } from '../../../Services/auth-service.service';
+import { SrvRatingService } from '../../../Services/srv-rating.service';
 import {
   RatingDialogComponent,
   RatingDialogData,
@@ -41,6 +43,11 @@ export class ShowAttractionComponent {
   isLiked: boolean = false;
   isAddNew = false;
 
+  /** ממוצע הדירוג של האטרקציה (מבחוץ, בלי לפתוח דיאלוג). */
+  ratingAverage = 0;
+  /** מספר הדירוגים של האטרקציה. */
+  ratingCount = 0;
+
   /** תמונות שכבר נשמרו בשרת עבור האטרקציה (לתצוגה ולמחיקה). */
   images: int_AttractionFile[] = [];
   /** קבצי תמונה שנבחרו אך טרם הועלו (לאטרקציה חדשה שעדיין אין לה ID). */
@@ -57,7 +64,7 @@ export class ShowAttractionComponent {
     public Attractions: srv_Attractions,
     public srv_favorite: srv_Favorite,
         public refreshService: RefreshService,
-
+    private srvRating: SrvRatingService,
   ) {
     // האיברים מאותחלים כמערכים כדי שה-@for בטמפלייט יפעל בצורה בטוחה
     this.RegionsArrayData = [];
@@ -122,6 +129,27 @@ export class ShowAttractionComponent {
         this.images = imgs ?? [];
       });
     }
+
+    // שליפת ממוצע הדירוג להצגה מבחוץ.
+    this.loadAverage();
+  }
+
+  /** הממוצע מעוגל לשלם — לצורך הצגת הכוכבים המלאים. */
+  get ratingAverageRounded(): number {
+    return Math.round(this.ratingAverage);
+  }
+
+  /** שולף את ממוצע הדירוג ואת מספר הדירוגים של האטרקציה. */
+  private loadAverage(): void {
+    if (!this.data?.attractionId || this.data.attractionId <= 0) {
+      this.ratingAverage = 0;
+      this.ratingCount = 0;
+      return;
+    }
+    this.srvRating.GetAverage(RatingEntityType.ATTRACTION, this.data.attractionId).subscribe((res) => {
+      this.ratingAverage = res?.average ?? 0;
+      this.ratingCount = res?.count ?? 0;
+    });
   }
 
   toggleFavorite() {
@@ -147,21 +175,31 @@ export class ShowAttractionComponent {
       this.isLiked = true;
     }
   }
-  deleteAttraction(){
-     this.Attractions.deleteAttraction(this.data.attractionId).subscribe({
+  deleteAttraction() {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '400px',
+      data: { message: 'האם את בטוחה שברצונך למחוק את האטרקציה?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        console.log('מחיקה בוטלה');
+        return;
+      }
+
+      this.Attractions.deleteAttraction(this.data.attractionId).subscribe({
         next: () => {
           console.log('מחיקת מסלול');
           this.onClose();
           this.openDialogRegistrations('האטרקציה נמחקה בהצלחה');
           this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
-
         },
         error: (err) => {
           console.error('שגיאה במחיקת האטרקציה:', err);
           // כאן תוכל להציג הודעה למשתמש על השגיאה
         },
       });
-
+    });
   }
 
   onClose(): void {
@@ -227,27 +265,22 @@ export class ShowAttractionComponent {
         },
       );
     } else {
-      // אטרקציה חדשה (אין עדיין ID) — שומרים את הקבצים להעלאה אחרי השמירה.
       this.pendingImages.push(...files);
     }
 
-    // איפוס שדה הבחירה כדי שאפשר יהיה לבחור שוב את אותו קובץ.
     input.value = '';
   }
 
-  /** מחיקת קובץ חדש שטרם הועלה (לאטרקציה חדשה). */
   removePendingImage(index: number) {
     this.pendingImages.splice(index, 1);
   }
 
-  /** מחיקת תמונה שמורה מהשרת ומהתצוגה. */
   deleteImage(fileId: number, index: number) {
     this.Attractions.DeleteImage(fileId).subscribe(() => {
       this.images.splice(index, 1);
     });
   }
 
-  /** מעלה את הקבצים שנבחרו לאטרקציה חדשה, אחרי שזו נשמרה (יש כבר ID). */
   uploadPendingImages(newAttractionId: number) {
     if (!this.pendingImages.length) return;
     const files = [...this.pendingImages];
@@ -258,9 +291,6 @@ export class ShowAttractionComponent {
   }
 
   saveEdit() {
-    // הערכים נקראים ישירות מ- this.data דרך [(ngModel)] בטמפלייט,
-    // כך שכל דיאלוג עובד עם אובייקט הנתונים שלו ולא עם getElementById גלובלי.
-    // נרמול לשם ערכים בטוחים:
     this.data.attractionsName = (this.data.attractionsName ?? '').trim();
     this.data.description = (this.data.description ?? '').trim();
     this.data.address = (this.data.address ?? '').trim();
@@ -269,7 +299,6 @@ export class ShowAttractionComponent {
     this.data.regionId = Number(this.data.regionId) || 0;
     this.data.shomerShabat = Number(this.data.shomerShabat);
 
-    console.log('data: 😊😊😊😊 ', this.data);
 
     if (this.isAddNew) {
       if (
@@ -282,7 +311,6 @@ export class ShowAttractionComponent {
       this.Attractions.AddNewAttraction(this.data).subscribe({
         next: (saved: any) => {
           console.log('הוספת מסלול', saved);
-          // האטרקציה נשמרה — עכשיו יש לה ID. אם נבחרו תמונות, מעלים אותן אליה.
           const newId =
             saved?.attractionId ?? saved?.attractionsId ?? this.data.attractionId;
           if (this.pendingImages.length && newId) {
@@ -290,7 +318,7 @@ export class ShowAttractionComponent {
           }
           this.onClose();
           this.openDialogRegistrations('האטרקציה נוספה בהצלחה');
-          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהוספה
+          this.refreshService.triggerRefresh(); 
 
         },
         error: (err) => {
@@ -321,7 +349,7 @@ export class ShowAttractionComponent {
     const dialogRef = this.dialog.open(SucceededAlertComponent, {
       width: '160px',
 
-      data: element, // העברת הנתונים לדיאלוג
+      data: element,
     });
   }
 }

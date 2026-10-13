@@ -1,6 +1,26 @@
 <div class="admin-page">
   <h2 class="page-title">דף ניהול — אישור מדריכות חדשות</h2>
 
+  <div class="search-wrap">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="חיפוש לפי שם"
+      [value]="searchTerm"
+      (input)="onSearch($any($event.target).value)"
+      (keydown.esc)="onSearch('')"
+    />
+    @if (searchTerm) {
+      <button
+        class="search-clear"
+        type="button"
+        title="ניקוי חיפוש"
+        (click)="onSearch('')"
+      >✕</button>
+    }
+  </div>
+
   @if (isLoading) {
     <div class="loading">טוען נתונים…</div>
   } @else if (errorMessage) {

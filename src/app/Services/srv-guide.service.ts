@@ -120,12 +120,6 @@ export class Srv_Guide {
     return this.mock_Guides.some((g) => g.userId === userId);
   }
 
-  /** מחזיר (Observable) את המדריך שנמצא לפי userId — דרך השרת. */
-  searchByUserId(userId: number): Observable<any | null> {
-    return this.GetGuides().pipe(
-      map((guides: any[]) => guides.find((g) => Number(g.userId) === Number(userId)) ?? null),
-    );
-  }
 
   /**
    * מחזיר את מסלול (URL) להורדה/פתיחה של קובץ מדריך לפי ה-FileId.

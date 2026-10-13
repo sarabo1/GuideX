@@ -9,6 +9,26 @@
     <div class="empty">לא נמצאו משתמשים.</div>
   } @else {
     <br/>
+    <div class="search-wrap">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="חיפוש לפי שם"
+        [value]="searchTerm"
+        (input)="onSearch($any($event.target).value)"
+        (keydown.esc)="onSearch('')"
+      />
+      @if (searchTerm) {
+        <button
+          class="search-clear"
+          type="button"
+          title="ניקוי חיפוש"
+          (click)="onSearch('')"
+          (keydown.enter)="onSearch('')"
+        >✕</button>
+      }
+    </div>
     <div class="table-wrap">
       <table class="perms-table">
         <thead>
@@ -27,7 +47,7 @@
         <tbody>
           @for (user of visibleUsers; track user.userId) {
             <tr>
-              <td class="col-user">
+              <td class="col-user" [attr.data-label]="'שם מלא'">
                 <button
                   class="name-link"
                   (click)="openUser(user)"
@@ -39,7 +59,10 @@
               </td>
               @for (perm of permissions; track perm.key) {
                 @if (showUserManagementColumn || perm.key !== 'userManagement') {
-                  <td class="col-perm">
+                  <td
+                    class="col-perm"
+                    [attr.data-label]="perm.label"
+                  >
                     <div class="cell-inner">
                       <button
                         class="perm-toggle"

@@ -1,22 +1,23 @@
 <div class="textOnWlcomePage">
   <div class="toPicture">
-    <div class="container">
-      <button class="btn" (click)="openDialogRegistrations()">
-        <span>רוצה להיצטרף אלינו?</span>
-        <span>
-          <mat-icon class="mat-icon-btn">person_add</mat-icon>
-        </span>
-      </button>
-      <button class="btn" (click)="openDialogLogin()">
-        <span>אנחנו כבר מכירות!</span>
-        <span>
-          <mat-icon class="mat-icon-btn">login</mat-icon>
-        </span>
-      </button>
-    </div>
     <div class="logo_dark">
       <img src="logo_for_dark.png" alt="לוגו" class="logo" />
     </div>
+  </div>
+
+  <div class="floating-buttons">
+    <button class="btn floating-btn primary" (click)="openDialogRegistrations()">
+      <span>רוצה להיצטרף אלינו?</span>
+      <span>
+        <mat-icon class="mat-icon-btn">person_add</mat-icon>
+      </span>
+    </button>
+    <button class="btn floating-btn secondary" (click)="openDialogLogin()">
+      <span>אנחנו כבר מכירות!</span>
+      <span>
+        <mat-icon class="mat-icon-btn">login</mat-icon>
+      </span>
+    </button>
   </div>
 
   <p class="welcome-text">

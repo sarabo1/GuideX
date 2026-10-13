@@ -6,6 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
+import { ConfirmDeleteDialogComponent } from '../../confirm-delete-dialog/confirm-delete-dialog.component';
 import { Int_WalkingTrail, Int_WalkingTrailFile } from '../../../Interfaces/Int_WalkingTrail';
 import { ServiceAllService } from '../../../Services/service-all.service';
 import { SrvWalkingTrailService } from '../../../Services/srv-WalkingTrail.service';
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
 import { AuthService } from '../../../Services/auth-service.service';
+import { SrvRatingService } from '../../../Services/srv-rating.service';
 import {
   RatingDialogComponent,
   RatingDialogData,
@@ -33,6 +35,11 @@ export class ShowWalkingTrailComponent {
   isLiked: boolean = false;
   isAddNew = false;
 
+  /** ממוצע הדירוג של מסלול ההליכה (מבחוץ, בלי לפתוח דיאלוג). */
+  ratingAverage = 0;
+  /** מספר הדירוגים של מסלול ההליכה. */
+  ratingCount = 0;
+
   images: Int_WalkingTrailFile[] = [];
   pendingImages: File[] = [];
 
@@ -45,7 +52,8 @@ export class ShowWalkingTrailComponent {
     public walkingTrails: SrvWalkingTrailService,
     public srv_favorite: srv_Favorite,
     public refreshService: RefreshService,
-    public authService: AuthService
+    public authService: AuthService,
+    private srvRating: SrvRatingService
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {
@@ -100,6 +108,27 @@ export class ShowWalkingTrailComponent {
         this.images = imgs ?? [];
       });
     }
+
+    // שליפת ממוצע הדירוג להצגה מבחוץ.
+    this.loadAverage();
+  }
+
+  /** שולף את ממוצע הדירוג ואת מספר הדירוגים של מסלול ההליכה. */
+  private loadAverage(): void {
+    if (!this.data?.WalkingTrailId || this.data.WalkingTrailId <= 0) {
+      this.ratingAverage = 0;
+      this.ratingCount = 0;
+      return;
+    }
+    this.srvRating.GetAverage(RatingEntityType.WALKING_TRAIL, this.data.WalkingTrailId).subscribe((res) => {
+      this.ratingAverage = res?.average ?? 0;
+      this.ratingCount = res?.count ?? 0;
+    });
+  }
+
+  /** הממוצע מעוגל לשלם — לצורך הצגת הכוכבים המלאים. */
+  get ratingAverageRounded(): number {
+    return Math.round(this.ratingAverage);
   }
   toggleFavorite() {
     if (
@@ -300,16 +329,28 @@ export class ShowWalkingTrailComponent {
   }
 
   deleteTrail() {
-    this.walkingTrails.deleteTrail(this.data.WalkingTrailId).subscribe({
-      next: () => {
-        console.log('מחיקת מסלול הליכה');
-        this.onClose();
-        this.openDialogRegistrations('מסלול ההליכה נמחק בהצלחה');
-        this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
-      },
-      error: (err) => {
-        console.error('שגיאה במחיקת מסלול ההליכה:', err);
-      },
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '400px',
+      data: { message: 'האם את בטוחה שברצונך למחוק את מסלול ההליכה?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        console.log('מחיקה בוטלה');
+        return;
+      }
+
+      this.walkingTrails.deleteTrail(this.data.WalkingTrailId).subscribe({
+        next: () => {
+          console.log('מחיקת מסלול הליכה');
+          this.onClose();
+          this.openDialogRegistrations('מסלול ההליכה נמחק בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
+        },
+        error: (err) => {
+          console.error('שגיאה במחיקת מסלול ההליכה:', err);
+        },
+      });
     });
   }
 

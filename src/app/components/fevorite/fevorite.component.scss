@@ -1,21 +1,16 @@
-
-
-.container.mt-4 {
-  margin-top: 100px !important; // העמוד מתחיל 100px מלמעלה
-  
+.favorites-container {
   direction: rtl;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
   position: relative;
-  padding-bottom: 3rem;
-  margin: auto;
+  min-height: 70vh;
 
-  // הזרקת הרקע עם הנקודות (קבוע מאחורי הכול, בלי לגעת בזרימה)
+  // רקע נקודות קבוע מאחורי הכול
   &::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     z-index: -1;
     opacity: 0.35;
     background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
@@ -23,85 +18,170 @@
     pointer-events: none;
   }
 
-  // מרכז את השורות של הקלפים
-  .row {
+  // ————— כותרת —————
+  .favorites-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    .favorites-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #111827;
+      margin: 0 0 0.5rem;
+      position: relative;
+      display: inline-block;
+      font-family: 'heebo';
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -12px;
+        left: 15%;
+        right: 15%;
+        height: 4px;
+        background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        border-radius: 4px;
+      }
+    }
+
+    .favorites-subtitle {
+      margin-top: 1.25rem;
+      color: #6b7280;
+      font-size: 1rem;
+    }
+  }
+
+  // ————— מצב ריק —————
+  .empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+    border: 1px dashed #d1d5db;
+
+    .empty-state-icon {
+      width: 56px;
+      height: 56px;
+      opacity: 0.4;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+    }
+
+    .empty-state-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 0.5rem;
+    }
+
+    .empty-state-hint {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+  }
+
+  // ————— רשת הקלפים —————
+  .favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
     justify-content: center;
-  }
 
-  // כותרת "המועדפים שלי"
-  h5.display-6 {
-    position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 25%;
-      right: 25%;
-      height: 4px;
-      background-color: #4f46e5; // צבע קו התחתון
-      border-radius: 2px;
-    }
-  }
-
-  // כרטיסיית מועדף
-  .card.shadow-sm {
-    border-radius: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
-      0 2px 4px -1px rgba(0, 0, 0, 0.01) !important;
-    transition: transform 0.25s ease;
-
-    &:hover {
-      box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.06),
-        0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
-    }
-
-    .card-body {
+    .favorite-card {
+      position: relative;
+      background: #ffffff;
+      border-radius: 20px;
       padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative; // כדי שכפתור הלב המוחלט יישאר בתוך הכרטיסייה
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
       min-height: 130px;
+      display: flex;
+      align-items: center;
 
-      .likeButton {
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 28px -10px rgba(0, 0, 0, 0.12),
+          0 4px 8px -2px rgba(0, 0, 0, 0.06);
+      }
+
+      // כפתור הלב
+      .like-button {
+        position: absolute;
+        top: 1.25rem;
+        left: 1.25rem;
+        z-index: 2;
         background: transparent;
         border: none;
         cursor: pointer;
-        position: absolute;
-        top: 1.5rem;
-        left: 1.5rem;
-        z-index: 2;
+        padding: 0;
         transition: transform 0.2s ease;
 
         &:hover {
-          transform: scale(1.1);
+          transform: scale(1.15);
         }
 
-        .img_like {
-          width: 26px;
-          height: 26px;
+        &:active {
+          transform: scale(0.95);
+        }
+
+        .like-icon {
+          width: 28px;
+          height: 28px;
           object-fit: contain;
-          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
       }
 
-      .details {
-        margin-top: 0.5rem;
-        padding-left: 2.5rem; // מונע מהטקסט לעלות על כפתור הלב משמאל
+      // אזור הפרטים (לוחץ ופותח את הדיאלוג)
+      .favorite-details {
+        padding-left: 3rem; // מונע חפיפה עם כפתור הלב
+        flex: 1;
 
-        .card-title,
-        .card-text {
-          margin: 0;
+        .favorite-type-badge {
+          display: inline-block;
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: #4f46e5;
+          background: #eef2ff;
+          border-radius: 999px;
+          padding: 0.2rem 0.7rem;
+          margin-bottom: 0.6rem;
+          text-transform: capitalize;
+        }
+
+        .favorite-name {
+          font-size: 1.15rem;
+          font-weight: 600;
           color: #1f2937;
-          cursor: pointer;
+          margin: 0;
+          line-height: 1.4;
           transition: color 0.15s ease;
 
           &:hover {
-            color: #4f46e5;
+            color: #7c3aed; // סגול
+            text-decoration: underline;
+            text-underline-offset: 3px; // רווח קטן בין הכיתוב לקו
           }
         }
       }
+    }
+  }
+
+  // ————— תגובתיות למובייל —————
+  @media (max-width: 576px) {
+    padding: 1.5rem 1rem 4rem;
+
+    .favorites-header .favorites-title {
+      font-size: 1.75rem;
+    }
+
+    .favorites-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
   }
 }

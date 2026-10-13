@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { GreetingPipe } from '../../Pipes/GreetingPipe';
 import { EditUserDetailComponent } from '../edit-user-detail/edit-user-detail.component';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserPermissionsComponent } from '../admin-page/user-permissions/user-permissions.component';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class HeaderComponent {
 
  
 listOfPermissions: string[] = [];
+  showPermissions: boolean = false;
   dateToHeader: Date = new Date();
   openMenu: boolean = false;
   username = 'אנונימית';
@@ -83,6 +85,10 @@ listOfPermissions: string[] = [];
     }
   }
 
+  togglePermissions() {
+    this.showPermissions = !this.showPermissions;
+  }
+
   openDialogEditD() {
     // מעביר את ה-UserId של המשתמש המחובר לצורך מילוי טופס העריכה
     const dialogRef = this.dialog.open(EditUserDetailComponent, {
@@ -96,5 +102,13 @@ listOfPermissions: string[] = [];
         this.route.navigate(['welcome/Favorites'])  
 }
 
+openPermissions(){
+    this.route.navigate(['welcome/AdminUsers'])
+  }
 
+  openGuidePermissions(){
+    this.route.navigate(['welcome/AdminGuide'])
+  }
 }
+
+

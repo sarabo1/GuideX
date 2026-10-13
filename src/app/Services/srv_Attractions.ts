@@ -8,91 +8,8 @@ import { catchError, Observable, of, tap, throwError } from 'rxjs';
 })
 export class srv_Attractions {
   constructor(public http: HttpClient) {}
-  mock_Attractions: int_Attractions[] = [
-    {
-      attractionId: 1,
-      attractionsName: 'מעלית הזמן ירושלים',
-      regionId: 7,
-      address: 'נחלת שבעה, ירושלים',
-      attractionTypeId: 1,
-      description: 'מיצג אינטראקטיבי היסטורי חווייתי לקבוצות וכיתות',
-      shomerShabat: 2,
-      phone: '02-6248383',
-    },
-    {
-      attractionId: 2,
-      attractionsName: 'בריכות צפת',
-      regionId: 1,
-      address: 'צפת',
-      attractionTypeId: 2,
-      description: 'מתחם בריכות עירוני נפרד',
-      shomerShabat: 2,
-      phone: '04-6972411',
-    },
-    {
-      attractionId: 3,
-      attractionsName: 'מסלול נחל כזיב',
-      regionId: 1,
-      address: '',
-      attractionTypeId: 3,
-      description: 'מסלול הליכה בטבע הגלילי',
-      shomerShabat: 0,
-      phone: '',
-    },
-    {
-      attractionId: 4,
-      attractionsName: 'רכיבה על סוסים חוות השפלה',
-      regionId: 6,
-      address: 'מושב ישעי',
-      attractionTypeId: 4,
-      description: 'טיולי סוסים בנופים המרהיבים של השפלה',
-      shomerShabat: 1,
-      phone: '02-9913344',
-    },
-    {
-      attractionId: 5,
-      attractionsName: 'מרכז המבקרים של בנק ישראל',
-      regionId: 7,
-      address: 'קריית הממשלה, ירושלים',
-      attractionTypeId: 8,
-      description: 'סיור מרתק ומותאם לכיתות על תולדות המטבע והכלכלה',
-      shomerShabat: 2,
-      phone: '02-6552211',
-    },
-    {
-      attractionId: 6,
-      attractionsName: 'חוף נפרד טבריה',
-      regionId: 2,
-      address: 'טבריה',
-      attractionTypeId: 5,
-      description: 'חוף רחצה נפרד ומסודר בכנרת',
-      shomerShabat: 2,
-      phone: '04-6721155',
-    },
-    {
-      attractionId: 7,
-      attractionsName: 'איי קלימבו קיר טיפוס',
-      regionId: 5,
-      address: 'קניון איילון, רמת גן',
-      attractionTypeId: 6,
-      description: 'מתחם קירות טיפוס אתגרי לכל הגילאים',
-      shomerShabat: 1,
-      phone: '03-5704455',
-    },
-    {
-      attractionId: 8,
-      attractionsName: 'חריש על גלגלים',
-      regionId: 3,
-      address: 'חריש',
-      attractionTypeId: 7,
-      description: "טיולי ג'יפים ושטח למשפחות וקבוצות",
-      shomerShabat: 2,
-      phone: '052-7162233',
-    },
-  ];
   
   GetAttractions() {
-    // return this.mock_Attractions;
     const baseUrl = 'https://localhost:7098/Attractions';
     return this.http.get<int_Attractions[]>(baseUrl);
   }
@@ -151,7 +68,7 @@ AddNewAttraction(attraction: int_Attractions): Observable<any> {
         catchError((error) => {
           console.error('Error updating attraction:', error);
           // מכאן תוכל להראות שגיאה למשתמש או לעשות משהו אחר
-          return throwError(() => new Error('לא удалось להוסיף אטרקציה: ' + error.message));
+          return throwError(() => new Error('לא הצלחנו להוסיף אטרקציה: ' + error.message));
         }),
       );
 }
@@ -205,9 +122,4 @@ AddNewAttraction(attraction: int_Attractions): Observable<any> {
   //    return this.http.put<void>(`https://localhost:7098/Attractions/${attraction.attractionId}`, attraction);
   // }
 
-  getAttractionById(AttractionsId: number) {
-    var a = this.mock_Attractions.find((a) => a.attractionId == AttractionsId);
-    console.log(a);
-    return a;
-  }
 }

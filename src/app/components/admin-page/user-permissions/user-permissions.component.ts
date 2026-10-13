@@ -24,8 +24,11 @@ export class UserPermissionsComponent implements OnDestroy {
   /** כל המשתמשים שנטענו מהשרת. */
   users: AdminUser[] = [];
 
-  /** המשתמשים שמוצגים בטבלה, לאחר הסינון לפי הרשאת המשתמש המחובר. */
+  /** המשתמשים שמוצגים בטבלה, לאחר הסינון לפי הרשאת המשתמש המחובר ולפי תיבת החיפוש. */
   visibleUsers: AdminUser[] = [];
+
+  /** טקסט החיפוש החופשי — מסנן לפי שם מלא. */
+  searchTerm = '';
 
   isLoading = true;
   errorMessage = '';
@@ -83,7 +86,7 @@ export class UserPermissionsComponent implements OnDestroy {
     this.serviceUsers.GetAllUsers().subscribe({
       next: (users: any[]) => {
         this.users = (users ?? []).map((u) => u as AdminUser);
-        this.visibleUsers = this.filterUsers(this.users);
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (err: any) => {
@@ -106,6 +109,25 @@ export class UserPermissionsComponent implements OnDestroy {
       return users.filter((u) => !u.superAdmin);
     }
     return users.filter((u) => !u.userManagement);
+  }
+
+  /**
+   * מחיל את שני הסינונים על רשימת המשתמשים המלאה:
+   * סינון לפי הרשאת המנהל המחובר, ולצידו סינון לפי תיבת החיפוש.
+   */
+  private applyFilters() {
+    let result = this.filterUsers(this.users);
+    const term = this.searchTerm.trim().toLowerCase();
+    if (term) {
+      result = result.filter((u) => this.fullName(u).toLowerCase().includes(term));
+    }
+    this.visibleUsers = result;
+  }
+
+  /** מעדכן את תיבת החיפוש ומסנן מחדש את הטבלה. */
+  onSearch(value: string) {
+    this.searchTerm = value;
+    this.applyFilters();
   }
 
   /** שם מלא של משתמש. */

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { int_ForumMessage } from '../Interfaces/int_ForumMessage';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -27,11 +27,6 @@ export class SrvForumMessageService {
     );
 }
 
-  getMessageById(forumId: number): Observable<int_ForumMessage> {
-    return this.http.get<int_ForumMessage>(`${this.allMessagesUrl}/${forumId}`);
-  }
-
-
   postMessage(msg: int_ForumMessage): Observable<int_ForumMessage> {
     return this.http.post<int_ForumMessage>(this.addForum, msg);
   }
@@ -40,16 +35,9 @@ export class SrvForumMessageService {
   //   return this.http.delete(`${this.deleteUrl}/${forumId}`);
   // }
 
-deletePost(forumId: number) {
+deletePost(forumId: number): Observable<any> {
      console.log('sss: ', forumId);
-     return this.http.delete(`${this.deleteUrl}${forumId}`).subscribe(
-       response => {
-         console.log('Post deleted successfully:', response);
-       },
-       error => {
-         console.error('Error deleting post:', error);
-       }
-     );
+     return this.http.delete(`${this.deleteUrl}${forumId}`);
    }
  
 

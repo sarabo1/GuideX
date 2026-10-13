@@ -84,16 +84,12 @@ login() {
             
             // בדוק אם נמצא משתמש
             if (response) {
-                const userObj = {
-                    token: response.token // אם הטוקן הגיע כאן בתגובה
-                };
-                console.log("הני: ", userObj);
-                localStorage.setItem('user_data', JSON.stringify(userObj));
-                
-                // שמור גם ב-AuthService
-                this.authService.login(userObj.token);
-                
-                this.userNotFount = false; 
+                // מפענח את ה-JWT ושומר את מלא פרטי המשתמש
+                // (firstName, userId, email, permission) דרך ה-AuthService —
+                // בלי שמירה ידנית כפולה של user_data ב-LOCAL STORAGE.
+                this.authService.login(response.token);
+
+                this.userNotFount = false;
                 this.formLogIn.reset();
                 this.onClose(); 
                 this.router.navigate(['welcome/Home_Page']);

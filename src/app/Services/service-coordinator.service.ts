@@ -47,9 +47,6 @@ export class ServiceCoordinatorService {
       SchoolId: 4,
     }
   ];
-  GetCoordinators() {
-    return this.mock_Coordinators;
-  }
 
   GetLastTourCoordinatorId() {
     const coordinatorIds = this.mock_Coordinators.map(
@@ -58,23 +55,6 @@ export class ServiceCoordinatorService {
     return Math.max(...coordinatorIds);
   }
 
-  InsertCoordinator(
-    UserId: number,
-    TourCoordinatorId: number,
-    RoleId: number,
-    SchoolId: number,
-  ) {
-    const newCoordinator: InterfaceCoordinator = {
-      UserId: UserId,
-      TourCoordinatorId: TourCoordinatorId,
-      RoleId: RoleId,
-      SchoolId: SchoolId,
-    };
-    this.mock_Coordinators.push(newCoordinator);
-  }
-   userExist(userId: number): boolean {
-    return this.mock_Coordinators.some(c => c.UserId === userId);
-  }
 
   /**
    * שולח את כל פרטי רישום הכורדינטור (משתמש + תפקיד + מוסד-אם-חדש)

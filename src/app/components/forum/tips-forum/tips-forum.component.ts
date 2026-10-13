@@ -5,12 +5,11 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { NewMessageTipsForumComponent } from '../new-message-tips-forum/new-message-tips-forum.component';
 import { ForumMessageStoreService } from '../../../Services/forum-message-store.service';
-import { ServiceUsersService } from '../../../Services/srv-users';
 import { HebrewDateConverterPipe } from '../../../Pipes/hebrewDateConverter ';
 import { ActivatedRoute } from '@angular/router';
 import { SrvForumMessageService } from '../../../Services/srv-forum-message.service';
 import { AuthService } from '../../../Services/auth-service.service';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { ConfirmDeleteDialogComponent } from '../../confirm-delete-dialog/confirm-delete-dialog.component';
 
 @Component({
   selector: 'app-tips-forum',
@@ -22,13 +21,11 @@ export class TipsForumComponent {
   // כל ההודעות בסדר צפייה: כל תגובה מופיעה מיד לאחר הודעת המקור שלה
   allTheMessage: int_ForumMessage[] | undefined;
   forumType: number = 0;
-    errorMessage: string = ''; // משתנה לאחסון השגיאה
 
 
   constructor(
     public dialog: MatDialog,
     public forumMessageStore: ForumMessageStoreService,
-    public srv_user: ServiceUsersService,
     private route: ActivatedRoute,
     public Srv_Forum: SrvForumMessageService,
     public authService: AuthService
@@ -129,13 +126,24 @@ export class TipsForumComponent {
 //     );      
 //   }
   DeletePost(forumId: number) {
-    if (confirm('האם הנכם בטוחים במחיקה?')) {
-      this.Srv_Forum.deletePost(forumId);
-      this.forumMessageStore.fetchMessagesByForumType(this.forumType);
-    } else {
-      console.log('מחיקה בוטלה');
-      return;
-    }
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '400px',
+      data: { message: 'האם את בטוחה שברצונך למחוק את ההודעה?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        console.log('מחיקה בוטלה');
+        return;
+      }
+
+      this.Srv_Forum.deletePost(forumId).subscribe({
+        next: () => {
+          this.forumMessageStore.fetchMessagesByForumType(this.forumType);
+        },
+        error: (err) => console.error('Error deleting post:', err),
+      });
+    });
   }
 
  

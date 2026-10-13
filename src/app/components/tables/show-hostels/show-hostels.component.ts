@@ -6,6 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { SucceededAlertComponent } from '../succeeded-alert/succeeded-alert.component';
+import { ConfirmDeleteDialogComponent } from '../../confirm-delete-dialog/confirm-delete-dialog.component';
 import { Int_Hostels, Int_HostelFile } from '../../../Interfaces/Int_Hostels';
 import { ServiceAllService } from '../../../Services/service-all.service';
 import { srv_Hostels } from '../../../Services/srv_Hostels';
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { RefreshService } from '../../../Services/RefreshService';
 import { KashrutNamePipe } from "../../../Pipes/kashrutName";
 import { AuthService } from '../../../Services/auth-service.service';
+import { SrvRatingService } from '../../../Services/srv-rating.service';
 import {
   RatingDialogComponent,
   RatingDialogData,
@@ -41,6 +43,11 @@ export class ShowHostelsComponent {
   isLiked: boolean = false;
   isAddNew = false;
 
+  /** ממוצע הדירוג של מקום הלינה (מבחוץ, בלי לפתוח דיאלוג). */
+  ratingAverage = 0;
+  /** מספר הדירוגים של מקום הלינה. */
+  ratingCount = 0;
+
   /** תמונות שכבר נשמרו בשרת עבור מקום הלינה (לתצוגה ולמחיקה). */
   images: Int_HostelFile[] = [];
   /** קבצי תמונה שנבחרו אך טרם הועלו (למקום לינה חדש שעדיין אין לו ID). */
@@ -56,7 +63,8 @@ export class ShowHostelsComponent {
     public hostels: srv_Hostels,
     public srv_favorite: srv_Favorite,
     public refreshService: RefreshService,
-    public authService: AuthService
+    public authService: AuthService,
+    private srvRating: SrvRatingService
   ) {
     this.RegionsArrayData = this.srv_all.getRegionsArray().subscribe(
       (data) => {
@@ -124,6 +132,27 @@ export class ShowHostelsComponent {
         this.images = imgs ?? [];
       });
     }
+
+    // שליפת ממוצע הדירוג להצגה מבחוץ.
+    this.loadAverage();
+  }
+
+  /** שולף את ממוצע הדירוג ואת מספר הדירוגים של מקום הלינה. */
+  private loadAverage(): void {
+    if (!this.data?.HostelsId || this.data.HostelsId <= 0) {
+      this.ratingAverage = 0;
+      this.ratingCount = 0;
+      return;
+    }
+    this.srvRating.GetAverage(RatingEntityType.HOSTEL, this.data.HostelsId).subscribe((res) => {
+      this.ratingAverage = res?.average ?? 0;
+      this.ratingCount = res?.count ?? 0;
+    });
+  }
+
+  /** הממוצע מעוגל לשלם — לצורך הצגת הכוכבים המלאים. */
+  get ratingAverageRounded(): number {
+    return Math.round(this.ratingAverage);
   }
   toggleFavorite() {
     if (
@@ -221,16 +250,28 @@ export class ShowHostelsComponent {
   }
 
   deleteHostel() {
-    this.hostels.deleteHostel(this.data.HostelsId).subscribe({
-      next: () => {
-        console.log('מחיקת מקום לינה');
-        this.onClose();
-        this.openDialogRegistrations('מקום הלינה נמחק בהצלחה');
-        this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
-      },
-      error: (err) => {
-        console.error('שגיאה במחיקת מקום הלינה:', err);
-      },
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '400px',
+      data: { message: 'האם את בטוחה שברצונך למחוק את מקום הלינה?' },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        console.log('מחיקה בוטלה');
+        return;
+      }
+
+      this.hostels.deleteHostel(this.data.HostelsId).subscribe({
+        next: () => {
+          console.log('מחיקת מקום לינה');
+          this.onClose();
+          this.openDialogRegistrations('מקום הלינה נמחק בהצלחה');
+          this.refreshService.triggerRefresh(); // רענון הטבלה אחרי שהמחיקה הסתיימה
+        },
+        error: (err) => {
+          console.error('שגיאה במחיקת מקום הלינה:', err);
+        },
+      });
     });
   }
 

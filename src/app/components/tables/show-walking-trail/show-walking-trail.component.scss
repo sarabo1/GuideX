@@ -35,6 +35,41 @@
   gap: 10px;
 }
 
+/* ─────────── ממוצע דירוג (מבחוץ) ─────────── */
+.rating-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #f8f6fd;
+  border: 1px solid #e3d9f7;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background: #f1edfc;
+    transform: translateY(-1px);
+  }
+
+  mat-icon {
+    color: #d8d0ef;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+
+    &.filled {
+      color: #f5a623;
+    }
+  }
+
+  .rating-score {
+    font-size: 14px;
+    font-weight: 600;
+    color: #5f16eb;
+  }
+}
+
 .icon-btn {
   width: 40px;
   height: 40px;

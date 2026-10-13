@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ServiceUsersService } from './srv-users';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, tap } from 'rxjs';
 
@@ -7,36 +6,12 @@ import { map, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class ServiceAllService {
-  
-  constructor(public Srv_Users:ServiceUsersService,
-    public http : HttpClient,
-  ) {}
-  getRollName(roleId: number): Observable<string> {
-  
-    return this.http.get<string>(`https://localhost:7098/Roll_${roleId}`)
-        .pipe(map(response => response ? response : 'אחר'));
-  }
-  
-
+  constructor(public http: HttpClient) {}
 
 getReligiousName(religiousId: number): Observable<string | undefined> {
     return this.http.get<string>(`https://localhost:7098/Religious_${religiousId}`)
         .pipe(map(response => response ? response : 'אחר'));
 }
- 
-  getTypeSchoolName(typeSchoolId: number): Observable<string | undefined> {
-    return this.getReligiousName(typeSchoolId)
-    // switch (typeSchoolId) {
-    //   case 1:
-    //     return 'חסידי';
-    //   case 2:
-    //     return 'ספרדי';
-    //   case 3:
-    //     return 'אשכנזי';
-    //   default:
-    //     return 'אחר';
-    // }
-  }
 
   getAgeSchoolName(ageSchoolId: number): string | undefined {
     switch (ageSchoolId) {

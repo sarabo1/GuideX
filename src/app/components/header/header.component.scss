@@ -131,6 +131,67 @@
     width: 20px;
     height: 20px;
     margin-left: 5px;
-    
+
+}
+
+/* ===== רשימת ההרשאות ===== */
+.permissions-toggle {
+    justify-content: space-between;
+}
+
+.permissions-toggle-text {
+    flex: 1;
+    text-align: right;
+}
+
+.manage-icon {
+    /* פונט Material Symbols Outlined - קו דק */
+    font-family: 'Material Symbols Outlined';
+    font-weight: 200; /* קו דק */
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+    margin-left: 5px;
+}
+
+.permissions-chevron {
+    margin-right: 4px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.permissions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 0;
+    background-color: #f7f6fd;
+    border-radius: 8px;
+    margin: 0 8px 6px 8px;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+
+    &:hover {
+        background-color: #ece9fb;
+    }
+}
+
+.permission-check {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    color: #5f16eb;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.permission-label {
+    font-size: 14px;
+    color: #1d1d1f;
+    text-align: right;
 }
 

@@ -12,29 +12,6 @@ export class SrvWalkingTrailService {
   //  public mock_WalkingTrails: Int_WalkingTrail[] = [
  
 
-  public mock_WalkingTrails: Int_WalkingTrail[] = [
-    // 1 - גליל עליון
-    {
-      WalkingTrailId: 1,
-      WalkingTrailName: 'נחל חרמון (בניאס)',
-      Description: 'מסלול מים בגליל העליון עם מפלים ונחלים זורמים.',
-      regionId: 1,
-      Directions: 'שמורת הבניאס',
-      LengthInKm: 3.5,
-      RouteDuration: 100,
-      Difficulty: 2,
-      MinAge: 5,
-      MaxAge: 80,
-      IsWet: true,
-      
-      SeasonSummer: true,
-    SeasonWinter: true,
-    SeasonSpring: false,
-    SeasonAutumn : false,
-      
-    }
-   
-  ];
 
   GetWalkingTrails() {
     return this.http.get<Int_WalkingTrail[]>(this.baseUrl).pipe(
@@ -64,12 +41,6 @@ export class SrvWalkingTrailService {
     );
   }
 
-  GetLengthToFilter(lengthValue: number) {
-    if (lengthValue >= 4) return 3;
-    if (lengthValue >= 2) return 2;
-    if (lengthValue < 2) return 1;
-    else return 0;
-  }
   UpdateTrail(route: Int_WalkingTrail): Observable<void> {
     console.log(route);
     return this.http
@@ -156,7 +127,4 @@ AddNewTrail(route: Int_WalkingTrail): Observable<any> {
     }
   }
 
-  getWalkingTrailById(id: number) {
-    return this.mock_WalkingTrails.find((wt) => wt.WalkingTrailId === id);
-  }
 }

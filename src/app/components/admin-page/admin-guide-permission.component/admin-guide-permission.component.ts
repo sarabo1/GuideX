@@ -33,6 +33,14 @@ export class AdminGuidePermissionComponent {
   /** המדריכות שכבר אושרו + הקבצים שלהן (ניתן לבטל את האישור). */
   approvedData: GuideWithFiles[] = [];
 
+  /** כל המדריכות הממתינות — לפי הסינון (מקור ללא מסנן החיפוש). */
+  private allPending: GuideWithFiles[] = [];
+  /** כל המדריכות המאושרות — לפי הסינון (מקור ללא מסנן החיפוש). */
+  private allApproved: GuideWithFiles[] = [];
+
+  /** טקסט החיפוש החופשי — מסנן לפי שם מלא. */
+  searchTerm = '';
+
   /** האם המקטע של הממתינות סיים להיטען. */
   isLoading = true;
   /** האם המקטע של המאושרות סיים להיטען (נטען בנפרד מהממתינות). */
@@ -92,7 +100,8 @@ export class AdminGuidePermissionComponent {
           guide: this.normalizeGuide(g),
           files: this.filesFromGuide(g),
         }));
-        this.data = entries;
+        this.allPending = entries;
+        this.applySearch();
 
         // בכל מקרה משיכת הקבצים גם בדרך נפרדת (getGuideFiles) — כך שהקבצים
         // יוצגו גם אם השרת לא מחזיר אותם בתוך תשובת המדריכות עצמה.
@@ -120,7 +129,8 @@ export class AdminGuidePermissionComponent {
           guide: this.normalizeGuide(g),
           files: this.filesFromGuide(g),
         }));
-        this.approvedData = entries;
+        this.allApproved = entries;
+        this.applySearch();
 
         entries.forEach((entry) => this.loadFilesForGuide(entry, entry.guide.guideId));
 
@@ -222,6 +232,31 @@ export class AdminGuidePermissionComponent {
     return `${g.firstName ?? ''} ${g.lastName ?? ''}`.trim();
   }
 
+  /**
+   * מחיל את מסנן החיפוש על שתי רשימות הכרטיסים (הממתינות והמאושרות),
+   * לפי השם המלא, מבלי לשנות את הרשימות המקוריות.
+   */
+  private applySearch() {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (term) {
+      this.data = (this.allPending || []).filter((e) =>
+        this.fullName(e.guide).toLowerCase().includes(term)
+      );
+      this.approvedData = (this.allApproved || []).filter((e) =>
+        this.fullName(e.guide).toLowerCase().includes(term)
+      );
+    } else {
+      this.data = this.allPending || [];
+      this.approvedData = this.allApproved || [];
+    }
+  }
+
+  /** מעדכן את תיבת החיפוש ומסנן מחדש את הכרטיסים. */
+  onSearch(value: string) {
+    this.searchTerm = value;
+    this.applySearch();
+  }
+
   /** שם אזור התמחות לפי regionId. */
   private getRegionName(id: number): string {
     const found = this.availableAreas.find((a) => a.id === id);
@@ -264,12 +299,13 @@ export class AdminGuidePermissionComponent {
       next: () => {
         this.approvingGuideId = null;
         // מציאת המדריכה לפני הסרתה — כדי להעביר אותה למקטע המאושרות.
-        const entry = this.data.find((d) => d.guide.guideId === guideId);
-        this.data = this.data.filter((d) => d.guide.guideId !== guideId);
+        const entry = this.allPending.find((d) => d.guide.guideId === guideId);
+        this.allPending = this.allPending.filter((d) => d.guide.guideId !== guideId);
         if (entry) {
           entry.guide.isApproved = true;
-          this.approvedData = [entry, ...this.approvedData];
+          this.allApproved = [entry, ...this.allApproved];
         }
+        this.applySearch();
       },
       error: (err: any) => {
         this.approvingGuideId = null;
@@ -290,12 +326,13 @@ export class AdminGuidePermissionComponent {
     this.srv_guide.disapproveGuide(guideId).subscribe({
       next: () => {
         this.disapprovingGuideId = null;
-        const entry = this.approvedData.find((d) => d.guide.guideId === guideId);
-        this.approvedData = this.approvedData.filter((d) => d.guide.guideId !== guideId);
+        const entry = this.allApproved.find((d) => d.guide.guideId === guideId);
+        this.allApproved = this.allApproved.filter((d) => d.guide.guideId !== guideId);
         if (entry) {
           entry.guide.isApproved = false;
-          this.data = [entry, ...this.data];
+          this.allPending = [entry, ...this.allPending];
         }
+        this.applySearch();
       },
       error: (err: any) => {
         this.disapprovingGuideId = null;

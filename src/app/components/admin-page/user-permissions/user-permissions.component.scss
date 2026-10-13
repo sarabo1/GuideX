@@ -16,6 +16,68 @@
   font-weight: 700;
 }
 
+/* ── תיבת החיפוש החופשי ── */
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 380px;
+  margin-bottom: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  color: #a78fd6;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  border: 1.5px solid #dccdf5;
+  border-radius: 24px;
+  padding: 9px 40px 9px 34px;
+  font-family: heebo, sans-serif;
+  font-size: 14px;
+  color: #444;
+  background-color: #faf8ff;
+  transition: border-color 0.18s, box-shadow 0.18s, background-color 0.18s;
+}
+
+.search-input::placeholder {
+  color: #b3a6cf;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6f2fe0;
+  background-color: #ffffff;
+  box-shadow: 0 3px 10px rgba(111, 47, 224, 0.15);
+}
+
+.search-clear {
+  position: absolute;
+  left: 8px;
+  border: none;
+  background: none;
+  color: #a78fd6;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.search-clear:hover {
+  color: #6f2fe0;
+  background-color: #f0eaff;
+}
+
+
 .loading,
 .empty,
 .error {
@@ -245,4 +307,103 @@
 
 .cell-error.fading {
   opacity: 0;
+}
+
+/* ─────────────────────────────────────────────
+   תצוגה רספונסיבית — שורות מוערמות (טבלט / מובייל)
+   עד לרוחב 900px הטבלה הופכת לכרטיסים:
+   לכל משתמש כרטיס משלו — שם למעלה, וההרשאות
+   זו מתחת לזו עם שם ההרשאה לצד כל מתג.
+   ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .user-permissions {
+    padding: 18px 12px;
+  }
+
+  .page-title {
+    font-size: 19px;
+  }
+
+  /* מבטלים את אפיפת הטבלה הקלאסית */
+  .perms-table,
+  .perms-table thead,
+  .perms-table tbody,
+  .perms-table tr,
+  .perms-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .perms-table {
+    min-width: 0;
+  }
+
+  /* מסתירים את שורת הכותרות — כל תא יציג את
+     השם שלו בעצמו דרך attr(data-label) */
+  .perms-table thead {
+    display: none;
+    box-shadow: none;
+  }
+
+  /* כל משתמש = כרטיס */
+  .perms-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .perms-table tbody tr {
+    border: 1.5px solid #dccdf5;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgba(111, 47, 224, 0.08);
+    padding: 12px 14px;
+  }
+
+  .perms-table tbody tr:nth-child(even),
+  .perms-table tbody tr:hover {
+    background-color: #ffffff;
+  }
+
+  /* עמודת השם — שורה ראשונה, בכותרת הכרטיס */
+  .perms-table tbody td.col-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 4px 10px;
+    border-bottom: 1px dashed #eadff8;
+    margin-bottom: 6px;
+    text-align: right;
+  }
+
+  .perms-table tbody td.col-user .name-link {
+    order: 2;
+  }
+
+  /* כל תא הרשאה — שורה נפרדת עם שם ההרשאה */
+  .perms-table tbody td.col-perm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: right;
+    padding: 8px 6px;
+    border-bottom: 1px solid #f3ecfc;
+  }
+
+  .perms-table tbody td.col-perm:last-child {
+    border-bottom: none;
+  }
+
+  /* שם ההרשאה, נשלף מה-attr(data-label) */
+  .perms-table td::before {
+    content: attr(data-label);
+    color: #6f2fe0;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .cell-inner {
+    display: inline-flex;
+    align-items: center;
+  }
 }

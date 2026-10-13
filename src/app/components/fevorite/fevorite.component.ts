@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import { AuthService } from '../../Services/auth-service.service';
 import { srv_Favorite } from '../../Services/srv_Favorite';
 import { SrvWalkingTrailService } from '../../Services/srv-WalkingTrail.service';
@@ -17,15 +16,13 @@ import { int_Favorite } from '../../Interfaces/int_Favorite';
 @Component({
   selector: 'app-fevorite',
   standalone: true,
-  imports: [JsonPipe],
+  imports: [],
   templateUrl: './fevorite.component.html',
   styleUrl: './fevorite.component.scss',
 })
 export class FevoriteComponent {
-  /** הרשימה שמגיעה מהשרת (כולל שמות הפריטים). */
   allTheFavorite: int_Favorite[] = [];
 
-  /** מצב הלב של כל מועדף — true = מסומן. */
   isLiked: boolean[] = [];
 
   userDetails: any;
